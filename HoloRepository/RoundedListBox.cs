@@ -32,12 +32,10 @@ namespace HoloRepository
             }
         }
 
-        // 重写 OnPaint 以绘制圆角
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e); // 调用基类的绘制方法
+            base.OnPaint(e);
 
-            // 创建圆角路径
             GraphicsPath graphicsPath = new GraphicsPath();
             graphicsPath.AddArc(0, 0, BorderRadius, BorderRadius, 180, 90);
             graphicsPath.AddArc(Width - BorderRadius, 0, BorderRadius, BorderRadius, 270, 90);
@@ -45,20 +43,15 @@ namespace HoloRepository
             graphicsPath.AddArc(0, Height - BorderRadius, BorderRadius, BorderRadius, 90, 90);
             graphicsPath.CloseFigure();
 
-            // 设置 ListBox 的区域为圆角形状
             Region = new Region(graphicsPath);
 
-            // 填充背景
             using Brush brush = new SolidBrush(BackColor);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.FillPath(brush, graphicsPath);
         }
 
-
-        // 重写 OnDrawItem 以增加项之间的空间和调整内边距
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            // 跳过设计器模式下的绘制
             if (DesignMode || e.Index < 0)
             {
                 return;
@@ -69,14 +62,12 @@ namespace HoloRepository
                 return;
             }
 
-            // 获取当前项的文本，并处理可能的 null 值
             object item = this.Items[e.Index];
             string itemText = item?.ToString() ?? string.Empty;
 
-            // 设置文本绘制区域，增加内边距
             Rectangle bounds = e.Bounds;
             bounds.Width -= DeleteButtonSize + DeleteButtonMargin;
-            bounds.Inflate(-10, -10); // 调整内边距
+            bounds.Inflate(-10, -10);
             e.Graphics.DrawString(itemText, e.Font, new SolidBrush(e.ForeColor), bounds, StringFormat.GenericDefault);
 
             if (deleteButtonImage != null)
@@ -89,7 +80,7 @@ namespace HoloRepository
                 e.Graphics.DrawImage(deleteButtonImage, deleteButtonBounds);
             }
 
-            int lineLength = e.Bounds.Width - 15; // 横线长度
+            int lineLength = e.Bounds.Width - 15;
 
             using (Pen pen = new Pen(lineColor, lineHeight))
             {
@@ -99,12 +90,11 @@ namespace HoloRepository
             }
         }
 
-        // 重写 MeasureItem 以调整项的高度
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
             if (e.Index >= 0)
             {
-                e.ItemHeight = Font.Height + 20; // 增加项的高度
+                e.ItemHeight = Font.Height + 20;
             }
             base.OnMeasureItem(e);
         }

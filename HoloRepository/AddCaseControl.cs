@@ -76,10 +76,8 @@ namespace HoloRepository
         {
             using (AddOrganSlice addOrganSlice = new())
             {
-                // 这里可以初始化预览窗体的一些属性或数据
-                addOrganSlice.StartPosition = FormStartPosition.CenterParent; // 设置预览窗体居中显示
+                addOrganSlice.StartPosition = FormStartPosition.CenterParent;
 
-                // 显示预览窗体
                 addOrganSlice.ShowDialog();
             }
         }
