@@ -28,17 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            listBox1 = new ListBox();
+            SuspendLayout();
+            // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 24;
+            listBox1.Items.AddRange(new object[] { "1213", "123", "123", "123" });
+            listBox1.Location = new Point(375, 288);
+            listBox1.Name = "listBox1";
+            listBox1.SelectionMode = SelectionMode.None;
+            listBox1.Size = new Size(425, 292);
+            listBox1.TabIndex = 0;
             // 
             // UserGuideControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "UserGuideControl";
-            this.Size = new System.Drawing.Size(300, 200);
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(listBox1);
+            Margin = new Padding(6, 6, 6, 6);
+            Name = "UserGuideControl";
+            Size = new Size(1425, 957);
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private ListBox listBox1;
     }
 }

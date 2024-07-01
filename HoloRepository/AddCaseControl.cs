@@ -59,5 +59,29 @@ namespace HoloRepository
             }
         }
 
+        private void RemoveAllButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to remove all DICOM files?",
+                                                  "Confirmation",
+                                                  MessageBoxButtons.YesNo,
+                                                  MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                fileListBox.Items.Clear();
+            }
+        }
+
+        private void AddOrganSlicesButton_Click(object sender, EventArgs e)
+        {
+            using (AddOrganSlice addOrganSlice = new())
+            {
+                // 这里可以初始化预览窗体的一些属性或数据
+                addOrganSlice.StartPosition = FormStartPosition.CenterParent; // 设置预览窗体居中显示
+
+                // 显示预览窗体
+                addOrganSlice.ShowDialog();
+            }
+        }
     }
 }

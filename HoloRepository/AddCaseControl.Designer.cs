@@ -32,10 +32,12 @@
             pictureBox1 = new PictureBox();
             button1 = new Button();
             DICOMTitle = new Label();
-            ImportDICOMButton = new Button();
-            fileListBox = new ListBox();
-            RemoveAllButton = new Button();
+            ImportDICOMButton = new RoundedButton();
+            fileListBox = new RoundedListBox();
+            RemoveAllButton = new RoundedButton();
             panel1 = new Panel();
+            OrganSlicesTitle = new Label();
+            AddOrganSlicesButton = new RoundedButton();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -45,28 +47,33 @@
             AddCaseTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             AddCaseTitle.AutoSize = true;
             AddCaseTitle.Font = new Font("Microsoft YaHei UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
-            AddCaseTitle.Location = new Point(380, 30);
+            AddCaseTitle.Location = new Point(581, 32);
+            AddCaseTitle.Margin = new Padding(5, 0, 5, 0);
             AddCaseTitle.Name = "AddCaseTitle";
-            AddCaseTitle.Size = new Size(166, 36);
+            AddCaseTitle.Size = new Size(252, 54);
             AddCaseTitle.TabIndex = 0;
             AddCaseTitle.Text = "Add a Case";
             // 
             // pictureBox1
             // 
-            pictureBox1.Location = new Point(298, 317);
+            pictureBox1.Anchor = AnchorStyles.Top;
+            pictureBox1.Location = new Point(459, 550);
+            pictureBox1.Margin = new Padding(5, 4, 5, 4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(342, 296);
+            pictureBox1.Size = new Size(489, 398);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
             // 
             // button1
             // 
-            button1.Location = new Point(437, 619);
+            button1.Anchor = AnchorStyles.Top;
+            button1.Location = new Point(1041, 717);
+            button1.Margin = new Padding(5, 4, 5, 4);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
+            button1.Size = new Size(165, 40);
             button1.TabIndex = 2;
-            button1.Text = "button1";
+            button1.Text = "Add Picture";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -75,23 +82,26 @@
             DICOMTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             DICOMTitle.AutoSize = true;
             DICOMTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            DICOMTitle.Location = new Point(12, 15);
+            DICOMTitle.Location = new Point(102, 115);
+            DICOMTitle.Margin = new Padding(5, 0, 5, 0);
             DICOMTitle.Name = "DICOMTitle";
-            DICOMTitle.Size = new Size(141, 28);
+            DICOMTitle.Size = new Size(216, 42);
             DICOMTitle.TabIndex = 3;
             DICOMTitle.Text = "DICOM Files";
             // 
             // ImportDICOMButton
             // 
-            ImportDICOMButton.Anchor = AnchorStyles.None;
+            ImportDICOMButton.Anchor = AnchorStyles.Top;
             ImportDICOMButton.BackColor = Color.CornflowerBlue;
+            ImportDICOMButton.BorderRadius = 15;
             ImportDICOMButton.FlatAppearance.BorderSize = 0;
             ImportDICOMButton.FlatStyle = FlatStyle.Flat;
             ImportDICOMButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ImportDICOMButton.ForeColor = Color.White;
-            ImportDICOMButton.Location = new Point(543, 15);
+            ImportDICOMButton.Location = new Point(943, 109);
+            ImportDICOMButton.Margin = new Padding(5, 4, 5, 4);
             ImportDICOMButton.Name = "ImportDICOMButton";
-            ImportDICOMButton.Size = new Size(97, 28);
+            ImportDICOMButton.Size = new Size(152, 46);
             ImportDICOMButton.TabIndex = 4;
             ImportDICOMButton.Text = "+ Import";
             ImportDICOMButton.UseVisualStyleBackColor = false;
@@ -100,51 +110,97 @@
             // fileListBox
             // 
             fileListBox.AllowDrop = true;
-            fileListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            fileListBox.Anchor = AnchorStyles.Top;
+            fileListBox.BorderRadius = 20;
+            fileListBox.DrawMode = DrawMode.OwnerDrawVariable;
+            fileListBox.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             fileListBox.FormattingEnabled = true;
-            fileListBox.ItemHeight = 17;
-            fileListBox.Location = new Point(74, 149);
+            fileListBox.ItemHeight = 24;
+            fileListBox.Location = new Point(96, 180);
+            fileListBox.Margin = new Padding(5, 4, 5, 4);
             fileListBox.Name = "fileListBox";
-            fileListBox.Size = new Size(785, 140);
+            fileListBox.SelectionMode = SelectionMode.None;
+            fileListBox.Size = new Size(1231, 220);
             fileListBox.TabIndex = 5;
             // 
             // RemoveAllButton
             // 
-            RemoveAllButton.Anchor = AnchorStyles.None;
+            RemoveAllButton.Anchor = AnchorStyles.Top;
             RemoveAllButton.BackColor = Color.IndianRed;
+            RemoveAllButton.BorderRadius = 15;
             RemoveAllButton.FlatAppearance.BorderSize = 0;
             RemoveAllButton.FlatStyle = FlatStyle.Flat;
             RemoveAllButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             RemoveAllButton.ForeColor = Color.White;
-            RemoveAllButton.Location = new Point(659, 16);
+            RemoveAllButton.Location = new Point(1152, 109);
+            RemoveAllButton.Margin = new Padding(5, 4, 5, 4);
             RemoveAllButton.Name = "RemoveAllButton";
-            RemoveAllButton.Size = new Size(113, 28);
+            RemoveAllButton.Size = new Size(178, 46);
             RemoveAllButton.TabIndex = 6;
             RemoveAllButton.Text = "Remove All";
             RemoveAllButton.UseVisualStyleBackColor = false;
+            RemoveAllButton.Click += RemoveAllButton_Click;
             // 
             // panel1
             // 
-            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            panel1.AutoScroll = true;
+            panel1.AutoSize = true;
+            panel1.BackColor = Color.White;
+            panel1.Controls.Add(AddOrganSlicesButton);
+            panel1.Controls.Add(OrganSlicesTitle);
             panel1.Controls.Add(ImportDICOMButton);
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(fileListBox);
+            panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(RemoveAllButton);
+            panel1.Controls.Add(AddCaseTitle);
             panel1.Controls.Add(DICOMTitle);
-            panel1.Location = new Point(74, 86);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(5, 4, 5, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(785, 57);
+            panel1.Padding = new Padding(5);
+            panel1.Size = new Size(1425, 957);
             panel1.TabIndex = 7;
+            // 
+            // OrganSlicesTitle
+            // 
+            OrganSlicesTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            OrganSlicesTitle.AutoSize = true;
+            OrganSlicesTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            OrganSlicesTitle.Location = new Point(102, 433);
+            OrganSlicesTitle.Margin = new Padding(5, 0, 5, 0);
+            OrganSlicesTitle.Name = "OrganSlicesTitle";
+            OrganSlicesTitle.Size = new Size(217, 42);
+            OrganSlicesTitle.TabIndex = 7;
+            OrganSlicesTitle.Text = "Organ Slices";
+            // 
+            // AddOrganSlicesButton
+            // 
+            AddOrganSlicesButton.Anchor = AnchorStyles.Top;
+            AddOrganSlicesButton.BackColor = Color.CornflowerBlue;
+            AddOrganSlicesButton.BorderRadius = 15;
+            AddOrganSlicesButton.FlatAppearance.BorderSize = 0;
+            AddOrganSlicesButton.FlatStyle = FlatStyle.Flat;
+            AddOrganSlicesButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            AddOrganSlicesButton.ForeColor = Color.White;
+            AddOrganSlicesButton.Location = new Point(1067, 433);
+            AddOrganSlicesButton.Margin = new Padding(5, 4, 5, 4);
+            AddOrganSlicesButton.Name = "AddOrganSlicesButton";
+            AddOrganSlicesButton.Size = new Size(263, 46);
+            AddOrganSlicesButton.TabIndex = 8;
+            AddOrganSlicesButton.Text = "+ Add an organ slice";
+            AddOrganSlicesButton.UseVisualStyleBackColor = false;
+            AddOrganSlicesButton.Click += AddOrganSlicesButton_Click;
             // 
             // AddCaseControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
-            Controls.Add(fileListBox);
-            Controls.Add(button1);
-            Controls.Add(pictureBox1);
-            Controls.Add(AddCaseTitle);
+            Margin = new Padding(5, 4, 5, 4);
             Name = "AddCaseControl";
-            Size = new Size(907, 678);
+            Size = new Size(1425, 957);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -158,9 +214,11 @@
         private PictureBox pictureBox1;
         private Button button1;
         private Label DICOMTitle;
-        private Button ImportDICOMButton;
-        private ListBox fileListBox;
-        private Button RemoveAllButton;
         private Panel panel1;
+        private RoundedButton ImportDICOMButton;
+        private RoundedButton RemoveAllButton;
+        private RoundedListBox fileListBox;
+        private Label OrganSlicesTitle;
+        private RoundedButton AddOrganSlicesButton;
     }
 }
