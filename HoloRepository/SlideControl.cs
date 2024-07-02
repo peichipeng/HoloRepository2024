@@ -10,6 +10,9 @@ namespace HoloRepository
         private const int CircleSize = 20;
 
         private int circleX;
+        private int numberOfImages;
+        private int[] divisions;
+
         private Color circleColor = ColorTranslator.FromHtml("#3A8EDC");
         private Color trackColor = SystemColors.ControlDark;
         private Color activeTrackColor = ColorTranslator.FromHtml("#3381CA");
@@ -21,6 +24,42 @@ namespace HoloRepository
 
             circleX = (Width - CircleSize) / 2;
         }
+
+        public int NumberOfImages
+        {
+            get { return numberOfImages; }
+            set
+            {
+                numberOfImages = value;
+                CalculateDivisions();
+                Invalidate(); // 重新绘制控件
+            }
+        }
+
+        private void CalculateDivisions()
+        {
+            if (numberOfImages > 0)
+            {
+                divisions = new int[numberOfImages];
+                if (numberOfImages == 1)
+                {
+                    divisions[0] = Width - CircleSize;
+                }
+                else
+                {
+                    int step = (Width - CircleSize) / (numberOfImages - 1);
+                    for (int i = 0; i < numberOfImages; i++)
+                    {
+                        divisions[i] = i * step;
+                    }
+                }
+            }
+            else
+            {
+                divisions = new int[0];
+            }
+        }
+
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -85,6 +124,8 @@ namespace HoloRepository
         {
             base.OnMouseUp(e);
             Capture = false;
+
+            SnapToNearestDivision();
         }
 
         private void UpdateCirclePosition(int mouseX)
@@ -94,10 +135,42 @@ namespace HoloRepository
             Invalidate();
         }
 
+        private void SnapToNearestDivision()
+        {
+            if (divisions.Length > 0)
+            {
+                int nearestIndex = 0;
+                int minDistance = Math.Abs(circleX - divisions[0]);
+
+                for (int i = 1; i < divisions.Length; i++)
+                {
+                    int distance = Math.Abs(circleX - divisions[i]);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        nearestIndex = i;
+                    }
+                }
+
+                circleX = divisions[nearestIndex];
+                Invalidate();
+
+                OnImageSelected(nearestIndex);
+            }
+        }
+
+        public event EventHandler<int> ImageSelected;
+
+        protected virtual void OnImageSelected(int index)
+        {
+            ImageSelected?.Invoke(this, index);
+        }
+
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
 
+            CalculateDivisions();
             circleX = Math.Max(0, Math.Min(circleX, Width - CircleSize));
             Invalidate();
         }
