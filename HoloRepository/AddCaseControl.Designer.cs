@@ -56,7 +56,7 @@
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top;
-            pictureBox1.Location = new Point(284, 390);
+            pictureBox1.Location = new Point(284, 886);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(311, 282);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -66,7 +66,7 @@
             // button1
             // 
             button1.Anchor = AnchorStyles.Top;
-            button1.Location = new Point(654, 508);
+            button1.Location = new Point(654, 1004);
             button1.Name = "button1";
             button1.Size = new Size(105, 28);
             button1.TabIndex = 2;
@@ -79,7 +79,7 @@
             DICOMTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             DICOMTitle.AutoSize = true;
             DICOMTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            DICOMTitle.Location = new Point(57, 81);
+            DICOMTitle.Location = new Point(57, 577);
             DICOMTitle.Name = "DICOMTitle";
             DICOMTitle.Size = new Size(141, 28);
             DICOMTitle.TabIndex = 3;
@@ -94,7 +94,7 @@
             ImportDICOMButton.FlatStyle = FlatStyle.Flat;
             ImportDICOMButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ImportDICOMButton.ForeColor = Color.White;
-            ImportDICOMButton.Location = new Point(592, 77);
+            ImportDICOMButton.Location = new Point(592, 573);
             ImportDICOMButton.Name = "ImportDICOMButton";
             ImportDICOMButton.Size = new Size(97, 33);
             ImportDICOMButton.TabIndex = 4;
@@ -111,7 +111,7 @@
             fileListBox.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             fileListBox.FormattingEnabled = true;
             fileListBox.ItemHeight = 24;
-            fileListBox.Location = new Point(79, 626);
+            fileListBox.Location = new Point(53, 623);
             fileListBox.Name = "fileListBox";
             fileListBox.SelectionMode = SelectionMode.None;
             fileListBox.Size = new Size(785, 157);
@@ -126,7 +126,7 @@
             RemoveAllButton.FlatStyle = FlatStyle.Flat;
             RemoveAllButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             RemoveAllButton.ForeColor = Color.White;
-            RemoveAllButton.Location = new Point(725, 77);
+            RemoveAllButton.Location = new Point(725, 573);
             RemoveAllButton.Name = "RemoveAllButton";
             RemoveAllButton.Size = new Size(113, 33);
             RemoveAllButton.TabIndex = 6;
@@ -164,7 +164,7 @@
             AddOrganSlicesButton.FlatStyle = FlatStyle.Flat;
             AddOrganSlicesButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             AddOrganSlicesButton.ForeColor = Color.White;
-            AddOrganSlicesButton.Location = new Point(671, 307);
+            AddOrganSlicesButton.Location = new Point(671, 803);
             AddOrganSlicesButton.Name = "AddOrganSlicesButton";
             AddOrganSlicesButton.Size = new Size(167, 33);
             AddOrganSlicesButton.TabIndex = 8;
@@ -177,7 +177,7 @@
             OrganSlicesTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             OrganSlicesTitle.AutoSize = true;
             OrganSlicesTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganSlicesTitle.Location = new Point(57, 307);
+            OrganSlicesTitle.Location = new Point(57, 803);
             OrganSlicesTitle.Name = "OrganSlicesTitle";
             OrganSlicesTitle.Size = new Size(142, 28);
             OrganSlicesTitle.TabIndex = 7;
