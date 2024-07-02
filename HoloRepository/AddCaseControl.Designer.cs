@@ -36,8 +36,8 @@
             fileListBox = new RoundedListBox();
             RemoveAllButton = new RoundedButton();
             panel1 = new Panel();
-            OrganSlicesTitle = new Label();
             AddOrganSlicesButton = new RoundedButton();
+            OrganSlicesTitle = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -47,20 +47,18 @@
             AddCaseTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             AddCaseTitle.AutoSize = true;
             AddCaseTitle.Font = new Font("Microsoft YaHei UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
-            AddCaseTitle.Location = new Point(581, 32);
-            AddCaseTitle.Margin = new Padding(5, 0, 5, 0);
+            AddCaseTitle.Location = new Point(362, 23);
             AddCaseTitle.Name = "AddCaseTitle";
-            AddCaseTitle.Size = new Size(252, 54);
+            AddCaseTitle.Size = new Size(166, 36);
             AddCaseTitle.TabIndex = 0;
             AddCaseTitle.Text = "Add a Case";
             // 
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top;
-            pictureBox1.Location = new Point(459, 550);
-            pictureBox1.Margin = new Padding(5, 4, 5, 4);
+            pictureBox1.Location = new Point(284, 390);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(489, 398);
+            pictureBox1.Size = new Size(311, 282);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
@@ -68,10 +66,9 @@
             // button1
             // 
             button1.Anchor = AnchorStyles.Top;
-            button1.Location = new Point(1041, 717);
-            button1.Margin = new Padding(5, 4, 5, 4);
+            button1.Location = new Point(654, 508);
             button1.Name = "button1";
-            button1.Size = new Size(165, 40);
+            button1.Size = new Size(105, 28);
             button1.TabIndex = 2;
             button1.Text = "Add Picture";
             button1.UseVisualStyleBackColor = true;
@@ -82,10 +79,9 @@
             DICOMTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             DICOMTitle.AutoSize = true;
             DICOMTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            DICOMTitle.Location = new Point(102, 115);
-            DICOMTitle.Margin = new Padding(5, 0, 5, 0);
+            DICOMTitle.Location = new Point(57, 81);
             DICOMTitle.Name = "DICOMTitle";
-            DICOMTitle.Size = new Size(216, 42);
+            DICOMTitle.Size = new Size(141, 28);
             DICOMTitle.TabIndex = 3;
             DICOMTitle.Text = "DICOM Files";
             // 
@@ -98,10 +94,9 @@
             ImportDICOMButton.FlatStyle = FlatStyle.Flat;
             ImportDICOMButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ImportDICOMButton.ForeColor = Color.White;
-            ImportDICOMButton.Location = new Point(943, 109);
-            ImportDICOMButton.Margin = new Padding(5, 4, 5, 4);
+            ImportDICOMButton.Location = new Point(592, 77);
             ImportDICOMButton.Name = "ImportDICOMButton";
-            ImportDICOMButton.Size = new Size(152, 46);
+            ImportDICOMButton.Size = new Size(97, 33);
             ImportDICOMButton.TabIndex = 4;
             ImportDICOMButton.Text = "+ Import";
             ImportDICOMButton.UseVisualStyleBackColor = false;
@@ -116,11 +111,10 @@
             fileListBox.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             fileListBox.FormattingEnabled = true;
             fileListBox.ItemHeight = 24;
-            fileListBox.Location = new Point(96, 180);
-            fileListBox.Margin = new Padding(5, 4, 5, 4);
+            fileListBox.Location = new Point(79, 626);
             fileListBox.Name = "fileListBox";
             fileListBox.SelectionMode = SelectionMode.None;
-            fileListBox.Size = new Size(1231, 220);
+            fileListBox.Size = new Size(785, 157);
             fileListBox.TabIndex = 5;
             // 
             // RemoveAllButton
@@ -132,10 +126,9 @@
             RemoveAllButton.FlatStyle = FlatStyle.Flat;
             RemoveAllButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             RemoveAllButton.ForeColor = Color.White;
-            RemoveAllButton.Location = new Point(1152, 109);
-            RemoveAllButton.Margin = new Padding(5, 4, 5, 4);
+            RemoveAllButton.Location = new Point(725, 77);
             RemoveAllButton.Name = "RemoveAllButton";
-            RemoveAllButton.Size = new Size(178, 46);
+            RemoveAllButton.Size = new Size(113, 33);
             RemoveAllButton.TabIndex = 6;
             RemoveAllButton.Text = "Remove All";
             RemoveAllButton.UseVisualStyleBackColor = false;
@@ -157,23 +150,10 @@
             panel1.Controls.Add(DICOMTitle);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
-            panel1.Margin = new Padding(5, 4, 5, 4);
             panel1.Name = "panel1";
-            panel1.Padding = new Padding(5);
-            panel1.Size = new Size(1425, 957);
+            panel1.Padding = new Padding(3, 4, 3, 4);
+            panel1.Size = new Size(907, 678);
             panel1.TabIndex = 7;
-            // 
-            // OrganSlicesTitle
-            // 
-            OrganSlicesTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            OrganSlicesTitle.AutoSize = true;
-            OrganSlicesTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganSlicesTitle.Location = new Point(102, 433);
-            OrganSlicesTitle.Margin = new Padding(5, 0, 5, 0);
-            OrganSlicesTitle.Name = "OrganSlicesTitle";
-            OrganSlicesTitle.Size = new Size(217, 42);
-            OrganSlicesTitle.TabIndex = 7;
-            OrganSlicesTitle.Text = "Organ Slices";
             // 
             // AddOrganSlicesButton
             // 
@@ -184,23 +164,32 @@
             AddOrganSlicesButton.FlatStyle = FlatStyle.Flat;
             AddOrganSlicesButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             AddOrganSlicesButton.ForeColor = Color.White;
-            AddOrganSlicesButton.Location = new Point(1067, 433);
-            AddOrganSlicesButton.Margin = new Padding(5, 4, 5, 4);
+            AddOrganSlicesButton.Location = new Point(671, 307);
             AddOrganSlicesButton.Name = "AddOrganSlicesButton";
-            AddOrganSlicesButton.Size = new Size(263, 46);
+            AddOrganSlicesButton.Size = new Size(167, 33);
             AddOrganSlicesButton.TabIndex = 8;
             AddOrganSlicesButton.Text = "+ Add an organ slice";
             AddOrganSlicesButton.UseVisualStyleBackColor = false;
             AddOrganSlicesButton.Click += AddOrganSlicesButton_Click;
             // 
+            // OrganSlicesTitle
+            // 
+            OrganSlicesTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            OrganSlicesTitle.AutoSize = true;
+            OrganSlicesTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            OrganSlicesTitle.Location = new Point(57, 307);
+            OrganSlicesTitle.Name = "OrganSlicesTitle";
+            OrganSlicesTitle.Size = new Size(142, 28);
+            OrganSlicesTitle.TabIndex = 7;
+            OrganSlicesTitle.Text = "Organ Slices";
+            // 
             // AddCaseControl
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
-            Margin = new Padding(5, 4, 5, 4);
             Name = "AddCaseControl";
-            Size = new Size(1425, 957);
+            Size = new Size(907, 678);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

@@ -20,21 +20,19 @@ namespace HoloRepository
 
         private void button1_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.RestoreDirectory = true;
+                // Get the path of specified file
+                string filePath = openFileDialog.FileName;
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    // Get the path of specified file
-                    string filePath = openFileDialog.FileName;
-
-                    // Display image in pictureBox
-                    pictureBox1.Image = new Bitmap(filePath);
-                }
+                // Display image in pictureBox
+                pictureBox1.Image = new Bitmap(filePath);
             }
         }
 
