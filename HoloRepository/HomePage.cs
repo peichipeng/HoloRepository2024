@@ -28,5 +28,10 @@ namespace HoloRepository
             userControl.Dock = DockStyle.Fill;
             mainPanel.Controls.Add(userControl);
         }
+
+        private void basicInfo_Click(object sender, EventArgs e)
+        {
+            LoadControl(new BasicInfo());
+        }
     }
 }

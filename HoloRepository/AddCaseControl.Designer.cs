@@ -33,7 +33,6 @@
             button1 = new Button();
             DICOMTitle = new Label();
             ImportDICOMButton = new RoundedButton();
-            fileListBox = new RoundedListBox();
             RemoveAllButton = new RoundedButton();
             panel1 = new Panel();
             AddOrganSlicesButton = new RoundedButton();
@@ -47,18 +46,21 @@
             AddCaseTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             AddCaseTitle.AutoSize = true;
             AddCaseTitle.Font = new Font("Microsoft YaHei UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
-            AddCaseTitle.Location = new Point(362, 23);
+            AddCaseTitle.Location = new Point(517, 34);
+            AddCaseTitle.Margin = new Padding(4, 0, 4, 0);
             AddCaseTitle.Name = "AddCaseTitle";
-            AddCaseTitle.Size = new Size(166, 36);
+            AddCaseTitle.Size = new Size(252, 54);
             AddCaseTitle.TabIndex = 0;
             AddCaseTitle.Text = "Add a Case";
+            AddCaseTitle.Click += AddCaseTitle_Click;
             // 
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top;
-            pictureBox1.Location = new Point(284, 886);
+            pictureBox1.Location = new Point(406, 1303);
+            pictureBox1.Margin = new Padding(4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(311, 282);
+            pictureBox1.Size = new Size(444, 415);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
@@ -66,9 +68,10 @@
             // button1
             // 
             button1.Anchor = AnchorStyles.Top;
-            button1.Location = new Point(654, 1004);
+            button1.Location = new Point(934, 1476);
+            button1.Margin = new Padding(4);
             button1.Name = "button1";
-            button1.Size = new Size(105, 28);
+            button1.Size = new Size(150, 41);
             button1.TabIndex = 2;
             button1.Text = "Add Picture";
             button1.UseVisualStyleBackColor = true;
@@ -79,9 +82,10 @@
             DICOMTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             DICOMTitle.AutoSize = true;
             DICOMTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            DICOMTitle.Location = new Point(57, 577);
+            DICOMTitle.Location = new Point(81, 849);
+            DICOMTitle.Margin = new Padding(4, 0, 4, 0);
             DICOMTitle.Name = "DICOMTitle";
-            DICOMTitle.Size = new Size(141, 28);
+            DICOMTitle.Size = new Size(216, 42);
             DICOMTitle.TabIndex = 3;
             DICOMTitle.Text = "DICOM Files";
             // 
@@ -94,28 +98,14 @@
             ImportDICOMButton.FlatStyle = FlatStyle.Flat;
             ImportDICOMButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ImportDICOMButton.ForeColor = Color.White;
-            ImportDICOMButton.Location = new Point(592, 573);
+            ImportDICOMButton.Location = new Point(846, 843);
+            ImportDICOMButton.Margin = new Padding(4);
             ImportDICOMButton.Name = "ImportDICOMButton";
-            ImportDICOMButton.Size = new Size(97, 33);
+            ImportDICOMButton.Size = new Size(139, 49);
             ImportDICOMButton.TabIndex = 4;
             ImportDICOMButton.Text = "+ Import";
             ImportDICOMButton.UseVisualStyleBackColor = false;
             ImportDICOMButton.Click += ImportDICOMButton_Click;
-            // 
-            // fileListBox
-            // 
-            fileListBox.AllowDrop = true;
-            fileListBox.Anchor = AnchorStyles.Top;
-            fileListBox.BorderRadius = 20;
-            fileListBox.DrawMode = DrawMode.OwnerDrawVariable;
-            fileListBox.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            fileListBox.FormattingEnabled = true;
-            fileListBox.ItemHeight = 24;
-            fileListBox.Location = new Point(53, 623);
-            fileListBox.Name = "fileListBox";
-            fileListBox.SelectionMode = SelectionMode.None;
-            fileListBox.Size = new Size(785, 157);
-            fileListBox.TabIndex = 5;
             // 
             // RemoveAllButton
             // 
@@ -126,9 +116,10 @@
             RemoveAllButton.FlatStyle = FlatStyle.Flat;
             RemoveAllButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             RemoveAllButton.ForeColor = Color.White;
-            RemoveAllButton.Location = new Point(725, 573);
+            RemoveAllButton.Location = new Point(1036, 843);
+            RemoveAllButton.Margin = new Padding(4);
             RemoveAllButton.Name = "RemoveAllButton";
-            RemoveAllButton.Size = new Size(113, 33);
+            RemoveAllButton.Size = new Size(161, 49);
             RemoveAllButton.TabIndex = 6;
             RemoveAllButton.Text = "Remove All";
             RemoveAllButton.UseVisualStyleBackColor = false;
@@ -143,16 +134,16 @@
             panel1.Controls.Add(OrganSlicesTitle);
             panel1.Controls.Add(ImportDICOMButton);
             panel1.Controls.Add(button1);
-            panel1.Controls.Add(fileListBox);
             panel1.Controls.Add(pictureBox1);
             panel1.Controls.Add(RemoveAllButton);
             panel1.Controls.Add(AddCaseTitle);
             panel1.Controls.Add(DICOMTitle);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
-            panel1.Padding = new Padding(3, 4, 3, 4);
-            panel1.Size = new Size(907, 678);
+            panel1.Padding = new Padding(4, 6, 4, 6);
+            panel1.Size = new Size(1296, 997);
             panel1.TabIndex = 7;
             // 
             // AddOrganSlicesButton
@@ -164,9 +155,10 @@
             AddOrganSlicesButton.FlatStyle = FlatStyle.Flat;
             AddOrganSlicesButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             AddOrganSlicesButton.ForeColor = Color.White;
-            AddOrganSlicesButton.Location = new Point(671, 803);
+            AddOrganSlicesButton.Location = new Point(959, 1181);
+            AddOrganSlicesButton.Margin = new Padding(4);
             AddOrganSlicesButton.Name = "AddOrganSlicesButton";
-            AddOrganSlicesButton.Size = new Size(167, 33);
+            AddOrganSlicesButton.Size = new Size(239, 49);
             AddOrganSlicesButton.TabIndex = 8;
             AddOrganSlicesButton.Text = "+ Add an organ slice";
             AddOrganSlicesButton.UseVisualStyleBackColor = false;
@@ -177,19 +169,21 @@
             OrganSlicesTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             OrganSlicesTitle.AutoSize = true;
             OrganSlicesTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganSlicesTitle.Location = new Point(57, 803);
+            OrganSlicesTitle.Location = new Point(81, 1181);
+            OrganSlicesTitle.Margin = new Padding(4, 0, 4, 0);
             OrganSlicesTitle.Name = "OrganSlicesTitle";
-            OrganSlicesTitle.Size = new Size(142, 28);
+            OrganSlicesTitle.Size = new Size(217, 42);
             OrganSlicesTitle.TabIndex = 7;
             OrganSlicesTitle.Text = "Organ Slices";
             // 
             // AddCaseControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
+            Margin = new Padding(4);
             Name = "AddCaseControl";
-            Size = new Size(907, 678);
+            Size = new Size(1296, 997);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

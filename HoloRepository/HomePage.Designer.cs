@@ -33,6 +33,7 @@
             ViewCasesButton = new Button();
             UserGuideButton = new Button();
             mainPanel = new Panel();
+            basicInfo = new Button();
             mainPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -41,7 +42,7 @@
             Title.Anchor = AnchorStyles.None;
             Title.AutoSize = true;
             Title.Font = new Font("Tahoma", 50.25F, FontStyle.Bold, GraphicsUnit.Point);
-            Title.Location = new Point(196, 127);
+            Title.Location = new Point(178, 132);
             Title.Margin = new Padding(5, 0, 5, 0);
             Title.Name = "Title";
             Title.Size = new Size(830, 122);
@@ -55,10 +56,10 @@
             AddCaseButton.FlatStyle = FlatStyle.Flat;
             AddCaseButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             AddCaseButton.ForeColor = SystemColors.ButtonFace;
-            AddCaseButton.Location = new Point(495, 275);
+            AddCaseButton.Location = new Point(450, 286);
             AddCaseButton.Margin = new Padding(5, 4, 5, 4);
             AddCaseButton.Name = "AddCaseButton";
-            AddCaseButton.Size = new Size(292, 55);
+            AddCaseButton.Size = new Size(265, 57);
             AddCaseButton.TabIndex = 1;
             AddCaseButton.Text = "Add a Case";
             AddCaseButton.UseVisualStyleBackColor = false;
@@ -71,10 +72,10 @@
             ViewCasesButton.FlatStyle = FlatStyle.Flat;
             ViewCasesButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             ViewCasesButton.ForeColor = SystemColors.ButtonFace;
-            ViewCasesButton.Location = new Point(495, 364);
+            ViewCasesButton.Location = new Point(450, 379);
             ViewCasesButton.Margin = new Padding(5, 4, 5, 4);
             ViewCasesButton.Name = "ViewCasesButton";
-            ViewCasesButton.Size = new Size(292, 55);
+            ViewCasesButton.Size = new Size(265, 57);
             ViewCasesButton.TabIndex = 2;
             ViewCasesButton.Text = "View Cases";
             ViewCasesButton.UseVisualStyleBackColor = false;
@@ -87,10 +88,10 @@
             UserGuideButton.FlatStyle = FlatStyle.Flat;
             UserGuideButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             UserGuideButton.ForeColor = Color.Transparent;
-            UserGuideButton.Location = new Point(495, 453);
+            UserGuideButton.Location = new Point(450, 472);
             UserGuideButton.Margin = new Padding(5, 4, 5, 4);
             UserGuideButton.Name = "UserGuideButton";
-            UserGuideButton.Size = new Size(292, 55);
+            UserGuideButton.Size = new Size(265, 57);
             UserGuideButton.TabIndex = 3;
             UserGuideButton.Text = "User Guide";
             UserGuideButton.UseVisualStyleBackColor = false;
@@ -100,6 +101,7 @@
             // 
             mainPanel.AutoScroll = true;
             mainPanel.BackColor = Color.White;
+            mainPanel.Controls.Add(basicInfo);
             mainPanel.Controls.Add(AddCaseButton);
             mainPanel.Controls.Add(Title);
             mainPanel.Controls.Add(UserGuideButton);
@@ -108,14 +110,25 @@
             mainPanel.Location = new Point(0, 0);
             mainPanel.Margin = new Padding(5, 4, 5, 4);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(1257, 635);
+            mainPanel.Size = new Size(1143, 661);
             mainPanel.TabIndex = 4;
+            // 
+            // basicInfo
+            // 
+            basicInfo.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            basicInfo.Location = new Point(140, 346);
+            basicInfo.Name = "basicInfo";
+            basicInfo.Size = new Size(112, 34);
+            basicInfo.TabIndex = 4;
+            basicInfo.Text = "temp";
+            basicInfo.UseVisualStyleBackColor = true;
+            basicInfo.Click += basicInfo_Click;
             // 
             // HomePage
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1257, 635);
+            ClientSize = new Size(1143, 661);
             Controls.Add(mainPanel);
             Margin = new Padding(5, 4, 5, 4);
             Name = "HomePage";
@@ -132,5 +145,6 @@
         private Button ViewCasesButton;
         private Button UserGuideButton;
         private Panel mainPanel;
+        private Button basicInfo;
     }
 }

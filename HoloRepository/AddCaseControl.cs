@@ -79,5 +79,10 @@ namespace HoloRepository
                 addOrganSlice.ShowDialog();
             }
         }
+
+        private void AddCaseTitle_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
