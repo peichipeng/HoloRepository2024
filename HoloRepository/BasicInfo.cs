@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HoloRepository.CasePageControls;
+using HoloRepository.CasePageControls.Footer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +17,8 @@ namespace HoloRepository
         public BasicInfo()
         {
             InitializeComponent();
+            AddDonorInfo addDonorInfo = new AddDonorInfo();
+            addContent(addDonorInfo);
         }
 
         private void roundedButton1_Click(object sender, EventArgs e)
@@ -37,10 +41,20 @@ namespace HoloRepository
 
         }
 
-        private void nextBtn_Click(object sender, EventArgs e)
+        private void addContent(UserControl userControl)
         {
-            //nextBtn.Visible = false;
-            //saveBtn.Visible = true;
+            userControl.Dock = DockStyle.Fill;
+            contentContainer.Controls.Clear();
+            contentContainer.Controls.Add(userControl);
+            userControl.BringToFront();
+        }
+
+        public void addFooter(UserControl userControl)
+        {
+            userControl.Dock = DockStyle.Fill;
+            footerContainer.Controls.Clear();
+            footerContainer.Controls.Add(userControl);
+            userControl.BringToFront();
         }
 
         private void materialTextBox1_TextChanged(object sender, EventArgs e)
@@ -51,6 +65,24 @@ namespace HoloRepository
         private void label4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void panelContainer_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void nextBtn_Click(object sender, EventArgs e)
+        {
+            //nextBtn.Visible = false;
+            //saveBtn.Visible = true;
+            if (nextBtn.Text == "Next")
+            {
+                nextBtn.Text = "Save";
+                addSliceBtn caseOverview = new addSliceBtn();
+                addContent(caseOverview);
+
+            }
         }
     }
 }

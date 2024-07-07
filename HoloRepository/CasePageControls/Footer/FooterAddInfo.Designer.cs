@@ -1,6 +1,6 @@
-﻿namespace HoloRepository
+﻿namespace HoloRepository.CasePageControls.Footer
 {
-    partial class BasicInfo
+    partial class FooterAddInfo
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,23 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            footerContainer = new Panel();
             nextBtn = new RoundedButton();
             cancelBtn = new RoundedButton();
-            panel1 = new Panel();
-            contentContainer = new Panel();
-            footerContainer.SuspendLayout();
             SuspendLayout();
-            // 
-            // footerContainer
-            // 
-            footerContainer.Controls.Add(nextBtn);
-            footerContainer.Controls.Add(cancelBtn);
-            footerContainer.Dock = DockStyle.Bottom;
-            footerContainer.Location = new Point(0, 516);
-            footerContainer.Name = "footerContainer";
-            footerContainer.Size = new Size(1143, 145);
-            footerContainer.TabIndex = 1;
             // 
             // nextBtn
             // 
@@ -53,11 +39,11 @@
             nextBtn.BorderRadius = 15;
             nextBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             nextBtn.ForeColor = Color.White;
-            nextBtn.Location = new Point(922, 27);
+            nextBtn.Location = new Point(956, 62);
             nextBtn.Margin = new Padding(3, 3, 20, 3);
             nextBtn.Name = "nextBtn";
             nextBtn.Size = new Size(116, 51);
-            nextBtn.TabIndex = 5;
+            nextBtn.TabIndex = 3;
             nextBtn.Text = "Next";
             nextBtn.UseVisualStyleBackColor = false;
             nextBtn.Click += nextBtn_Click;
@@ -69,50 +55,27 @@
             cancelBtn.BorderRadius = 15;
             cancelBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             cancelBtn.ForeColor = Color.White;
-            cancelBtn.Location = new Point(103, 27);
+            cancelBtn.Location = new Point(71, 62);
             cancelBtn.Margin = new Padding(20, 3, 3, 3);
             cancelBtn.Name = "cancelBtn";
             cancelBtn.Size = new Size(116, 51);
-            cancelBtn.TabIndex = 4;
+            cancelBtn.TabIndex = 2;
             cancelBtn.Text = "Cancel";
             cancelBtn.UseVisualStyleBackColor = false;
             // 
-            // panel1
-            // 
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.MaximumSize = new Size(0, 40);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(1143, 40);
-            panel1.TabIndex = 2;
-            // 
-            // contentContainer
-            // 
-            contentContainer.Dock = DockStyle.Fill;
-            contentContainer.Location = new Point(0, 40);
-            contentContainer.Name = "contentContainer";
-            contentContainer.Size = new Size(1143, 476);
-            contentContainer.TabIndex = 16;
-            contentContainer.Paint += panelContainer_Paint;
-            // 
-            // BasicInfo
+            // FooterAddInfo
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(contentContainer);
-            Controls.Add(panel1);
-            Controls.Add(footerContainer);
-            Name = "BasicInfo";
-            Size = new Size(1143, 661);
-            Load += BasicInfo_Load;
-            footerContainer.ResumeLayout(false);
+            Controls.Add(nextBtn);
+            Controls.Add(cancelBtn);
+            Name = "FooterAddInfo";
+            Size = new Size(1143, 175);
             ResumeLayout(false);
         }
 
         #endregion
-        private Panel footerContainer;
-        private Panel panel1;
-        private Panel contentContainer;
+
         private RoundedButton nextBtn;
         private RoundedButton cancelBtn;
     }
