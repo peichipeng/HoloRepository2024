@@ -79,9 +79,10 @@ namespace HoloRepository
             if (nextBtn.Text == "Next")
             {
                 nextBtn.Text = "Save";
-                addSliceBtn caseOverview = new addSliceBtn();
-                addContent(caseOverview);
-
+                //addSliceBtn caseOverview = new addSliceBtn();
+                //addContent(caseOverview);
+                CasePageContainer casePageContainer = new CasePageContainer();
+                addContent(casePageContainer);
             }
         }
     }

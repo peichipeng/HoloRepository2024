@@ -10,21 +10,11 @@ using System.Windows.Forms;
 
 namespace HoloRepository.CasePageControls
 {
-    public partial class addSliceBtn : UserControl
+    public partial class AddCase : UserControl
     {
-        public addSliceBtn()
+        public AddCase()
         {
             InitializeComponent();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void CaseOverview_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
