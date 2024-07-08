@@ -16,5 +16,11 @@ namespace HoloRepository.CasePageControls
         {
             InitializeComponent();
         }
+        public void OnUpdateBtnClicked(object? sender, DonorInfoEventArgs e)
+        {
+            MessageBox.Show("hey");
+            title.Text = "Update Donor's Basic Information";
+            ID.Text = e.donorInfo["id"];
+        }
     }
 }

@@ -17,8 +17,17 @@ namespace HoloRepository
         public BasicInfo()
         {
             InitializeComponent();
+            InitializeCustomComponents();
             AddDonorInfo addDonorInfo = new AddDonorInfo();
             addContent(addDonorInfo);
+        }
+
+        private void InitializeCustomComponents()
+        {
+            AddCase addCase = new AddCase();
+            AddDonorInfo addInfo = new AddDonorInfo();
+
+            addCase.UpdateBtnClicked += addInfo.OnUpdateBtnClicked;
         }
 
         private void roundedButton1_Click(object sender, EventArgs e)

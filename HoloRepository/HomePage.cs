@@ -1,3 +1,5 @@
+using HoloRepository.CasePageControls;
+
 namespace HoloRepository
 {
     public partial class HomePage : Form

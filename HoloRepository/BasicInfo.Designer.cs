@@ -112,7 +112,7 @@
         #endregion
         private Panel footerContainer;
         private Panel panel1;
-        private Panel contentContainer;
+        public Panel contentContainer;
         private RoundedButton nextBtn;
         private RoundedButton cancelBtn;
     }
