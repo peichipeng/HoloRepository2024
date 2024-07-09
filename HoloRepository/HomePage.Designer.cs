@@ -33,7 +33,7 @@
             ViewCasesButton = new Button();
             UserGuideButton = new Button();
             mainPanel = new Panel();
-            basicInfo = new Button();
+            AddBtn = new Button();
             mainPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -42,10 +42,10 @@
             Title.Anchor = AnchorStyles.None;
             Title.AutoSize = true;
             Title.Font = new Font("Tahoma", 50.25F, FontStyle.Bold, GraphicsUnit.Point);
-            Title.Location = new Point(178, 132);
-            Title.Margin = new Padding(5, 0, 5, 0);
+            Title.Location = new Point(125, 79);
+            Title.Margin = new Padding(4, 0, 4, 0);
             Title.Name = "Title";
-            Title.Size = new Size(830, 122);
+            Title.Size = new Size(551, 81);
             Title.TabIndex = 0;
             Title.Text = "HoloRepository";
             // 
@@ -56,10 +56,10 @@
             AddCaseButton.FlatStyle = FlatStyle.Flat;
             AddCaseButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             AddCaseButton.ForeColor = SystemColors.ButtonFace;
-            AddCaseButton.Location = new Point(450, 286);
-            AddCaseButton.Margin = new Padding(5, 4, 5, 4);
+            AddCaseButton.Location = new Point(315, 172);
+            AddCaseButton.Margin = new Padding(4, 2, 4, 2);
             AddCaseButton.Name = "AddCaseButton";
-            AddCaseButton.Size = new Size(265, 57);
+            AddCaseButton.Size = new Size(186, 34);
             AddCaseButton.TabIndex = 1;
             AddCaseButton.Text = "Add a Case";
             AddCaseButton.UseVisualStyleBackColor = false;
@@ -72,10 +72,10 @@
             ViewCasesButton.FlatStyle = FlatStyle.Flat;
             ViewCasesButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             ViewCasesButton.ForeColor = SystemColors.ButtonFace;
-            ViewCasesButton.Location = new Point(450, 379);
-            ViewCasesButton.Margin = new Padding(5, 4, 5, 4);
+            ViewCasesButton.Location = new Point(315, 227);
+            ViewCasesButton.Margin = new Padding(4, 2, 4, 2);
             ViewCasesButton.Name = "ViewCasesButton";
-            ViewCasesButton.Size = new Size(265, 57);
+            ViewCasesButton.Size = new Size(186, 34);
             ViewCasesButton.TabIndex = 2;
             ViewCasesButton.Text = "View Cases";
             ViewCasesButton.UseVisualStyleBackColor = false;
@@ -88,10 +88,10 @@
             UserGuideButton.FlatStyle = FlatStyle.Flat;
             UserGuideButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             UserGuideButton.ForeColor = Color.Transparent;
-            UserGuideButton.Location = new Point(450, 472);
-            UserGuideButton.Margin = new Padding(5, 4, 5, 4);
+            UserGuideButton.Location = new Point(315, 283);
+            UserGuideButton.Margin = new Padding(4, 2, 4, 2);
             UserGuideButton.Name = "UserGuideButton";
-            UserGuideButton.Size = new Size(265, 57);
+            UserGuideButton.Size = new Size(186, 34);
             UserGuideButton.TabIndex = 3;
             UserGuideButton.Text = "User Guide";
             UserGuideButton.UseVisualStyleBackColor = false;
@@ -101,36 +101,36 @@
             // 
             mainPanel.AutoScroll = true;
             mainPanel.BackColor = Color.White;
-            mainPanel.Controls.Add(basicInfo);
+            mainPanel.Controls.Add(AddBtn);
             mainPanel.Controls.Add(AddCaseButton);
             mainPanel.Controls.Add(Title);
             mainPanel.Controls.Add(UserGuideButton);
             mainPanel.Controls.Add(ViewCasesButton);
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
-            mainPanel.Margin = new Padding(5, 4, 5, 4);
+            mainPanel.Margin = new Padding(4, 2, 4, 2);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(1143, 661);
+            mainPanel.Size = new Size(800, 397);
             mainPanel.TabIndex = 4;
             // 
-            // basicInfo
+            // AddBtn
             // 
-            basicInfo.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            basicInfo.Location = new Point(140, 346);
-            basicInfo.Name = "basicInfo";
-            basicInfo.Size = new Size(112, 34);
-            basicInfo.TabIndex = 4;
-            basicInfo.Text = "temp";
-            basicInfo.UseVisualStyleBackColor = true;
-            basicInfo.Click += basicInfo_Click;
+            AddBtn.Font = new Font("Century Gothic", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            AddBtn.Location = new Point(98, 265);
+            AddBtn.Name = "AddBtn";
+            AddBtn.Size = new Size(90, 38);
+            AddBtn.TabIndex = 5;
+            AddBtn.Text = "temp";
+            AddBtn.UseVisualStyleBackColor = true;
+            AddBtn.Click += AddBtn_Click;
             // 
             // HomePage
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1143, 661);
+            ClientSize = new Size(800, 397);
             Controls.Add(mainPanel);
-            Margin = new Padding(5, 4, 5, 4);
+            Margin = new Padding(4, 2, 4, 2);
             Name = "HomePage";
             Text = "HoloRepository";
             mainPanel.ResumeLayout(false);
@@ -145,6 +145,6 @@
         private Button ViewCasesButton;
         private Button UserGuideButton;
         private Panel mainPanel;
-        private Button basicInfo;
+        private Button AddBtn;
     }
 }

@@ -1,4 +1,3 @@
-using HoloRepository.CasePageControls;
 
 namespace HoloRepository
 {
@@ -31,9 +30,9 @@ namespace HoloRepository
             mainPanel.Controls.Add(userControl);
         }
 
-        private void basicInfo_Click(object sender, EventArgs e)
+        private void AddBtn_Click(object sender, EventArgs e)
         {
-            LoadControl(new BasicInfo());
+            LoadControl(new MainFramwork("add"));
         }
     }
 }
