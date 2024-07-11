@@ -9,6 +9,7 @@ namespace HoloRepository
 {
     public class RoundedListBox : ListBox
     {
+        public event EventHandler<string> ImageDeleted;
         public int BorderRadius { get; set; } = 20;
         private readonly Image deleteButtonImage;
         private const int DeleteButtonSize = 20;
@@ -19,7 +20,7 @@ namespace HoloRepository
         public RoundedListBox()
         {
             this.DrawMode = DrawMode.OwnerDrawVariable;
-
+            
             string absoluteImagePath = @"C:\Users\10927\source\repos\HoloRepository\HoloRepository\DeleteButton.png";
 
             if (File.Exists(absoluteImagePath))
@@ -28,7 +29,7 @@ namespace HoloRepository
             }
             else
             {
-                throw new FileNotFoundException($"DeleteButton.png 文件未找到。路径：{absoluteImagePath}");
+                throw new FileNotFoundException($"DeleteButton.png not found, path is {absoluteImagePath}");
             }
         }
 
@@ -68,6 +69,22 @@ namespace HoloRepository
             Rectangle bounds = e.Bounds;
             bounds.Width -= DeleteButtonSize + DeleteButtonMargin;
             bounds.Inflate(-10, -10);
+
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                using (Brush brush = new SolidBrush(SystemColors.Highlight))
+                {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }
+            }
+            else
+            {
+                using (Brush brush = new SolidBrush(this.BackColor))
+                {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }
+            }
+
             e.Graphics.DrawString(itemText, e.Font, new SolidBrush(e.ForeColor), bounds, StringFormat.GenericDefault);
 
             if (deleteButtonImage != null)
@@ -89,6 +106,7 @@ namespace HoloRepository
                                     e.Bounds.Left + 5 + lineLength, e.Bounds.Bottom - 1);
             }
         }
+
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
@@ -114,6 +132,9 @@ namespace HoloRepository
 
                     if (deleteButtonBounds.Contains(e.Location))
                     {
+                        string deletedImagePath = (string)Items[i];
+                        ImageDeleted?.Invoke(this, deletedImagePath);
+
                         Items.RemoveAt(i);
 
                         Invalidate();

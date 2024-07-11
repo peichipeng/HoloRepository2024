@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,27 +13,35 @@ namespace HoloRepository
 {
     public partial class AddCaseControl : UserControl
     {
-
+        private List<string> imagePaths = new List<string>();
         public AddCaseControl()
         {
             InitializeComponent();
+            InitializeCustomComponents();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void InitializeCustomComponents()
         {
-            using OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = "c:\\";
-            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            // Subscribe to the ImageDeleted event
+            if (fileListBox is RoundedListBox roundedListBox)
             {
-                // Get the path of specified file
-                string filePath = openFileDialog.FileName;
+                roundedListBox.ImageDeleted += RoundedListBox_ImageDeleted;
+            }
+        }
 
-                // Display image in pictureBox
-                pictureBox1.Image = new Bitmap(filePath);
+        private void RoundedListBox_ImageDeleted(object sender, string deletedFileName)
+        {
+            // Find the full path corresponding to the deleted file name
+            string deletedImagePath = imagePaths.FirstOrDefault(path => path.EndsWith(deletedFileName, StringComparison.InvariantCultureIgnoreCase));
+
+            if (deletedImagePath != null)
+            {
+                imagePaths.Remove(deletedImagePath);
+                Debug.WriteLine($"Deleted image path: {deletedImagePath}");
+            }
+            else
+            {
+                Debug.WriteLine($"Image path for file {deletedFileName} was not found in the list.");
             }
         }
 
@@ -41,17 +50,22 @@ namespace HoloRepository
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Multiselect = true;
-                openFileDialog.Filter = "All files (*.*)|*.*";
+                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
+                openFileDialog.Multiselect = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    // Get selected file names and add to list box
-                    foreach (string fileName in openFileDialog.FileNames)
+                    // Process each selected image file
+                    foreach (string filePath in openFileDialog.FileNames)
                     {
-                        fileListBox.Items.Add(Path.GetFileName(fileName));
+                        // Add file name to ListBox
+                        string fileName = Path.GetFileName(filePath);
+                        fileListBox.Items.Add(fileName);
+
+                        // Add file path to list
+                        imagePaths.Add(filePath);
                     }
                 }
             }
@@ -67,6 +81,7 @@ namespace HoloRepository
             if (result == DialogResult.Yes)
             {
                 fileListBox.Items.Clear();
+                imagePaths.Clear();
             }
         }
 
@@ -76,8 +91,25 @@ namespace HoloRepository
             {
                 addOrganSlice.StartPosition = FormStartPosition.CenterParent;
 
+                List<Image> images = new();
+                foreach (string path in imagePaths)
+                {
+                    images.Add(new Bitmap(path));
+                }
+                addOrganSlice.SetImageList(images);
+
                 addOrganSlice.ShowDialog();
             }
         }
+
+        private void CancelAddOrganButton_Click(object sender, EventArgs e)
+        {
+            Form parentForm = this.ParentForm;
+            if (parentForm != null)
+            {
+                parentForm.Close();
+            }
+        }
+
     }
 }
