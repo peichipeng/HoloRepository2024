@@ -63,8 +63,8 @@ namespace HoloRepository
             overlayPanel = new Panel
             {
                 BackColor = Color.FromArgb(128, 255, 255, 255),
-                Location = new Point(662, 23),
-                Size = new Size(509, 371),
+                Location = new Point(562,15),
+                Size = new Size(480,377),
                 Visible = true
             };
 
@@ -119,8 +119,8 @@ namespace HoloRepository
 
                 float lineHeight = labelFont.Height * 1.5f;
 
-                float y = 200;
-                RectangleF rect = new RectangleF(25, y, 450, 300);
+                float y = 225;
+                RectangleF rect = new RectangleF(20, y, 450, 300);
 
 
                 string[] lines = labelText.Split(new string[] { "\n" }, StringSplitOptions.None);

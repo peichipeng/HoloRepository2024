@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Reflection;
+using System.IO;
 using System.Windows.Forms;
 
 namespace HoloRepository
@@ -21,24 +21,39 @@ namespace HoloRepository
         {
             this.DrawMode = DrawMode.OwnerDrawVariable;
 
-            // Get the base directory of the application source
-            string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
-            // Construct the full path to the image file
-            string absoluteImagePath = Path.Combine(projectDirectory, "DeleteButton.png");
+            try
+            {
+                // Get the base directory of the application source
+                string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
+                // Construct the full path to the image file
+                string absoluteImagePath = Path.Combine(projectDirectory, "DeleteButton.png");
 
-            if (File.Exists(absoluteImagePath))
-            {
-                deleteButtonImage = Image.FromFile(absoluteImagePath);
+                if (File.Exists(absoluteImagePath))
+                {
+                    deleteButtonImage = Image.FromFile(absoluteImagePath);
+                }
+                else
+                {
+                    throw new FileNotFoundException($"DeleteButton.png not found, path is {absoluteImagePath}");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new FileNotFoundException($"DeleteButton.png not found, path is {absoluteImagePath}");
+                // Handle exception (e.g., log, display error message)
+                Debug.WriteLine($"Error loading image: {ex.Message}");
+                // Provide a fallback or default behavior here if necessary
+                deleteButtonImage = null; // or provide a default image
             }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+            if (DesignMode)
+            {
+                base.OnPaint(e);
+                e.Graphics.Clear(BackColor);  // Clear background to show default control style in design mode
+                return;
+            }
 
             GraphicsPath graphicsPath = new GraphicsPath();
             graphicsPath.AddArc(0, 0, BorderRadius, BorderRadius, 180, 90);
@@ -49,15 +64,18 @@ namespace HoloRepository
 
             Region = new Region(graphicsPath);
 
-            using Brush brush = new SolidBrush(BackColor);
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.FillPath(brush, graphicsPath);
+            using (Brush brush = new SolidBrush(BackColor))
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                e.Graphics.FillPath(brush, graphicsPath);
+            }
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
             if (DesignMode || e.Index < 0)
             {
+                base.OnDrawItem(e);
                 return;
             }
 
@@ -88,6 +106,8 @@ namespace HoloRepository
                 }
             }
 
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+
             e.Graphics.DrawString(itemText, e.Font, new SolidBrush(e.ForeColor), bounds, StringFormat.GenericDefault);
 
             if (deleteButtonImage != null)
@@ -109,7 +129,6 @@ namespace HoloRepository
                                     e.Bounds.Left + 5 + lineLength, e.Bounds.Bottom - 1);
             }
         }
-
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
