@@ -32,7 +32,7 @@ namespace HoloRepository
             {
                 numberOfImages = value;
                 CalculateDivisions();
-                Invalidate(); // 重新绘制控件
+                Invalidate();
             }
         }
 

@@ -14,6 +14,8 @@ namespace HoloRepository
         {
             base.OnPaint(e);
 
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
             GraphicsPath graphicsPath = new();
             graphicsPath.AddArc(0, 0, BorderRadius, BorderRadius, 180, 90);
             graphicsPath.AddArc(Width - BorderRadius, 0, BorderRadius, BorderRadius, 270, 90);

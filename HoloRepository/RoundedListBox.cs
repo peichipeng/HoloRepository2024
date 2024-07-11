@@ -2,13 +2,14 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Reflection;
+using System.IO;
 using System.Windows.Forms;
 
 namespace HoloRepository
 {
     public class RoundedListBox : ListBox
     {
+        public event EventHandler<string> ImageDeleted;
         public int BorderRadius { get; set; } = 20;
         private readonly Image deleteButtonImage;
         private const int DeleteButtonSize = 20;
@@ -20,24 +21,39 @@ namespace HoloRepository
         {
             this.DrawMode = DrawMode.OwnerDrawVariable;
 
-            // Get the base directory of the application source
-            string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
-            // Construct the full path to the image file
-            string absoluteImagePath = Path.Combine(projectDirectory, "DeleteButton.png");
+            try
+            {
+                // Get the base directory of the application source
+                string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
+                // Construct the full path to the image file
+                string absoluteImagePath = Path.Combine(projectDirectory, "DeleteButton.png");
 
-            if (File.Exists(absoluteImagePath))
-            {
-                deleteButtonImage = Image.FromFile(absoluteImagePath);
+                if (File.Exists(absoluteImagePath))
+                {
+                    deleteButtonImage = Image.FromFile(absoluteImagePath);
+                }
+                else
+                {
+                    throw new FileNotFoundException($"DeleteButton.png not found, path is {absoluteImagePath}");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new FileNotFoundException($"DeleteButton.png 文件未找到。路径：{absoluteImagePath}");
+                // Handle exception (e.g., log, display error message)
+                Debug.WriteLine($"Error loading image: {ex.Message}");
+                // Provide a fallback or default behavior here if necessary
+                deleteButtonImage = null; // or provide a default image
             }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+            if (DesignMode)
+            {
+                base.OnPaint(e);
+                e.Graphics.Clear(BackColor);  // Clear background to show default control style in design mode
+                return;
+            }
 
             GraphicsPath graphicsPath = new GraphicsPath();
             graphicsPath.AddArc(0, 0, BorderRadius, BorderRadius, 180, 90);
@@ -48,15 +64,18 @@ namespace HoloRepository
 
             Region = new Region(graphicsPath);
 
-            using Brush brush = new SolidBrush(BackColor);
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.FillPath(brush, graphicsPath);
+            using (Brush brush = new SolidBrush(BackColor))
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                e.Graphics.FillPath(brush, graphicsPath);
+            }
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
             if (DesignMode || e.Index < 0)
             {
+                base.OnDrawItem(e);
                 return;
             }
 
@@ -71,6 +90,24 @@ namespace HoloRepository
             Rectangle bounds = e.Bounds;
             bounds.Width -= DeleteButtonSize + DeleteButtonMargin;
             bounds.Inflate(-10, -10);
+
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                using (Brush brush = new SolidBrush(SystemColors.Highlight))
+                {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }
+            }
+            else
+            {
+                using (Brush brush = new SolidBrush(this.BackColor))
+                {
+                    e.Graphics.FillRectangle(brush, e.Bounds);
+                }
+            }
+
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+
             e.Graphics.DrawString(itemText, e.Font, new SolidBrush(e.ForeColor), bounds, StringFormat.GenericDefault);
 
             if (deleteButtonImage != null)
@@ -117,6 +154,9 @@ namespace HoloRepository
 
                     if (deleteButtonBounds.Contains(e.Location))
                     {
+                        string deletedImagePath = (string)Items[i];
+                        ImageDeleted?.Invoke(this, deletedImagePath);
+
                         Items.RemoveAt(i);
 
                         Invalidate();
