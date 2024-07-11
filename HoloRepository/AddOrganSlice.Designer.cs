@@ -145,7 +145,7 @@
             // 
             // AddOrganSlice
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(769, 537);
@@ -153,7 +153,6 @@
             Controls.Add(roundedPanel1);
             Controls.Add(Add);
             Controls.Add(OrganSlicePanel);
-            Margin = new Padding(2);
             Name = "AddOrganSlice";
             Text = "Add an organ slice";
             ((System.ComponentModel.ISupportInitialize)DICOMFilePicture).EndInit();

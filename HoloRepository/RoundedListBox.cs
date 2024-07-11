@@ -20,8 +20,11 @@ namespace HoloRepository
         public RoundedListBox()
         {
             this.DrawMode = DrawMode.OwnerDrawVariable;
-            
-            string absoluteImagePath = @"C:\Users\10927\source\repos\HoloRepository\HoloRepository\DeleteButton.png";
+
+            // Get the base directory of the application source
+            string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
+            // Construct the full path to the image file
+            string absoluteImagePath = Path.Combine(projectDirectory, "DeleteButton.png");
 
             if (File.Exists(absoluteImagePath))
             {

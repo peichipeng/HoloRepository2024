@@ -1,3 +1,4 @@
+
 namespace HoloRepository
 {
     public partial class HomePage : Form
@@ -27,6 +28,11 @@ namespace HoloRepository
             mainPanel.Controls.Clear();
             userControl.Dock = DockStyle.Fill;
             mainPanel.Controls.Add(userControl);
+        }
+
+        private void AddBtn_Click(object sender, EventArgs e)
+        {
+            LoadControl(new MainFramwork("add"));
         }
     }
 }
