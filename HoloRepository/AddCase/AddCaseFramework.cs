@@ -29,14 +29,29 @@ namespace HoloRepository.AddCase
 
         private void nextBtn_Click(object sender, EventArgs e)
         {
-            Dictionary<string, string> donorInfo = new Dictionary<string, string>
+            if (addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
             {
-                {"id", donorInfoPage.donorID.Text },
-                {"dod", donorInfoPage.DOD.Text},
-                {"age", donorInfoPage.age.Text},
-                {"causeOfDeath", donorInfoPage.causeOfDeath.Text}
-            };
-            LoadControl(new CaseOrganFramework("case", donorInfo)); 
+                Dictionary<string, string> donorInfo = new Dictionary<string, string>
+                {
+                    {"id", donorInfoPage.donorID.Text },
+                    {"dod", donorInfoPage.DOD.Text},
+                    {"age", donorInfoPage.age.Text},
+                    {"causeOfDeath", donorInfoPage.causeOfDeath.Text}
+                };
+                LoadControl(new CaseOrganFramework("case", donorInfo));
+                nextBtn.Text = "save";
+            }
+        }
+
+        public string InspectControls()
+        {
+            string userControls = string.Empty;
+
+            foreach (Control control in addCaseContainer.Controls)
+            {
+                userControls += control.Name;
+            }
+            return userControls;
         }
     }
 }

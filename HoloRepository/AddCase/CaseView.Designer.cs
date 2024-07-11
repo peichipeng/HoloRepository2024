@@ -43,12 +43,14 @@
             label3 = new Label();
             label2 = new Label();
             label6 = new Label();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)updateBtn).BeginInit();
             SuspendLayout();
             // 
             // updateBtn
             // 
             updateBtn.Anchor = AnchorStyles.Top;
+            updateBtn.BackColor = Color.Transparent;
             updateBtn.Image = (Image)resources.GetObject("updateBtn.Image");
             updateBtn.Location = new Point(341, 2);
             updateBtn.Name = "updateBtn";
@@ -57,13 +59,18 @@
             updateBtn.TabIndex = 75;
             updateBtn.TabStop = false;
             updateBtn.Click += updateBtn_Click;
+            updateBtn.MouseEnter += updateBtn_MouseEnter;
+            updateBtn.MouseLeave += updateBtn_MouseLeave;
             // 
             // flowLayoutPanel1
             // 
-            flowLayoutPanel1.Location = new Point(71, 187);
+            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel1.BackColor = Color.Transparent;
+            flowLayoutPanel1.Location = new Point(60, 187);
             flowLayoutPanel1.Margin = new Padding(2);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(660, 112);
+            flowLayoutPanel1.Size = new Size(698, 261);
             flowLayoutPanel1.TabIndex = 74;
             // 
             // materialDivider2
@@ -224,10 +231,21 @@
             label6.TabIndex = 62;
             label6.Text = "Donor's Basic Information";
             // 
+            // button1
+            // 
+            button1.Location = new Point(240, 148);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 76;
+            button1.Text = "add";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // CaseView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(button1);
             Controls.Add(updateBtn);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(materialDivider2);
@@ -243,7 +261,7 @@
             Controls.Add(label2);
             Controls.Add(label6);
             Name = "CaseView";
-            Size = new Size(800, 301);
+            Size = new Size(800, 450);
             ((System.ComponentModel.ISupportInitialize)updateBtn).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -265,5 +283,6 @@
         private Label label3;
         private Label label2;
         private Label label6;
+        private Button button1;
     }
 }

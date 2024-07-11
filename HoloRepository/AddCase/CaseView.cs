@@ -39,5 +39,21 @@ namespace HoloRepository.AddCase
             container.Controls.Clear();
             container.Controls.Add(updateDonorInfo);
         }
+
+        private void updateBtn_MouseEnter(object sender, EventArgs e)
+        {
+            updateBtn.BackColor = Color.Gainsboro;
+        }
+
+        private void updateBtn_MouseLeave(object sender, EventArgs e)
+        {
+            updateBtn.BackColor = Color.Transparent;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OrganPanel organPanel = new OrganPanel("kidney");
+            flowLayoutPanel1.Controls.Add(organPanel);
+        }
     }
 }
