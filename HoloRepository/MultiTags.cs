@@ -15,7 +15,7 @@ namespace HoloRepository
         private List<string> data;
 
         public List<string> SelectedItems { get; private set; }
-        private string connectionString = "Host=holorepository.cbm8gq4o813v.eu-north-1.rds.amazonaws.com;Port=5432;Username=postgres;Password=12345678;Database=holorepository";
+        private string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
 
 
         public MultiTags()

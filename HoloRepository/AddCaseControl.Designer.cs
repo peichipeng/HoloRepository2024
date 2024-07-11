@@ -31,6 +31,7 @@
             AddOrganTitle = new Label();
             DICOMTitle = new Label();
             ImportDICOMButton = new RoundedButton();
+            fileListBox = new RoundedListBox();
             RemoveAllButton = new RoundedButton();
             panel1 = new Panel();
             lineControl2 = new LineControl();
@@ -63,7 +64,7 @@
             DICOMTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             DICOMTitle.Location = new Point(56, 115);
             DICOMTitle.Name = "DICOMTitle";
-            DICOMTitle.Size = new Size(216, 42);
+            DICOMTitle.Size = new Size(141, 28);
             DICOMTitle.TabIndex = 3;
             DICOMTitle.Text = "DICOM Files";
             // 
@@ -78,7 +79,7 @@
             ImportDICOMButton.ForeColor = Color.White;
             ImportDICOMButton.Location = new Point(600, 110);
             ImportDICOMButton.Name = "ImportDICOMButton";
-            ImportDICOMButton.Size = new Size(139, 49);
+            ImportDICOMButton.Size = new Size(97, 33);
             ImportDICOMButton.TabIndex = 4;
             ImportDICOMButton.Text = "+ Import";
             ImportDICOMButton.UseVisualStyleBackColor = false;
@@ -110,7 +111,7 @@
             RemoveAllButton.ForeColor = Color.White;
             RemoveAllButton.Location = new Point(733, 110);
             RemoveAllButton.Name = "RemoveAllButton";
-            RemoveAllButton.Size = new Size(161, 49);
+            RemoveAllButton.Size = new Size(113, 33);
             RemoveAllButton.TabIndex = 6;
             RemoveAllButton.Text = "Remove All";
             RemoveAllButton.UseVisualStyleBackColor = false;
@@ -137,10 +138,9 @@
             panel1.Controls.Add(DICOMTitle);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
-            panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
-            panel1.Padding = new Padding(4, 6, 4, 6);
-            panel1.Size = new Size(1296, 997);
+            panel1.Padding = new Padding(3, 4, 3, 4);
+            panel1.Size = new Size(907, 678);
             panel1.TabIndex = 7;
             // 
             // lineControl2
@@ -263,7 +263,7 @@
             AddOrganSlicesButton.ForeColor = Color.White;
             AddOrganSlicesButton.Location = new Point(679, 396);
             AddOrganSlicesButton.Name = "AddOrganSlicesButton";
-            AddOrganSlicesButton.Size = new Size(239, 49);
+            AddOrganSlicesButton.Size = new Size(167, 33);
             AddOrganSlicesButton.TabIndex = 8;
             AddOrganSlicesButton.Text = "+ Add an organ slice";
             AddOrganSlicesButton.UseVisualStyleBackColor = false;
@@ -282,10 +282,9 @@
             // 
             // AddCaseControl
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
-            Margin = new Padding(4);
             Name = "AddCaseControl";
             Size = new Size(907, 678);
             panel1.ResumeLayout(false);
