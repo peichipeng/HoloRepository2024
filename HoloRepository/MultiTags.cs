@@ -16,7 +16,7 @@ namespace HoloRepository
 
         public List<string> SelectedItems { get; private set; }
         private string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
-
+        private DatabaseConnection dbConnection;
 
         public MultiTags()
         {
@@ -74,6 +74,8 @@ namespace HoloRepository
             this.Name = "MultiTags";
             this.ResumeLayout(false);
             this.PerformLayout();
+
+            dbConnection = new DatabaseConnection(connectionString);
         }
 
         private void TextBox_Click(object sender, EventArgs e)
@@ -93,20 +95,13 @@ namespace HoloRepository
         {
             try
             {
-                using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+                string sql = "SELECT * FROM tag";
+                using (NpgsqlDataReader reader = dbConnection.ExecuteReader(sql))
                 {
-                    conn.Open();
-                    string sql = "SELECT * FROM tag";
-                    using (NpgsqlCommand cmd = new NpgsqlCommand(sql, conn))
+                    while (reader.Read())
                     {
-                        using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                string tagName = reader.GetString(1);
-                                data.Add(tagName);
-                            }
-                        }
+                        string tagName = reader.GetString(1);
+                        data.Add(tagName);
                     }
                 }
             }
