@@ -31,15 +31,23 @@ namespace HoloRepository.AddCase
         {
             if (addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
             {
-                Dictionary<string, string> donorInfo = new Dictionary<string, string>
+                bool checkId = donorInfoPage.IsIdValid();
+                bool checkDod = donorInfoPage.IsDateValid();
+                bool checkAge = donorInfoPage.IsAgeValid();
+                bool checkCause = donorInfoPage.IsCauseValid();
+                // Check if all the user input is correct
+                if (checkId && checkDod && checkAge && checkCause)
                 {
-                    {"id", donorInfoPage.donorID.Text },
-                    {"dod", donorInfoPage.DOD.Text},
-                    {"age", donorInfoPage.age.Text},
-                    {"causeOfDeath", donorInfoPage.causeOfDeath.Text}
-                };
-                LoadControl(new CaseOrganFramework("case", donorInfo));
-                nextBtn.Text = "save";
+                    Dictionary<string, string> donorInfo = new Dictionary<string, string>
+                    {
+                        {"id", donorInfoPage.donorID.Text },
+                        {"dod", donorInfoPage.DOD.Text},
+                        {"age", donorInfoPage.age.Text},
+                        {"causeOfDeath", donorInfoPage.causeOfDeath.Text}
+                    };
+                    LoadControl(new CaseOrganFramework("case", donorInfo));
+                    nextBtn.Text = "save";
+                }
             }
         }
 

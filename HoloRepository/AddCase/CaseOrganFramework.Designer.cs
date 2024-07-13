@@ -30,7 +30,7 @@
         {
             panel1 = new Panel();
             caseNoLabel = new Label();
-            materialDivider1 = new MaterialSkin.Controls.MaterialDivider();
+            divider = new MaterialSkin.Controls.MaterialDivider();
             pageNameLabel = new Label();
             caseOrganContainer = new Panel();
             panel1.SuspendLayout();
@@ -39,7 +39,7 @@
             // panel1
             // 
             panel1.Controls.Add(caseNoLabel);
-            panel1.Controls.Add(materialDivider1);
+            panel1.Controls.Add(divider);
             panel1.Controls.Add(pageNameLabel);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
@@ -60,18 +60,18 @@
             caseNoLabel.TabIndex = 54;
             caseNoLabel.Text = "Case 123456789";
             // 
-            // materialDivider1
+            // divider
             // 
-            materialDivider1.Anchor = AnchorStyles.Top;
-            materialDivider1.BackColor = Color.DarkGray;
-            materialDivider1.Depth = 0;
-            materialDivider1.Location = new Point(69, 58);
-            materialDivider1.Margin = new Padding(2);
-            materialDivider1.MouseState = MaterialSkin.MouseState.HOVER;
-            materialDivider1.Name = "materialDivider1";
-            materialDivider1.Size = new Size(662, 1);
-            materialDivider1.TabIndex = 53;
-            materialDivider1.Text = "materialDivider1";
+            divider.Anchor = AnchorStyles.Top;
+            divider.BackColor = Color.DarkGray;
+            divider.Depth = 0;
+            divider.Location = new Point(69, 58);
+            divider.Margin = new Padding(2);
+            divider.MouseState = MaterialSkin.MouseState.HOVER;
+            divider.Name = "divider";
+            divider.Size = new Size(662, 1);
+            divider.TabIndex = 53;
+            divider.Text = "materialDivider1";
             // 
             // pageNameLabel
             // 
@@ -111,7 +111,7 @@
         private Panel panel1;
         private Panel caseOrganContainer;
         private Label caseNoLabel;
-        private MaterialSkin.Controls.MaterialDivider materialDivider1;
+        private MaterialSkin.Controls.MaterialDivider divider;
         private Label pageNameLabel;
     }
 }

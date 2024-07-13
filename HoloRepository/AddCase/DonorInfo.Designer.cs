@@ -38,6 +38,10 @@
             label2 = new Label();
             title = new Label();
             label1 = new Label();
+            dodErrorLabel = new Label();
+            idErrorLabel = new Label();
+            ageErrorLabel = new Label();
+            causeErrorLabel = new Label();
             SuspendLayout();
             // 
             // causeOfDeath
@@ -51,7 +55,7 @@
             causeOfDeath.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
             causeOfDeath.StateCommon.Border.Rounding = 5;
             causeOfDeath.StateCommon.Border.Width = 2;
-            causeOfDeath.StateCommon.Content.Color1 = Color.Gray;
+            causeOfDeath.StateCommon.Content.Color1 = Color.Black;
             causeOfDeath.TabIndex = 33;
             // 
             // age
@@ -65,8 +69,9 @@
             age.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
             age.StateCommon.Border.Rounding = 5;
             age.StateCommon.Border.Width = 2;
-            age.StateCommon.Content.Color1 = Color.Gray;
+            age.StateCommon.Content.Color1 = Color.Black;
             age.TabIndex = 32;
+            age.Leave += age_Leave;
             // 
             // DOD
             // 
@@ -81,6 +86,11 @@
             DOD.StateCommon.Border.Width = 2;
             DOD.StateCommon.Content.Color1 = Color.Gray;
             DOD.TabIndex = 31;
+            DOD.Text = "DD/MM/YYYY";
+            DOD.TextChanged += DOD_TextChanged;
+            DOD.Enter += DOD_Enter;
+            DOD.KeyDown += DOD_KeyDown;
+            DOD.Leave += DOD_Leave;
             // 
             // donorID
             // 
@@ -93,8 +103,9 @@
             donorID.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
             donorID.StateCommon.Border.Rounding = 5;
             donorID.StateCommon.Border.Width = 2;
-            donorID.StateCommon.Content.Color1 = Color.Gray;
+            donorID.StateCommon.Content.Color1 = Color.Black;
             donorID.TabIndex = 30;
+            donorID.Leave += donorID_Leave;
             // 
             // label4
             // 
@@ -172,10 +183,54 @@
             label1.TabIndex = 34;
             label1.Text = "Information";
             // 
+            // dodErrorLabel
+            // 
+            dodErrorLabel.Anchor = AnchorStyles.None;
+            dodErrorLabel.AutoSize = true;
+            dodErrorLabel.ForeColor = Color.Red;
+            dodErrorLabel.Location = new Point(432, 165);
+            dodErrorLabel.Name = "dodErrorLabel";
+            dodErrorLabel.Size = new Size(0, 15);
+            dodErrorLabel.TabIndex = 35;
+            // 
+            // idErrorLabel
+            // 
+            idErrorLabel.Anchor = AnchorStyles.None;
+            idErrorLabel.AutoSize = true;
+            idErrorLabel.ForeColor = Color.Red;
+            idErrorLabel.Location = new Point(432, 134);
+            idErrorLabel.Name = "idErrorLabel";
+            idErrorLabel.Size = new Size(0, 15);
+            idErrorLabel.TabIndex = 36;
+            // 
+            // ageErrorLabel
+            // 
+            ageErrorLabel.Anchor = AnchorStyles.None;
+            ageErrorLabel.AutoSize = true;
+            ageErrorLabel.ForeColor = Color.Red;
+            ageErrorLabel.Location = new Point(432, 196);
+            ageErrorLabel.Name = "ageErrorLabel";
+            ageErrorLabel.Size = new Size(0, 15);
+            ageErrorLabel.TabIndex = 37;
+            // 
+            // causeErrorLabel
+            // 
+            causeErrorLabel.Anchor = AnchorStyles.None;
+            causeErrorLabel.AutoSize = true;
+            causeErrorLabel.ForeColor = Color.Red;
+            causeErrorLabel.Location = new Point(432, 227);
+            causeErrorLabel.Name = "causeErrorLabel";
+            causeErrorLabel.Size = new Size(0, 15);
+            causeErrorLabel.TabIndex = 38;
+            // 
             // DonorInfo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(causeErrorLabel);
+            Controls.Add(ageErrorLabel);
+            Controls.Add(idErrorLabel);
+            Controls.Add(dodErrorLabel);
             Controls.Add(label1);
             Controls.Add(causeOfDeath);
             Controls.Add(age);
@@ -204,5 +259,9 @@
         private Label label2;
         private Label title;
         private Label label1;
+        private Label dodErrorLabel;
+        private Label idErrorLabel;
+        private Label ageErrorLabel;
+        private Label causeErrorLabel;
     }
 }

@@ -20,6 +20,7 @@ namespace HoloRepository.AddCase
             {
                 pageNameLabel.Text = "Add a Case";
                 caseNoLabel.Text = $"Case {donorInfo["id"]}";
+                caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width, 35);
                 LoadControl(new CaseView(donorInfo));
             }
         }
