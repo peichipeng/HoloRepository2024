@@ -60,10 +60,11 @@ namespace HoloRepository
             }
         }
 
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             int trackY = (Height - TrackHeight) / 2;
             Rectangle trackRect = new Rectangle(CircleSize / 2, trackY, Width - CircleSize, TrackHeight);
@@ -98,7 +99,6 @@ namespace HoloRepository
 
             if (e.Button == MouseButtons.Left)
             {
-
                 int circleY = (Height - CircleSize) / 2;
                 Rectangle circleRect = new Rectangle(circleX, circleY, CircleSize, CircleSize);
 
@@ -130,7 +130,6 @@ namespace HoloRepository
 
         private void UpdateCirclePosition(int mouseX)
         {
-
             circleX = Math.Max(0, Math.Min(mouseX - CircleSize / 2, Width - CircleSize));
             Invalidate();
         }
@@ -173,6 +172,15 @@ namespace HoloRepository
             CalculateDivisions();
             circleX = Math.Max(0, Math.Min(circleX, Width - CircleSize));
             Invalidate();
+        }
+
+        public void SetSelectedIndex(int selectedIndex)
+        {
+            if (selectedIndex >= 0 && selectedIndex < numberOfImages)
+            {
+                circleX = divisions[selectedIndex];
+                Invalidate();
+            }
         }
     }
 }

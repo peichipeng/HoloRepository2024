@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,9 +16,18 @@ namespace HoloRepository
     public partial class AddOrganSlice : Form
     {
         private List<Image> imageList = new List<Image>();
+        public List<Image> ImageList => imageList;
         private SliderControl sliderControl;
         private Panel overlayPanel;
         private const string placeholderText = "Describe additional information about the organ slice ...";
+        public Image OrganSliceImage { get; private set; }
+        public Image SelectedImage { get; private set; }
+        public string Description { get; private set; }
+
+        public int SelectedIndex { get; private set; }
+
+        public event Action<Image, Image, string, int> OrganSliceUpdated;
+
 
         public AddOrganSlice()
         {
@@ -30,6 +40,7 @@ namespace HoloRepository
             DescriptionBox.GotFocus += DescriptionBox_GotFocus;
             DescriptionBox.LostFocus += DescriptionBox_LostFocus;
         }
+
         private void DescriptionBox_GotFocus(object sender, EventArgs e)
         {
             if (DescriptionBox.Text == placeholderText)
@@ -46,15 +57,15 @@ namespace HoloRepository
             }
         }
 
-        public void SetImageList(List<Image> images)
+        public void SetImageList(List<Image> images, int index)
         {
             imageList = images;
-
             sliderControl1.NumberOfImages = imageList.Count;
 
             if (imageList.Count > 0)
             {
-                DICOMFilePicture.Image = imageList[0];
+                DICOMFilePicture.Image = imageList[index >= 0 && index < imageList.Count ? index : 0];
+                sliderControl1.SetSelectedIndex(index);
             }
         }
 
@@ -136,53 +147,19 @@ namespace HoloRepository
 
         private void OverlayPanel_Click(object sender, EventArgs e)
         {
+            HideOverlayPanel(0);
+        }
+
+        public void HideOverlayPanel(int hideNum){
             // Hide overlay panel
             overlayPanel.Visible = false;
 
             // Display SliderControl and PictureBox
             sliderControl1.Visible = true;
             DICOMFilePicture.Visible = true;
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            if (hideNum == 1) 
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.RestoreDirectory = true;
-                openFileDialog.Multiselect = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-
-                    imageList.Clear();
-
-                    foreach (string filePath in openFileDialog.FileNames)
-                    {
-                        Image selectedImage;
-                        try
-                        {
-                            selectedImage = new Bitmap(filePath);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error loading image: {ex.Message}");
-                            continue;
-                        }
-                        imageList.Add(selectedImage);
-                    }
-
-                    sliderControl1.NumberOfImages = imageList.Count;
-
-                    UpdateSliderControlLayout();
-
-                    if (imageList.Count > 0)
-                    {
-                        ShowImage(imageList[0]);
-                    }
-                }
+                OrganSliceDescription.Visible = false;
             }
         }
 
@@ -200,24 +177,43 @@ namespace HoloRepository
             if (index >= 0 && index < imageList.Count)
             {
                 DICOMFilePicture.Image = imageList[index];
+                SelectedIndex = index;
             }
         }
 
-
-        private void ShowImage(Image image)
+        public void SetOrganSlice(Image image)
         {
-            if (image != null)
-            {
-                DICOMFilePicture.Image = image;
-            }
-            else
-            {
-                MessageBox.Show("Image is null.");
-            }
+            OrganSlicePicture.SizeMode = PictureBoxSizeMode.Zoom;
+            OrganSlicePicture.Image = image;
+        }
+
+        public void SetDescription(string description)
+        {
+            DescriptionBox.Text = description;
+        }
+
+        public void SetFormTitle(string title)
+        {
+            this.Text = title;
+        }
+
+
+        public void ChangeButtonText(string text)
+        {
+            Add.Text = text;
         }
 
         private void Add_Click(object sender, EventArgs e)
         {
+            OrganSliceImage = OrganSlicePicture.Image;
+            SelectedImage = DICOMFilePicture.Image;
+            Description = DescriptionBox.Text;
+
+            SelectedIndex = imageList.IndexOf(DICOMFilePicture.Image);
+
+            OrganSliceUpdated?.Invoke(OrganSliceImage, SelectedImage, Description, SelectedIndex);
+
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
@@ -254,7 +250,6 @@ namespace HoloRepository
                 }
             }
         }
-
-
     }
+
 }
