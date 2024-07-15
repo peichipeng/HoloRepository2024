@@ -15,7 +15,6 @@ namespace HoloRepository
         private List<string> data;
 
         public List<string> SelectedItems { get; private set; }
-        private string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
         private DatabaseConnection dbConnection;
 
         public MultiTags()
@@ -75,7 +74,7 @@ namespace HoloRepository
             this.ResumeLayout(false);
             this.PerformLayout();
 
-            dbConnection = new DatabaseConnection(connectionString);
+            dbConnection = new DatabaseConnection();
         }
 
         private void TextBox_Click(object sender, EventArgs e)

@@ -14,6 +14,9 @@ namespace HoloRepository
     public partial class AddCaseControl : UserControl
     {
         private List<string> imagePaths = new List<string>();
+        private List<OrganSlicePanel> organSlicePanels = new List<OrganSlicePanel>();  // 保存所有的 OrganSlicePanel
+        private int selectedIndex;
+
         public AddCaseControl()
         {
             InitializeComponent();
@@ -27,6 +30,11 @@ namespace HoloRepository
             {
                 roundedListBox.ImageDeleted += RoundedListBox_ImageDeleted;
             }
+        }
+
+        public List<string> GetImagePaths()
+        {
+            return imagePaths;
         }
 
         private void RoundedListBox_ImageDeleted(object sender, string deletedFileName)
@@ -96,10 +104,45 @@ namespace HoloRepository
                 {
                     images.Add(new Bitmap(path));
                 }
-                addOrganSlice.SetImageList(images);
+                addOrganSlice.SetImageList(images, 0);
 
-                addOrganSlice.ShowDialog();
+                if (addOrganSlice.ShowDialog() == DialogResult.OK)
+                {
+                    // Selected Image and Description
+                    Image OrganSlice = addOrganSlice.OrganSliceImage;
+                    Image selectedImage = addOrganSlice.SelectedImage;
+                    string description = addOrganSlice.Description;
+                    selectedIndex = addOrganSlice.SelectedIndex;
+
+                    // Display the new organ slice
+                    DisplayNewOrganSlice(selectedImage, OrganSlice, description);
+                }
             }
+        }
+
+
+        private void DisplayNewOrganSlice(Image image, Image OrganSliceImage, string description)
+        {
+            // Create a new OrganSlicePanel
+            OrganSlicePanel organSlicePanel = new OrganSlicePanel
+            {
+                Width = organSlicesPanel.Width,
+                Height = 543,
+                BorderStyle = BorderStyle.None,
+                Margin = new Padding(10),
+                SelectedIndex = selectedIndex
+            };
+
+            // Set image and description
+            organSlicePanel.SetOrganSlice(OrganSliceImage);
+            organSlicePanel.SetCTImage(image);
+            organSlicePanel.SetDescription(description, selectedIndex);
+
+            int fixedControlsCount = 4;
+
+            organSlicesPanel.Controls.Add(organSlicePanel);
+            organSlicesPanel.Controls.SetChildIndex(organSlicePanel, organSlicesPanel.Controls.Count - fixedControlsCount - 1);
+            organSlicePanels.Add(organSlicePanel);
         }
 
         private void CancelAddOrganButton_Click(object sender, EventArgs e)

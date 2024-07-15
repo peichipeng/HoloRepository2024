@@ -10,9 +10,9 @@ public class DatabaseConnection
 { 
     private string connectionString;
 
-    public DatabaseConnection(string connectionString)
+    public DatabaseConnection()
     {
-        this.connectionString = connectionString;
+        this.connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
     }
 
     public NpgsqlConnection GetConnection()
