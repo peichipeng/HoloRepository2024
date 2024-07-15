@@ -105,12 +105,12 @@
             // 
             label8.Anchor = AnchorStyles.Top;
             label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label8.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
             label8.ForeColor = Color.Black;
-            label8.Location = new Point(71, 152);
+            label8.Location = new Point(71, 146);
             label8.Margin = new Padding(2, 0, 2, 0);
             label8.Name = "label8";
-            label8.Size = new Size(64, 21);
+            label8.Size = new Size(67, 23);
             label8.TabIndex = 71;
             label8.Text = "Organs";
             // 
@@ -218,12 +218,12 @@
             // 
             label6.Anchor = AnchorStyles.Top;
             label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label6.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
             label6.ForeColor = Color.Black;
-            label6.Location = new Point(71, 11);
+            label6.Location = new Point(71, 8);
             label6.Margin = new Padding(2, 0, 2, 0);
             label6.Name = "label6";
-            label6.Size = new Size(208, 21);
+            label6.Size = new Size(217, 23);
             label6.TabIndex = 62;
             label6.Text = "Donor's Basic Information";
             // 

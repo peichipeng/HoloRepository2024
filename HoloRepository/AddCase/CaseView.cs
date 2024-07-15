@@ -36,14 +36,14 @@ namespace HoloRepository.AddCase
                 dodLabel.Text = reader.GetFieldValue<DateTime>(1).ToString("dd/MM/yyyy");
             }
 
-            string queryOrgans = $"SELECT organ_id, organ_name_id FROM organ WHERE donor_id = {donorId}";
+            string queryOrgans = $"SELECT organ_id, organ_name_id FROM organ WHERE donor_id = {donorId} ORDER BY organ_id DESC";
             reader = dbConnection.ExecuteReader(queryOrgans);
 
+            // Iterate through all the organs from the donor
             while (await reader.ReadAsync())
             {
                 int organId = reader.GetFieldValue<int>(0);
                 int organNameId = reader.GetFieldValue<int>(1);
-                //MessageBox.Show(organId.ToString() + organNameId.ToString());
                 
                 // Retrieve the organ name
                 string queryOrganName = $"SELECT organ_name FROM organname WHERE organ_name_id = {organNameId}";

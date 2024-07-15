@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HoloRepository.ContextMenu;
+using HoloRepository.Dialog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +18,7 @@ namespace HoloRepository.AddCase
         private int organId;
         private string organName;
         private List<string> organSlices;
+        private int imageShown;
         public int BorderRadius { get; set; } = 20;
         public Color BorderColor { get; set; } = Color.LightGray;
         public int BorderThickness { get; set; } = 1;
@@ -34,24 +37,36 @@ namespace HoloRepository.AddCase
             leftArrow.Location = new Point(0, leftArrowYPosition);
             rightArrow.Location = new Point(rightArrowXPosition, leftArrowYPosition);
 
+            contextMenu.Renderer = new MenuRenderer();
+
             setOrganPanel();
         }
 
-        private void setOrganPanel ()
+        private void setOrganPanel()
         {
             organNameLabel.Text = organName;
-            organNameLabel.Location = new Point(this.Width/2- organNameLabel.Width/2, 210);
+            organNameLabel.Location = new Point(this.Width / 2 - organNameLabel.Width / 2, 210);
+            downArrow.Location = new Point(organNameLabel.Location.X + organNameLabel.Width - 2, 210);
 
             try
             {
-                if (organSlices.Count > 0 ) // need to add some text if there are no images available
+                if (organSlices.Count > 0) // need to add some text if there are no images available
                 {
+                    placeholderLabel.Visible = false;
                     // Load the image from file path
                     Image image = Image.FromFile(organSlices[0]);
 
                     // Assign the loaded image to PictureBox
                     sliceImages.Image = image;
-                }            }
+                    imageShown = 0;
+                }
+                else
+                {
+                    sliceImages.Image = null;
+                    placeholderLabel.Visible = true;
+                    placeholderLabel.Location = new Point(this.Width / 2 - placeholderLabel.Width / 2, 100);
+                }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading image: {ex.Message}");
@@ -97,7 +112,10 @@ namespace HoloRepository.AddCase
 
         private void leftArrow_MouseEnter(object sender, EventArgs e)
         {
-            leftArrow.BackColor = Color.LightGray;
+            if (organSlices.Count > 1)
+            {
+                leftArrow.BackColor = Color.LightGray;
+            }
         }
 
         private void leftArrow_MouseLeave(object sender, EventArgs e)
@@ -107,12 +125,90 @@ namespace HoloRepository.AddCase
 
         private void rightArrow_MouseEnter(object sender, EventArgs e)
         {
-            rightArrow.BackColor = Color.LightGray;
+            if (organSlices.Count > 1)
+            {
+                rightArrow.BackColor = Color.LightGray;
+            }
         }
 
         private void rightArrow_MouseLeave(object sender, EventArgs e)
         {
-            rightArrow.BackColor= Color.Transparent;
+            rightArrow.BackColor = Color.Transparent;
+        }
+
+        private void leftArrow_Click(object sender, EventArgs e)
+        {
+            if (organSlices.Count > 1)
+            {
+                if (imageShown == 0)
+                {
+                    imageShown = organSlices.Count - 1;
+                }
+                else
+                {
+                    imageShown = imageShown - 1;
+                }
+                Image image = Image.FromFile(organSlices[imageShown]);
+                sliceImages.Image = image;
+            }
+        }
+
+        private void rightArrow_Click(object sender, EventArgs e)
+        {
+            if (organSlices.Count > 1)
+            {
+                if (imageShown == organSlices.Count - 1)
+                {
+                    imageShown = 0;
+                }
+                else
+                {
+                    imageShown = imageShown + 1;
+                }
+                Image image = Image.FromFile(organSlices[imageShown]);
+                sliceImages.Image = image;
+            }
+        }
+
+        private void organNameLabel_MouseDown(object sender, MouseEventArgs e)
+        {
+            contextMenu.Show(organNameLabel, e.Location);
+        }
+
+        private void downArrow_MouseDown(object sender, MouseEventArgs e)
+        {
+            contextMenu.Show(downArrow, e.Location);
+        }
+
+        private void updateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Add the code for updating the organ here
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Add the code for deleting the organ here
+            //OverlayForm overlayForm = new OverlayForm();
+            //overlayForm.Show(this.ParentForm);
+
+            using (var popup = new PopupWindow("Are you sure you want to delete?"))
+            {
+                var result = popup.ShowDialog(this.ParentForm);
+
+                // Hide and dispose the overlay form
+                //overlayForm.HideOverlay();
+                //overlayForm.Dispose();
+
+                if (result == DialogResult.Yes)
+                {
+                    // Code for deleting the organ
+                    this.Parent.Controls.Remove(this);
+                }
+                else if (result == DialogResult.No)
+                {
+                    // Code for handling the "No" case (optional)
+                }
+            }
         }
     }
 }

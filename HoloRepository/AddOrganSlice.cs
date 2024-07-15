@@ -63,8 +63,8 @@ namespace HoloRepository
             overlayPanel = new Panel
             {
                 BackColor = Color.FromArgb(128, 255, 255, 255),
-                Location = new Point(562,15),
-                Size = new Size(480,377),
+                Location = new Point(562, 15),
+                Size = new Size(480, 377),
                 Visible = true
             };
 
