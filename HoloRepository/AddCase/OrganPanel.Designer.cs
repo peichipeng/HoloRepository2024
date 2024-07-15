@@ -32,7 +32,7 @@
             sliceImages = new PictureBox();
             leftArrow = new PictureBox();
             rightArrow = new PictureBox();
-            organName = new Label();
+            organNameLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)sliceImages).BeginInit();
             ((System.ComponentModel.ISupportInitialize)leftArrow).BeginInit();
             ((System.ComponentModel.ISupportInitialize)rightArrow).BeginInit();
@@ -75,25 +75,26 @@
             rightArrow.MouseEnter += rightArrow_MouseEnter;
             rightArrow.MouseLeave += rightArrow_MouseLeave;
             // 
-            // organName
+            // organNameLabel
             // 
-            organName.Anchor = AnchorStyles.Top;
-            organName.AutoSize = true;
-            organName.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            organName.ForeColor = Color.Black;
-            organName.Location = new Point(117, 211);
-            organName.Margin = new Padding(2, 0, 2, 0);
-            organName.Name = "organName";
-            organName.Size = new Size(66, 19);
-            organName.TabIndex = 64;
-            organName.Text = "Donor ID";
+            organNameLabel.Anchor = AnchorStyles.None;
+            organNameLabel.AutoSize = true;
+            organNameLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            organNameLabel.ForeColor = Color.Black;
+            organNameLabel.Location = new Point(121, 211);
+            organNameLabel.Margin = new Padding(2, 0, 2, 0);
+            organNameLabel.Name = "organNameLabel";
+            organNameLabel.Size = new Size(83, 19);
+            organNameLabel.TabIndex = 64;
+            organNameLabel.Text = "organ name";
+            organNameLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // OrganPanel
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            Controls.Add(organName);
+            Controls.Add(organNameLabel);
             Controls.Add(rightArrow);
             Controls.Add(leftArrow);
             Controls.Add(sliceImages);
@@ -112,6 +113,6 @@
         private PictureBox sliceImages;
         private PictureBox leftArrow;
         private PictureBox rightArrow;
-        private Label organName;
+        private Label organNameLabel;
     }
 }

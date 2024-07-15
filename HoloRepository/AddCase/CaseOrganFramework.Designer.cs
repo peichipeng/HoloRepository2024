@@ -28,24 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
+            header = new Panel();
             caseNoLabel = new Label();
             divider = new MaterialSkin.Controls.MaterialDivider();
             pageNameLabel = new Label();
             caseOrganContainer = new Panel();
-            panel1.SuspendLayout();
+            header.SuspendLayout();
             SuspendLayout();
             // 
-            // panel1
+            // header
             // 
-            panel1.Controls.Add(caseNoLabel);
-            panel1.Controls.Add(divider);
-            panel1.Controls.Add(pageNameLabel);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 64);
-            panel1.TabIndex = 0;
+            header.Controls.Add(caseNoLabel);
+            header.Controls.Add(divider);
+            header.Controls.Add(pageNameLabel);
+            header.Dock = DockStyle.Top;
+            header.Location = new Point(0, 0);
+            header.Name = "header";
+            header.Size = new Size(800, 64);
+            header.TabIndex = 0;
             // 
             // caseNoLabel
             // 
@@ -98,20 +98,20 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(caseOrganContainer);
-            Controls.Add(panel1);
+            Controls.Add(header);
             Name = "CaseOrganFramework";
             Size = new Size(800, 286);
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            header.ResumeLayout(false);
+            header.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Panel panel1;
+        private Panel header;
         private Panel caseOrganContainer;
         private Label caseNoLabel;
         private MaterialSkin.Controls.MaterialDivider divider;
-        private Label pageNameLabel;
+        public Label pageNameLabel;
     }
 }

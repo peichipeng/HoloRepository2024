@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,12 @@ namespace HoloRepository.AddCase
 {
     public partial class DonorInfo : UserControl
     {
+        private int originalId;
+        public int donorId;
+        private int age;
+        private string causeOfDeath;
+        private DateTime dod;
+
         private bool deleting = false;
         private string requiredFieldMsg = "Required field.";
         public DonorInfo()
@@ -24,17 +31,119 @@ namespace HoloRepository.AddCase
         public DonorInfo(Dictionary<string, string> donorInfo)
         {
             InitializeComponent();
+            originalId = int.Parse(donorInfo["id"]);
+
             title.Text = "Update Donor's Basic";
-            donorID.Text = donorInfo["id"];
-            age.Text = donorInfo["age"];
-            DOD.Text = donorInfo["dod"];
-            causeOfDeath.Text = donorInfo["causeOfDeath"];
+            donorIdTxt.Text = donorInfo["id"];
+            ageTxt.Text = donorInfo["age"];
+            dodTxt.Text = donorInfo["dod"];
+            causeOfDeathTxt.Text = donorInfo["causeOfDeath"];
+            dodTxt.StateCommon.Content.Color1 = Color.Black;
         }
 
-        public bool IsIdValid()
+        public async void AddDonorInfo()
         {
-            string inputId = donorID.Text;
-            int id;
+            // needs to be modified to meet the database connection class
+            // need to check if the donorid exists
+            try
+            {
+                var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
+                await using var conn = new NpgsqlConnection(connectionString);
+                await conn.OpenAsync();
+
+                await using var cmd = new NpgsqlCommand("INSERT INTO donor (donor_id, age, date_of_death, cause_of_death) VALUES ($1, $2, $3, $4)", conn)
+                {
+                    Parameters =
+                    {
+                        new() { Value = donorId },
+                        new() { Value = age },
+                        new() { Value = dod },
+                        new() { Value = causeOfDeath }
+                    }
+                };
+                await cmd.ExecuteNonQueryAsync();
+                if (Parent.Parent is AddCaseFramework framework)
+                {
+                    framework.LoadControl(new CaseOrganFramework("addCase", donorId));
+                }
+            }
+            catch (PostgresException e)
+            {
+                if (e.SqlState == "23505")
+                {
+                    // need to add error handling for existing donor id
+                    MessageBox.Show("duplicate primary key");
+                }
+            }
+        }
+
+        public async void UpdateDonorInfo()
+        {
+            try
+            {
+                var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
+                await using var conn = new NpgsqlConnection(connectionString);
+                await conn.OpenAsync();
+                
+                string sql;
+                if (originalId == donorId)
+                {
+                    sql = "UPDATE donor SET age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath WHERE donor_id = @donorId";
+                }
+                else
+                {
+                    sql = "UPDATE donor SET donor_id = @donorId, age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath WHERE donor_id = @originalId";
+                }
+                await using var cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@donorId", donorId);
+                cmd.Parameters.AddWithValue("@age", age);
+                cmd.Parameters.AddWithValue("@dod", dod);
+                cmd.Parameters.AddWithValue("@causeOfDeath", causeOfDeath);
+                
+                if (originalId != donorId)
+                {
+                    cmd.Parameters.AddWithValue("@originalId", originalId);
+                }
+
+                await cmd.ExecuteNonQueryAsync();
+                
+                if (Parent.Parent is AddCaseFramework framework)
+                {
+                    if (framework.destination == "addCase")
+                    {
+                        framework.LoadControl(new CaseOrganFramework("addCase", donorId));
+                    } else
+                    {
+                        framework.LoadControl(new CaseOrganFramework("caseOverview", donorId));
+                    }
+                }
+            }
+            catch (PostgresException e)
+            {
+                if (e.SqlState == "23505")
+                {
+                    // need to add error handling for existing donor id
+                    MessageBox.Show("duplicate primary key");
+                }
+            }
+        }
+
+        public bool ValidateAndConvertData()
+        {
+            bool checkId = IsIdValid();
+            bool checkDod = IsDateValid();
+            bool checkAge = IsAgeValid();
+            bool checkCause = IsCauseValid();
+
+            //string formattedDate = dod.ToString("yyyy-MM-dd");
+            //MessageBox.Show(formattedDate);
+
+            return checkId && checkDod && checkAge && checkCause;
+        }
+
+        private bool IsIdValid()
+        {
+            string inputId = donorIdTxt.Text;
 
             if (string.IsNullOrEmpty(inputId))
             {
@@ -42,7 +151,7 @@ namespace HoloRepository.AddCase
                 return false;
             }
 
-            if (!int.TryParse(inputId, out id))
+            if (!int.TryParse(inputId, out donorId))
             {
                 idErrorLabel.Text = "Invalid ID. Please enter a valid number.";
                 return false;
@@ -52,9 +161,9 @@ namespace HoloRepository.AddCase
             return true;
         }
 
-        public bool IsAgeValid()
+        private bool IsAgeValid()
         {
-            string inputAge = age.Text;
+            string inputAge = ageTxt.Text;
 
             if (string.IsNullOrEmpty(inputAge))
             {
@@ -62,7 +171,7 @@ namespace HoloRepository.AddCase
                 return false;
             }
 
-            if (!int.TryParse(inputAge, out int parsedAge))
+            if (!int.TryParse(inputAge, out age))
             {
                 ageErrorLabel.Text = "Invalid age. Please enter a valid number.";
                 return false;
@@ -73,21 +182,22 @@ namespace HoloRepository.AddCase
             return true;
         }
 
-        public bool IsCauseValid()
+        private bool IsCauseValid()
         {
-            if (string.IsNullOrEmpty(causeOfDeath.Text))
+            if (string.IsNullOrEmpty(causeOfDeathTxt.Text))
             {
                 causeErrorLabel.Text = requiredFieldMsg;
                 return false;
             }
 
+            causeOfDeath = causeOfDeathTxt.Text;
             causeErrorLabel.Text = "";
             return true;
         }
 
-        public bool IsDateValid()
+        private bool IsDateValid()
         {
-            string dateString = DOD.Text;
+            string dateString = dodTxt.Text;
             string format = "dd/MM/yyyy";
 
             string formatErrorMsg = "Invalid format. Please enter the date in the format DD/MM/YYYY.";
@@ -108,8 +218,7 @@ namespace HoloRepository.AddCase
                 return false; // Date is in incorrect format
             }
 
-            DateTime parsedDate;
-            if (!DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+            if (!DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out dod))
             {
                 dodErrorLabel.Text = invalidDateMsg;
                 return false; // Date is not valid
@@ -122,19 +231,19 @@ namespace HoloRepository.AddCase
 
         private void DOD_Enter(object sender, EventArgs e)
         {
-            if (DOD.Text == "DD/MM/YYYY")
+            if (dodTxt.Text == "DD/MM/YYYY")
             {
-                DOD.Text = "";
-                DOD.StateCommon.Content.Color1 = Color.Black;
+                dodTxt.Text = "";
+                dodTxt.StateCommon.Content.Color1 = Color.Black;
             }
         }
 
         private void DOD_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(DOD.Text))
+            if (string.IsNullOrEmpty(dodTxt.Text))
             {
-                DOD.StateCommon.Content.Color1 = Color.Gray;
-                DOD.Text = "DD/MM/YYYY";
+                dodTxt.StateCommon.Content.Color1 = Color.Gray;
+                dodTxt.Text = "DD/MM/YYYY";
             }
             else
             {
@@ -150,25 +259,25 @@ namespace HoloRepository.AddCase
                 return;
             }
 
-            int cursorPosition = DOD.SelectionStart;
+            int cursorPosition = dodTxt.SelectionStart;
 
-            if (DOD.Text.Length == 2 || DOD.Text.Length == 5)
+            if (dodTxt.Text.Length == 2 || dodTxt.Text.Length == 5)
             {
-                DOD.Text = DOD.Text.Insert(cursorPosition, "/");
+                dodTxt.Text = dodTxt.Text.Insert(cursorPosition, "/");
                 cursorPosition++;
-                DOD.SelectionStart = cursorPosition;
+                dodTxt.SelectionStart = cursorPosition;
             }
         }
 
         private void DOD_KeyDown(object sender, KeyEventArgs e)
         {
 
-            if (e.KeyCode == Keys.Back && DOD.Text.Length > 0)
+            if (e.KeyCode == Keys.Back && dodTxt.Text.Length > 0)
             {
-                int cursorPosition = DOD.SelectionStart;
+                int cursorPosition = dodTxt.SelectionStart;
 
                 // Check if deleting a slash
-                if (cursorPosition > 0 && DOD.Text[cursorPosition - 1] == '/')
+                if (cursorPosition > 0 && dodTxt.Text[cursorPosition - 1] == '/')
                 {
                     deleting = true;
                 }
@@ -177,7 +286,7 @@ namespace HoloRepository.AddCase
 
         private void donorID_Leave(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(donorID.Text))
+            if (!string.IsNullOrEmpty(donorIdTxt.Text))
             {
                 IsIdValid();
             }
@@ -185,7 +294,7 @@ namespace HoloRepository.AddCase
 
         private void age_Leave(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(age.Text))
+            if (!string.IsNullOrEmpty(ageTxt.Text))
             {
                 IsAgeValid();
             }

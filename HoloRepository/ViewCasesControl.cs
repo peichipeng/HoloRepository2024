@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HoloRepository.AddCase;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,29 @@ namespace HoloRepository
         public ViewCasesControl()
         {
             InitializeComponent();
+        }
+
+        private void addCaseBtn_Click(object sender, EventArgs e)
+        {
+            if (this.Parent.Parent is HomePage homePage)
+            {
+                homePage.LoadControl(new AddCaseFramework("viewCases", "addCase"));
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, string> donorInfo = new Dictionary<string, string>
+                    {
+                        {"id", "1234" },
+                        {"dod", "04/04/2024"},
+                        {"age", "34"},
+                        {"causeOfDeath", "cancer"}
+                    };
+            if (this.Parent.Parent is HomePage homePage)
+            {
+                homePage.LoadControl(new AddCaseFramework("viewCases", "caseOverview", 21));
+            }
         }
     }
 }

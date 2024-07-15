@@ -28,125 +28,152 @@
         /// </summary>
         private void InitializeComponent()
         {
+            header = new Panel();
+            mainContainer = new Panel();
+            userGuideBtn = new RoundedButton();
+            organArchiveBtn = new RoundedButton();
+            viewCasesBtn = new RoundedButton();
+            addCaseBtn = new RoundedButton();
+            tempBtn = new Button();
             Title = new Label();
-            AddCaseButton = new Button();
-            ViewCasesButton = new Button();
-            UserGuideButton = new Button();
-            mainPanel = new Panel();
-            AddBtn = new Button();
-            mainPanel.SuspendLayout();
+            mainContainer.SuspendLayout();
             SuspendLayout();
+            // 
+            // header
+            // 
+            header.Dock = DockStyle.Top;
+            header.Location = new Point(0, 0);
+            header.Name = "header";
+            header.Size = new Size(846, 30);
+            header.TabIndex = 0;
+            // 
+            // mainContainer
+            // 
+            mainContainer.Controls.Add(userGuideBtn);
+            mainContainer.Controls.Add(organArchiveBtn);
+            mainContainer.Controls.Add(viewCasesBtn);
+            mainContainer.Controls.Add(addCaseBtn);
+            mainContainer.Controls.Add(tempBtn);
+            mainContainer.Controls.Add(Title);
+            mainContainer.Dock = DockStyle.Fill;
+            mainContainer.Location = new Point(0, 30);
+            mainContainer.Name = "mainContainer";
+            mainContainer.Size = new Size(846, 415);
+            mainContainer.TabIndex = 1;
+            // 
+            // userGuideBtn
+            // 
+            userGuideBtn.Anchor = AnchorStyles.None;
+            userGuideBtn.BackColor = Color.FromArgb(238, 238, 238);
+            userGuideBtn.BorderRadius = 15;
+            userGuideBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            userGuideBtn.ForeColor = Color.Black;
+            userGuideBtn.Location = new Point(323, 327);
+            userGuideBtn.Margin = new Padding(2, 2, 14, 2);
+            userGuideBtn.Name = "userGuideBtn";
+            userGuideBtn.Size = new Size(201, 36);
+            userGuideBtn.TabIndex = 76;
+            userGuideBtn.Text = "User Guide";
+            userGuideBtn.UseVisualStyleBackColor = false;
+            userGuideBtn.Click += userGuideBtn_Click;
+            // 
+            // organArchiveBtn
+            // 
+            organArchiveBtn.Anchor = AnchorStyles.None;
+            organArchiveBtn.BackColor = Color.FromArgb(51, 129, 202);
+            organArchiveBtn.BorderRadius = 15;
+            organArchiveBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            organArchiveBtn.ForeColor = Color.White;
+            organArchiveBtn.Location = new Point(323, 279);
+            organArchiveBtn.Margin = new Padding(2, 2, 14, 2);
+            organArchiveBtn.Name = "organArchiveBtn";
+            organArchiveBtn.Size = new Size(201, 36);
+            organArchiveBtn.TabIndex = 75;
+            organArchiveBtn.Text = "Organ Archive";
+            organArchiveBtn.UseVisualStyleBackColor = false;
+            organArchiveBtn.Click += organArchiveBtn_Click;
+            // 
+            // viewCasesBtn
+            // 
+            viewCasesBtn.Anchor = AnchorStyles.None;
+            viewCasesBtn.BackColor = Color.FromArgb(51, 129, 202);
+            viewCasesBtn.BorderRadius = 15;
+            viewCasesBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            viewCasesBtn.ForeColor = Color.White;
+            viewCasesBtn.Location = new Point(323, 231);
+            viewCasesBtn.Margin = new Padding(2, 2, 14, 2);
+            viewCasesBtn.Name = "viewCasesBtn";
+            viewCasesBtn.Size = new Size(201, 36);
+            viewCasesBtn.TabIndex = 74;
+            viewCasesBtn.Text = "View Cases";
+            viewCasesBtn.UseVisualStyleBackColor = false;
+            viewCasesBtn.Click += viewCasesBtn_Click;
+            // 
+            // addCaseBtn
+            // 
+            addCaseBtn.Anchor = AnchorStyles.None;
+            addCaseBtn.BackColor = Color.FromArgb(51, 129, 202);
+            addCaseBtn.BorderRadius = 15;
+            addCaseBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            addCaseBtn.ForeColor = Color.White;
+            addCaseBtn.Location = new Point(323, 183);
+            addCaseBtn.Margin = new Padding(2, 2, 14, 2);
+            addCaseBtn.Name = "addCaseBtn";
+            addCaseBtn.Size = new Size(201, 36);
+            addCaseBtn.TabIndex = 73;
+            addCaseBtn.Text = " Add a Case";
+            addCaseBtn.UseVisualStyleBackColor = false;
+            addCaseBtn.Click += addCaseBtn_Click;
+            // 
+            // tempBtn
+            // 
+            tempBtn.Anchor = AnchorStyles.None;
+            tempBtn.Font = new Font("Century Gothic", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            tempBtn.Location = new Point(141, 202);
+            tempBtn.Name = "tempBtn";
+            tempBtn.Size = new Size(90, 38);
+            tempBtn.TabIndex = 15;
+            tempBtn.Text = "temp";
+            tempBtn.UseVisualStyleBackColor = true;
+            tempBtn.Click += this.tempBtn_Click;
             // 
             // Title
             // 
             Title.Anchor = AnchorStyles.None;
             Title.AutoSize = true;
-            Title.Font = new Font("Tahoma", 50.25F, FontStyle.Bold, GraphicsUnit.Point);
-            Title.Location = new Point(249, 115);
-            Title.Margin = new Padding(8, 0, 8, 0);
+            Title.Font = new Font("Tahoma", 42F, FontStyle.Bold, GraphicsUnit.Point);
+            Title.Location = new Point(192, 64);
+            Title.Margin = new Padding(5, 0, 5, 0);
             Title.Name = "Title";
-            Title.Size = new Size(830, 122);
-            Title.TabIndex = 0;
+            Title.Size = new Size(463, 68);
+            Title.TabIndex = 11;
             Title.Text = "HoloRepository";
-            // 
-            // AddCaseButton
-            // 
-            AddCaseButton.Anchor = AnchorStyles.None;
-            AddCaseButton.BackColor = Color.CornflowerBlue;
-            AddCaseButton.FlatStyle = FlatStyle.Flat;
-            AddCaseButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            AddCaseButton.ForeColor = SystemColors.ButtonFace;
-            AddCaseButton.Location = new Point(518, 375);
-            AddCaseButton.Margin = new Padding(8, 6, 8, 6);
-            AddCaseButton.Name = "AddCaseButton";
-            AddCaseButton.Size = new Size(292, 54);
-            AddCaseButton.TabIndex = 1;
-            AddCaseButton.Text = "Add a Case";
-            AddCaseButton.UseVisualStyleBackColor = false;
-            AddCaseButton.Click += AddCaseButton_Click;
-            // 
-            // ViewCasesButton
-            // 
-            ViewCasesButton.Anchor = AnchorStyles.None;
-            ViewCasesButton.BackColor = Color.CornflowerBlue;
-            ViewCasesButton.FlatStyle = FlatStyle.Flat;
-            ViewCasesButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            ViewCasesButton.ForeColor = SystemColors.ButtonFace;
-            ViewCasesButton.Location = new Point(518, 490);
-            ViewCasesButton.Margin = new Padding(8, 6, 8, 6);
-            ViewCasesButton.Name = "ViewCasesButton";
-            ViewCasesButton.Size = new Size(292, 54);
-            ViewCasesButton.TabIndex = 2;
-            ViewCasesButton.Text = "View Cases";
-            ViewCasesButton.UseVisualStyleBackColor = false;
-            ViewCasesButton.Click += ViewCasesButton_Click;
-            // 
-            // UserGuideButton
-            // 
-            UserGuideButton.Anchor = AnchorStyles.None;
-            UserGuideButton.BackColor = Color.CornflowerBlue;
-            UserGuideButton.FlatStyle = FlatStyle.Flat;
-            UserGuideButton.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            UserGuideButton.ForeColor = Color.Transparent;
-            UserGuideButton.Location = new Point(518, 600);
-            UserGuideButton.Margin = new Padding(8, 6, 8, 6);
-            UserGuideButton.Name = "UserGuideButton";
-            UserGuideButton.Size = new Size(292, 54);
-            UserGuideButton.TabIndex = 3;
-            UserGuideButton.Text = "User Guide";
-            UserGuideButton.UseVisualStyleBackColor = false;
-            UserGuideButton.Click += UserGuideButton_Click;
-            // 
-            // mainPanel
-            // 
-            mainPanel.AutoScroll = true;
-            mainPanel.BackColor = Color.White;
-            mainPanel.Controls.Add(AddBtn);
-            mainPanel.Controls.Add(AddCaseButton);
-            mainPanel.Controls.Add(Title);
-            mainPanel.Controls.Add(UserGuideButton);
-            mainPanel.Controls.Add(ViewCasesButton);
-            mainPanel.Dock = DockStyle.Fill;
-            mainPanel.Location = new Point(0, 0);
-            mainPanel.Margin = new Padding(6, 3, 6, 3);
-            mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(1329, 712);
-            mainPanel.TabIndex = 4;
-            // 
-            // AddBtn
-            // 
-            AddBtn.Anchor = AnchorStyles.None;
-            AddBtn.Font = new Font("Century Gothic", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            AddBtn.Location = new Point(226, 368);
-            AddBtn.Margin = new Padding(5);
-            AddBtn.Name = "AddBtn";
-            AddBtn.Size = new Size(141, 61);
-            AddBtn.TabIndex = 5;
-            AddBtn.Text = "temp";
-            AddBtn.UseVisualStyleBackColor = true;
-            AddBtn.Click += AddBtn_Click;
             // 
             // HomePage
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1329, 712);
-            Controls.Add(mainPanel);
-            Margin = new Padding(6, 3, 6, 3);
+            BackColor = Color.White;
+            ClientSize = new Size(846, 445);
+            Controls.Add(mainContainer);
+            Controls.Add(header);
+            Margin = new Padding(4, 2, 4, 2);
             Name = "HomePage";
             Text = "HoloRepository";
-            mainPanel.ResumeLayout(false);
-            mainPanel.PerformLayout();
+            mainContainer.ResumeLayout(false);
+            mainContainer.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
+        private Panel header;
+        private Panel mainContainer;
+        private Button tempBtn;
         private Label Title;
-        private Button AddCaseButton;
-        private Button ViewCasesButton;
-        private Button UserGuideButton;
-        private Panel mainPanel;
-        private Button AddBtn;
+        private RoundedButton addCaseBtn;
+        private RoundedButton userGuideBtn;
+        private RoundedButton organArchiveBtn;
+        private RoundedButton viewCasesBtn;
     }
 }

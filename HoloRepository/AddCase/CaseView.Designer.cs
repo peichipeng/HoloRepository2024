@@ -70,7 +70,7 @@
             flowLayoutPanel1.Location = new Point(60, 187);
             flowLayoutPanel1.Margin = new Padding(2);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(698, 261);
+            flowLayoutPanel1.Size = new Size(698, 282);
             flowLayoutPanel1.TabIndex = 74;
             // 
             // materialDivider2
@@ -98,7 +98,7 @@
             nextBtn.Name = "nextBtn";
             nextBtn.Size = new Size(143, 25);
             nextBtn.TabIndex = 72;
-            nextBtn.Text = "+ Add an organ";
+            nextBtn.Text = "+ Add an Organ";
             nextBtn.UseVisualStyleBackColor = false;
             // 
             // label8
@@ -123,9 +123,8 @@
             causeOfDeathLabel.Location = new Point(222, 115);
             causeOfDeathLabel.Margin = new Padding(2, 0, 2, 0);
             causeOfDeathLabel.Name = "causeOfDeathLabel";
-            causeOfDeathLabel.Size = new Size(143, 19);
+            causeOfDeathLabel.Size = new Size(0, 19);
             causeOfDeathLabel.TabIndex = 70;
-            causeOfDeathLabel.Text = "Ischemic heart disease";
             // 
             // ageLabel
             // 
@@ -136,9 +135,8 @@
             ageLabel.Location = new Point(222, 89);
             ageLabel.Margin = new Padding(2, 0, 2, 0);
             ageLabel.Name = "ageLabel";
-            ageLabel.Size = new Size(23, 19);
+            ageLabel.Size = new Size(0, 19);
             ageLabel.TabIndex = 69;
-            ageLabel.Text = "23";
             // 
             // dodLabel
             // 
@@ -149,9 +147,8 @@
             dodLabel.Location = new Point(222, 64);
             dodLabel.Margin = new Padding(2, 0, 2, 0);
             dodLabel.Name = "dodLabel";
-            dodLabel.Size = new Size(71, 19);
+            dodLabel.Size = new Size(0, 19);
             dodLabel.TabIndex = 68;
-            dodLabel.Text = "19/06/2001";
             // 
             // idLabel
             // 
@@ -162,9 +159,8 @@
             idLabel.Location = new Point(222, 38);
             idLabel.Margin = new Padding(2, 0, 2, 0);
             idLabel.Name = "idLabel";
-            idLabel.Size = new Size(71, 19);
+            idLabel.Size = new Size(0, 19);
             idLabel.TabIndex = 67;
-            idLabel.Text = "123456789";
             // 
             // label4
             // 
@@ -261,7 +257,7 @@
             Controls.Add(label2);
             Controls.Add(label6);
             Name = "CaseView";
-            Size = new Size(800, 450);
+            Size = new Size(800, 471);
             ((System.ComponentModel.ISupportInitialize)updateBtn).EndInit();
             ResumeLayout(false);
             PerformLayout();

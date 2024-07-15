@@ -13,12 +13,19 @@ namespace HoloRepository.AddCase
 {
     public partial class OrganPanel : UserControl
     {
+        private int organId;
+        private string organName;
+        private List<string> organSlices;
         public int BorderRadius { get; set; } = 20;
         public Color BorderColor { get; set; } = Color.LightGray;
         public int BorderThickness { get; set; } = 1;
-        public OrganPanel(string name)
+        public OrganPanel(int organId, string name, List<string> organSlices)
         {
             InitializeComponent();
+
+            this.organId = organId;
+            this.organName = name;
+            this.organSlices = organSlices;
 
             sliceImages.Controls.Add(leftArrow);
             sliceImages.Controls.Add(rightArrow);
@@ -27,12 +34,29 @@ namespace HoloRepository.AddCase
             leftArrow.Location = new Point(0, leftArrowYPosition);
             rightArrow.Location = new Point(rightArrowXPosition, leftArrowYPosition);
 
-            setOrganPanel(name);
+            setOrganPanel();
         }
 
-        private void setOrganPanel (string name)
+        private void setOrganPanel ()
         {
-            organName.Text = name;
+            organNameLabel.Text = organName;
+            organNameLabel.Location = new Point(this.Width/2- organNameLabel.Width/2, 210);
+
+            try
+            {
+                if (organSlices.Count > 0 ) // need to add some text if there are no images available
+                {
+                    // Load the image from file path
+                    Image image = Image.FromFile(organSlices[0]);
+
+                    // Assign the loaded image to PictureBox
+                    sliceImages.Image = image;
+                }            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading image: {ex.Message}");
+                // Optionally handle the exception here
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)

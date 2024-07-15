@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,13 +13,76 @@ namespace HoloRepository.AddCase
 {
     public partial class CaseView : UserControl
     {
-        public CaseView(Dictionary<string, string> donorInfo)
+        private int donorId;
+        public CaseView(int donorId)
         {
             InitializeComponent();
-            ageLabel.Text = donorInfo["age"];
-            idLabel.Text = donorInfo["id"];
-            causeOfDeathLabel.Text = donorInfo["causeOfDeath"];
-            dodLabel.Text = donorInfo["dod"];
+            this.donorId = donorId;
+            LoadData();
+        }
+
+        private async void LoadData()
+        {
+            var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
+            var dbConnection = new DatabaseConnection(connectionString);
+
+            string queryInfo = $"SELECT age, date_of_death, cause_of_death FROM donor WHERE donor_id = {donorId}";
+            var reader = dbConnection.ExecuteReader(queryInfo);
+            while (await reader.ReadAsync())
+            {
+                ageLabel.Text = reader.GetFieldValue<int>(0).ToString();
+                idLabel.Text = donorId.ToString();
+                causeOfDeathLabel.Text = reader.GetFieldValue<string>(2);
+                dodLabel.Text = reader.GetFieldValue<DateTime>(1).ToString("dd/MM/yyyy");
+            }
+
+            string queryOrgans = $"SELECT organ_id, organ_name_id FROM organ WHERE donor_id = {donorId}";
+            reader = dbConnection.ExecuteReader(queryOrgans);
+
+            while (await reader.ReadAsync())
+            {
+                int organId = reader.GetFieldValue<int>(0);
+                int organNameId = reader.GetFieldValue<int>(1);
+                //MessageBox.Show(organId.ToString() + organNameId.ToString());
+                
+                // Retrieve the organ name
+                string queryOrganName = $"SELECT organ_name FROM organname WHERE organ_name_id = {organNameId}";
+                var readerName = dbConnection.ExecuteReader(queryOrganName);
+                string organName = "";
+                while (await readerName.ReadAsync())
+                {
+                    organName = readerName.GetFieldValue<string>(0);
+                }
+                // Retrieve the corresponding organ slices
+                string queryOrganSlices = $"SELECT image_path FROM sliceimage WHERE organ_id = {organId}";
+                var readerSlice = dbConnection.ExecuteReader(queryOrganSlices);
+                List<string> sliceList = new List<string>();
+                while (await readerSlice.ReadAsync())
+                {
+                    sliceList.Add(readerSlice.GetFieldValue<string>(0));
+                }
+                OrganPanel organPanel = new OrganPanel(organId, organName, sliceList);
+                flowLayoutPanel1.Controls.Add(organPanel);
+            }
+        }
+
+        private async void LoadOrgans()
+        {
+            var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
+            await using var conn = new NpgsqlConnection(connectionString);
+            await conn.OpenAsync();
+
+            string query = $"SELECT age, date_of_death, cause_of_death FROM donor WHERE donor_id = {donorId}";
+            await using var cmd = new NpgsqlCommand(query, conn);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                ageLabel.Text = reader.GetFieldValue<int>(0).ToString();
+                idLabel.Text = donorId.ToString();
+                causeOfDeathLabel.Text = reader.GetFieldValue<string>(2);
+                dodLabel.Text = reader.GetFieldValue<DateTime>(1).ToString("dd/MM/yyyy");
+            }
         }
 
         private void updateBtn_Click(object sender, EventArgs e)
@@ -30,14 +94,11 @@ namespace HoloRepository.AddCase
                 {"age", ageLabel.Text},
                 {"causeOfDeath", causeOfDeathLabel.Text}
             };
-            //MessageBox.Show(this.Parent.Parent.Parent.Name);
-            Control addCaseContainer = this.Parent?.Parent?.Parent;
-            UserControl updateDonorInfo = new DonorInfo(donorInfo);
-            updateDonorInfo.Dock = DockStyle.Fill;
-
-            var container = addCaseContainer as Panel;
-            container.Controls.Clear();
-            container.Controls.Add(updateDonorInfo);
+            if (this.Parent.Parent.Parent.Parent is AddCaseFramework framework)
+            {
+                framework.LoadControl(new DonorInfo(donorInfo));
+                framework.ShowFooterBtns();
+            }
         }
 
         private void updateBtn_MouseEnter(object sender, EventArgs e)
@@ -52,8 +113,8 @@ namespace HoloRepository.AddCase
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OrganPanel organPanel = new OrganPanel("kidney");
-            flowLayoutPanel1.Controls.Add(organPanel);
+            //OrganPanel organPanel = new OrganPanel("kidney");
+            //flowLayoutPanel1.Controls.Add(organPanel);
         }
     }
 }

@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            causeOfDeath = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
-            age = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
-            DOD = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
-            donorID = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            causeOfDeathTxt = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            ageTxt = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            dodTxt = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            donorIdTxt = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             label4 = new Label();
             label5 = new Label();
             label3 = new Label();
@@ -44,68 +44,68 @@
             causeErrorLabel = new Label();
             SuspendLayout();
             // 
-            // causeOfDeath
+            // causeOfDeathTxt
             // 
-            causeOfDeath.Anchor = AnchorStyles.None;
-            causeOfDeath.Location = new Point(181, 219);
-            causeOfDeath.Margin = new Padding(2);
-            causeOfDeath.Name = "causeOfDeath";
-            causeOfDeath.Size = new Size(246, 29);
-            causeOfDeath.StateCommon.Border.Color1 = Color.LightGray;
-            causeOfDeath.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
-            causeOfDeath.StateCommon.Border.Rounding = 5;
-            causeOfDeath.StateCommon.Border.Width = 2;
-            causeOfDeath.StateCommon.Content.Color1 = Color.Black;
-            causeOfDeath.TabIndex = 33;
+            causeOfDeathTxt.Anchor = AnchorStyles.None;
+            causeOfDeathTxt.Location = new Point(181, 219);
+            causeOfDeathTxt.Margin = new Padding(2);
+            causeOfDeathTxt.Name = "causeOfDeathTxt";
+            causeOfDeathTxt.Size = new Size(246, 29);
+            causeOfDeathTxt.StateCommon.Border.Color1 = Color.LightGray;
+            causeOfDeathTxt.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
+            causeOfDeathTxt.StateCommon.Border.Rounding = 5;
+            causeOfDeathTxt.StateCommon.Border.Width = 2;
+            causeOfDeathTxt.StateCommon.Content.Color1 = Color.Black;
+            causeOfDeathTxt.TabIndex = 33;
             // 
-            // age
+            // ageTxt
             // 
-            age.Anchor = AnchorStyles.None;
-            age.Location = new Point(181, 188);
-            age.Margin = new Padding(2);
-            age.Name = "age";
-            age.Size = new Size(246, 29);
-            age.StateCommon.Border.Color1 = Color.LightGray;
-            age.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
-            age.StateCommon.Border.Rounding = 5;
-            age.StateCommon.Border.Width = 2;
-            age.StateCommon.Content.Color1 = Color.Black;
-            age.TabIndex = 32;
-            age.Leave += age_Leave;
+            ageTxt.Anchor = AnchorStyles.None;
+            ageTxt.Location = new Point(181, 188);
+            ageTxt.Margin = new Padding(2);
+            ageTxt.Name = "ageTxt";
+            ageTxt.Size = new Size(246, 29);
+            ageTxt.StateCommon.Border.Color1 = Color.LightGray;
+            ageTxt.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
+            ageTxt.StateCommon.Border.Rounding = 5;
+            ageTxt.StateCommon.Border.Width = 2;
+            ageTxt.StateCommon.Content.Color1 = Color.Black;
+            ageTxt.TabIndex = 32;
+            ageTxt.Leave += age_Leave;
             // 
-            // DOD
+            // dodTxt
             // 
-            DOD.Anchor = AnchorStyles.None;
-            DOD.Location = new Point(181, 157);
-            DOD.Margin = new Padding(2);
-            DOD.Name = "DOD";
-            DOD.Size = new Size(246, 29);
-            DOD.StateCommon.Border.Color1 = Color.LightGray;
-            DOD.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
-            DOD.StateCommon.Border.Rounding = 5;
-            DOD.StateCommon.Border.Width = 2;
-            DOD.StateCommon.Content.Color1 = Color.Gray;
-            DOD.TabIndex = 31;
-            DOD.Text = "DD/MM/YYYY";
-            DOD.TextChanged += DOD_TextChanged;
-            DOD.Enter += DOD_Enter;
-            DOD.KeyDown += DOD_KeyDown;
-            DOD.Leave += DOD_Leave;
+            dodTxt.Anchor = AnchorStyles.None;
+            dodTxt.Location = new Point(181, 157);
+            dodTxt.Margin = new Padding(2);
+            dodTxt.Name = "dodTxt";
+            dodTxt.Size = new Size(246, 29);
+            dodTxt.StateCommon.Border.Color1 = Color.LightGray;
+            dodTxt.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
+            dodTxt.StateCommon.Border.Rounding = 5;
+            dodTxt.StateCommon.Border.Width = 2;
+            dodTxt.StateCommon.Content.Color1 = Color.Gray;
+            dodTxt.TabIndex = 31;
+            dodTxt.Text = "DD/MM/YYYY";
+            dodTxt.TextChanged += DOD_TextChanged;
+            dodTxt.Enter += DOD_Enter;
+            dodTxt.KeyDown += DOD_KeyDown;
+            dodTxt.Leave += DOD_Leave;
             // 
-            // donorID
+            // donorIdTxt
             // 
-            donorID.Anchor = AnchorStyles.None;
-            donorID.Location = new Point(181, 126);
-            donorID.Margin = new Padding(2);
-            donorID.Name = "donorID";
-            donorID.Size = new Size(246, 29);
-            donorID.StateCommon.Border.Color1 = Color.LightGray;
-            donorID.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
-            donorID.StateCommon.Border.Rounding = 5;
-            donorID.StateCommon.Border.Width = 2;
-            donorID.StateCommon.Content.Color1 = Color.Black;
-            donorID.TabIndex = 30;
-            donorID.Leave += donorID_Leave;
+            donorIdTxt.Anchor = AnchorStyles.None;
+            donorIdTxt.Location = new Point(181, 126);
+            donorIdTxt.Margin = new Padding(2);
+            donorIdTxt.Name = "donorIdTxt";
+            donorIdTxt.Size = new Size(246, 29);
+            donorIdTxt.StateCommon.Border.Color1 = Color.LightGray;
+            donorIdTxt.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
+            donorIdTxt.StateCommon.Border.Rounding = 5;
+            donorIdTxt.StateCommon.Border.Width = 2;
+            donorIdTxt.StateCommon.Content.Color1 = Color.Black;
+            donorIdTxt.TabIndex = 30;
+            donorIdTxt.Leave += donorID_Leave;
             // 
             // label4
             // 
@@ -232,10 +232,10 @@
             Controls.Add(idErrorLabel);
             Controls.Add(dodErrorLabel);
             Controls.Add(label1);
-            Controls.Add(causeOfDeath);
-            Controls.Add(age);
-            Controls.Add(DOD);
-            Controls.Add(donorID);
+            Controls.Add(causeOfDeathTxt);
+            Controls.Add(ageTxt);
+            Controls.Add(dodTxt);
+            Controls.Add(donorIdTxt);
             Controls.Add(label4);
             Controls.Add(label5);
             Controls.Add(label3);
@@ -249,15 +249,15 @@
 
         #endregion
 
-        public ComponentFactory.Krypton.Toolkit.KryptonTextBox causeOfDeath;
-        public ComponentFactory.Krypton.Toolkit.KryptonTextBox age;
-        public ComponentFactory.Krypton.Toolkit.KryptonTextBox DOD;
-        public ComponentFactory.Krypton.Toolkit.KryptonTextBox donorID;
+        public ComponentFactory.Krypton.Toolkit.KryptonTextBox causeOfDeathTxt;
+        public ComponentFactory.Krypton.Toolkit.KryptonTextBox ageTxt;
+        public ComponentFactory.Krypton.Toolkit.KryptonTextBox dodTxt;
+        public ComponentFactory.Krypton.Toolkit.KryptonTextBox donorIdTxt;
         private Label label4;
         private Label label5;
         private Label label3;
         private Label label2;
-        private Label title;
+        public Label title;
         private Label label1;
         private Label dodErrorLabel;
         private Label idErrorLabel;
