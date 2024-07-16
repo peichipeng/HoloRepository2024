@@ -1,1 +1,1 @@
-SELECT * FROM donor;
+SELECT * FROM dicomfile;
