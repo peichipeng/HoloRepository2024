@@ -51,9 +51,10 @@
             updateBtn.Anchor = AnchorStyles.Top;
             updateBtn.BackColor = Color.Transparent;
             updateBtn.Image = (Image)resources.GetObject("updateBtn.Image");
-            updateBtn.Location = new Point(341, 2);
+            updateBtn.Location = new Point(536, 3);
+            updateBtn.Margin = new Padding(5, 5, 5, 5);
             updateBtn.Name = "updateBtn";
-            updateBtn.Size = new Size(24, 29);
+            updateBtn.Size = new Size(38, 46);
             updateBtn.SizeMode = PictureBoxSizeMode.Zoom;
             updateBtn.TabIndex = 75;
             updateBtn.TabStop = false;
@@ -66,10 +67,9 @@
             flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.BackColor = Color.Transparent;
-            flowLayoutPanel1.Location = new Point(60, 187);
-            flowLayoutPanel1.Margin = new Padding(2);
+            flowLayoutPanel1.Location = new Point(80, 299);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(698, 282);
+            flowLayoutPanel1.Size = new Size(1097, 451);
             flowLayoutPanel1.TabIndex = 74;
             // 
             // materialDivider2
@@ -77,11 +77,10 @@
             materialDivider2.Anchor = AnchorStyles.Top;
             materialDivider2.BackColor = Color.LightGray;
             materialDivider2.Depth = 0;
-            materialDivider2.Location = new Point(69, 175);
-            materialDivider2.Margin = new Padding(2);
+            materialDivider2.Location = new Point(108, 280);
             materialDivider2.MouseState = MaterialSkin.MouseState.HOVER;
             materialDivider2.Name = "materialDivider2";
-            materialDivider2.Size = new Size(662, 1);
+            materialDivider2.Size = new Size(1040, 2);
             materialDivider2.TabIndex = 73;
             materialDivider2.Text = "materialDivider2";
             // 
@@ -92,10 +91,10 @@
             addOrganBtn.BorderRadius = 15;
             addOrganBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             addOrganBtn.ForeColor = Color.White;
-            addOrganBtn.Location = new Point(588, 146);
-            addOrganBtn.Margin = new Padding(2, 2, 14, 2);
+            addOrganBtn.Location = new Point(924, 234);
+            addOrganBtn.Margin = new Padding(3, 3, 22, 3);
             addOrganBtn.Name = "addOrganBtn";
-            addOrganBtn.Size = new Size(143, 25);
+            addOrganBtn.Size = new Size(225, 40);
             addOrganBtn.TabIndex = 72;
             addOrganBtn.Text = "+ Add an Organ";
             addOrganBtn.UseVisualStyleBackColor = false;
@@ -107,10 +106,9 @@
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
             label8.ForeColor = Color.Black;
-            label8.Location = new Point(71, 146);
-            label8.Margin = new Padding(2, 0, 2, 0);
+            label8.Location = new Point(112, 234);
             label8.Name = "label8";
-            label8.Size = new Size(67, 23);
+            label8.Size = new Size(102, 36);
             label8.TabIndex = 71;
             label8.Text = "Organs";
             // 
@@ -120,10 +118,9 @@
             causeOfDeathLabel.AutoSize = true;
             causeOfDeathLabel.Font = new Font("Segoe UI Semilight", 10F, FontStyle.Regular, GraphicsUnit.Point);
             causeOfDeathLabel.ForeColor = Color.Black;
-            causeOfDeathLabel.Location = new Point(222, 115);
-            causeOfDeathLabel.Margin = new Padding(2, 0, 2, 0);
+            causeOfDeathLabel.Location = new Point(349, 184);
             causeOfDeathLabel.Name = "causeOfDeathLabel";
-            causeOfDeathLabel.Size = new Size(0, 19);
+            causeOfDeathLabel.Size = new Size(0, 28);
             causeOfDeathLabel.TabIndex = 70;
             // 
             // ageLabel
@@ -132,10 +129,9 @@
             ageLabel.AutoSize = true;
             ageLabel.Font = new Font("Segoe UI Semilight", 10F, FontStyle.Regular, GraphicsUnit.Point);
             ageLabel.ForeColor = Color.Black;
-            ageLabel.Location = new Point(222, 89);
-            ageLabel.Margin = new Padding(2, 0, 2, 0);
+            ageLabel.Location = new Point(349, 142);
             ageLabel.Name = "ageLabel";
-            ageLabel.Size = new Size(0, 19);
+            ageLabel.Size = new Size(0, 28);
             ageLabel.TabIndex = 69;
             // 
             // dodLabel
@@ -144,10 +140,9 @@
             dodLabel.AutoSize = true;
             dodLabel.Font = new Font("Segoe UI Semilight", 10F, FontStyle.Regular, GraphicsUnit.Point);
             dodLabel.ForeColor = Color.Black;
-            dodLabel.Location = new Point(222, 64);
-            dodLabel.Margin = new Padding(2, 0, 2, 0);
+            dodLabel.Location = new Point(349, 102);
             dodLabel.Name = "dodLabel";
-            dodLabel.Size = new Size(0, 19);
+            dodLabel.Size = new Size(0, 28);
             dodLabel.TabIndex = 68;
             // 
             // idLabel
@@ -156,10 +151,9 @@
             idLabel.AutoSize = true;
             idLabel.Font = new Font("Segoe UI Semilight", 10F, FontStyle.Regular, GraphicsUnit.Point);
             idLabel.ForeColor = Color.Black;
-            idLabel.Location = new Point(222, 38);
-            idLabel.Margin = new Padding(2, 0, 2, 0);
+            idLabel.Location = new Point(349, 61);
             idLabel.Name = "idLabel";
-            idLabel.Size = new Size(0, 19);
+            idLabel.Size = new Size(0, 28);
             idLabel.TabIndex = 67;
             // 
             // label4
@@ -168,10 +162,9 @@
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label4.ForeColor = Color.Black;
-            label4.Location = new Point(71, 115);
-            label4.Margin = new Padding(2, 0, 2, 0);
+            label4.Location = new Point(112, 184);
             label4.Name = "label4";
-            label4.Size = new Size(101, 19);
+            label4.Size = new Size(141, 28);
             label4.TabIndex = 66;
             label4.Text = "Cause of death";
             // 
@@ -181,10 +174,9 @@
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label5.ForeColor = Color.Black;
-            label5.Location = new Point(71, 89);
-            label5.Margin = new Padding(2, 0, 2, 0);
+            label5.Location = new Point(112, 142);
             label5.Name = "label5";
-            label5.Size = new Size(33, 19);
+            label5.Size = new Size(47, 28);
             label5.TabIndex = 65;
             label5.Text = "Age";
             // 
@@ -194,10 +186,9 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(71, 64);
-            label3.Margin = new Padding(2, 0, 2, 0);
+            label3.Location = new Point(112, 102);
             label3.Name = "label3";
-            label3.Size = new Size(93, 19);
+            label3.Size = new Size(131, 28);
             label3.TabIndex = 64;
             label3.Text = "Date of death";
             // 
@@ -207,10 +198,9 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.Black;
-            label2.Location = new Point(71, 38);
-            label2.Margin = new Padding(2, 0, 2, 0);
+            label2.Location = new Point(112, 61);
             label2.Name = "label2";
-            label2.Size = new Size(66, 19);
+            label2.Size = new Size(92, 28);
             label2.TabIndex = 63;
             label2.Text = "Donor ID";
             // 
@@ -220,16 +210,15 @@
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
             label6.ForeColor = Color.Black;
-            label6.Location = new Point(71, 8);
-            label6.Margin = new Padding(2, 0, 2, 0);
+            label6.Location = new Point(112, 13);
             label6.Name = "label6";
-            label6.Size = new Size(217, 23);
+            label6.Size = new Size(332, 36);
             label6.TabIndex = 62;
             label6.Text = "Donor's Basic Information";
             // 
             // CaseView
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(updateBtn);
             Controls.Add(flowLayoutPanel1);
@@ -245,8 +234,9 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label6);
+            Margin = new Padding(5, 5, 5, 5);
             Name = "CaseView";
-            Size = new Size(800, 471);
+            Size = new Size(1257, 754);
             ((System.ComponentModel.ISupportInitialize)updateBtn).EndInit();
             ResumeLayout(false);
             PerformLayout();

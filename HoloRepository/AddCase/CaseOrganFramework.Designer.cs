@@ -43,8 +43,9 @@
             header.Controls.Add(pageNameLabel);
             header.Dock = DockStyle.Top;
             header.Location = new Point(0, 0);
+            header.Margin = new Padding(5);
             header.Name = "header";
-            header.Size = new Size(800, 64);
+            header.Size = new Size(1257, 102);
             header.TabIndex = 0;
             // 
             // caseNoLabel
@@ -53,10 +54,9 @@
             caseNoLabel.AutoSize = true;
             caseNoLabel.Font = new Font("Segoe UI", 12F, FontStyle.Italic, GraphicsUnit.Point);
             caseNoLabel.ForeColor = Color.Black;
-            caseNoLabel.Location = new Point(603, 35);
-            caseNoLabel.Margin = new Padding(2, 0, 2, 0);
+            caseNoLabel.Location = new Point(948, 56);
             caseNoLabel.Name = "caseNoLabel";
-            caseNoLabel.Size = new Size(128, 21);
+            caseNoLabel.Size = new Size(187, 32);
             caseNoLabel.TabIndex = 54;
             caseNoLabel.Text = "Case 123456789";
             // 
@@ -65,11 +65,10 @@
             divider.Anchor = AnchorStyles.Top;
             divider.BackColor = Color.DarkGray;
             divider.Depth = 0;
-            divider.Location = new Point(69, 58);
-            divider.Margin = new Padding(2);
+            divider.Location = new Point(108, 97);
             divider.MouseState = MaterialSkin.MouseState.HOVER;
             divider.Name = "divider";
-            divider.Size = new Size(662, 1);
+            divider.Size = new Size(1040, 2);
             divider.TabIndex = 53;
             divider.Text = "materialDivider1";
             // 
@@ -78,29 +77,31 @@
             pageNameLabel.Anchor = AnchorStyles.Top;
             pageNameLabel.AutoSize = true;
             pageNameLabel.Font = new Font("Tahoma", 24F, FontStyle.Bold, GraphicsUnit.Point);
-            pageNameLabel.Location = new Point(69, 12);
-            pageNameLabel.Margin = new Padding(14, 0, 2, 0);
+            pageNameLabel.Location = new Point(108, 19);
+            pageNameLabel.Margin = new Padding(22, 0, 3, 0);
             pageNameLabel.Name = "pageNameLabel";
-            pageNameLabel.Size = new Size(191, 39);
+            pageNameLabel.Size = new Size(290, 58);
             pageNameLabel.TabIndex = 52;
             pageNameLabel.Text = "Add a Case";
             // 
             // caseOrganContainer
             // 
             caseOrganContainer.Dock = DockStyle.Fill;
-            caseOrganContainer.Location = new Point(0, 64);
+            caseOrganContainer.Location = new Point(0, 102);
+            caseOrganContainer.Margin = new Padding(5);
             caseOrganContainer.Name = "caseOrganContainer";
-            caseOrganContainer.Size = new Size(800, 222);
+            caseOrganContainer.Size = new Size(1257, 356);
             caseOrganContainer.TabIndex = 1;
             // 
             // CaseOrganFramework
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(caseOrganContainer);
             Controls.Add(header);
+            Margin = new Padding(5);
             Name = "CaseOrganFramework";
-            Size = new Size(800, 286);
+            Size = new Size(1257, 458);
             header.ResumeLayout(false);
             header.PerformLayout();
             ResumeLayout(false);

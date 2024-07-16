@@ -138,7 +138,7 @@ namespace HoloRepository
             organSlicePanel.SetCTImage(image);
             organSlicePanel.SetDescription(description, selectedIndex);
 
-            int fixedControlsCount = 4;
+            int fixedControlsCount = 3;
 
             organSlicesPanel.Controls.Add(organSlicePanel);
             organSlicesPanel.Controls.SetChildIndex(organSlicePanel, organSlicesPanel.Controls.Count - fixedControlsCount - 1);

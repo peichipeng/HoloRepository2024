@@ -41,9 +41,9 @@ namespace HoloRepository
             // 
             // OrganSliceBox
             // 
-            OrganSliceBox.Location = new Point(37, 60);
+            OrganSliceBox.Location = new Point(12, 60);
             OrganSliceBox.Name = "OrganSliceBox";
-            OrganSliceBox.Size = new Size(685, 472);
+            OrganSliceBox.Size = new Size(648, 463);
             OrganSliceBox.SizeMode = PictureBoxSizeMode.Zoom;
             OrganSliceBox.TabIndex = 0;
             OrganSliceBox.TabStop = false;
@@ -54,17 +54,17 @@ namespace HoloRepository
             lineControl1.LineWidth = 1;
             lineControl1.Location = new Point(3, 0);
             lineControl1.Name = "lineControl1";
-            lineControl1.Size = new Size(1240, 19);
+            lineControl1.Size = new Size(1040, 19);
             lineControl1.TabIndex = 2;
             lineControl1.Text = "lineControl1";
             // 
             // textBox
             // 
-            textBox.Location = new Point(755, 105);
+            textBox.Location = new Point(677, 102);
             textBox.Multiline = true;
             textBox.Name = "textBox";
             textBox.ReadOnly = true;
-            textBox.Size = new Size(465, 118);
+            textBox.Size = new Size(352, 118);
             textBox.StateActive.Border.Color1 = Color.Silver;
             textBox.StateActive.Border.Color2 = Color.Silver;
             textBox.StateActive.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
@@ -77,7 +77,7 @@ namespace HoloRepository
             // 
             AdditionalInfoLabel.AutoSize = true;
             AdditionalInfoLabel.Font = new Font("Poppins SemiBold", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            AdditionalInfoLabel.Location = new Point(755, 60);
+            AdditionalInfoLabel.Location = new Point(677, 60);
             AdditionalInfoLabel.Name = "AdditionalInfoLabel";
             AdditionalInfoLabel.Size = new Size(273, 39);
             AdditionalInfoLabel.TabIndex = 4;
@@ -87,7 +87,7 @@ namespace HoloRepository
             // 
             MatchedSliceLabel.AutoSize = true;
             MatchedSliceLabel.Font = new Font("Poppins SemiBold", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            MatchedSliceLabel.Location = new Point(755, 239);
+            MatchedSliceLabel.Location = new Point(677, 239);
             MatchedSliceLabel.Name = "MatchedSliceLabel";
             MatchedSliceLabel.Size = new Size(153, 39);
             MatchedSliceLabel.TabIndex = 5;
@@ -95,9 +95,9 @@ namespace HoloRepository
             // 
             // CTBox
             // 
-            CTBox.Location = new Point(755, 284);
+            CTBox.Location = new Point(677, 275);
             CTBox.Name = "CTBox";
-            CTBox.Size = new Size(465, 248);
+            CTBox.Size = new Size(352, 248);
             CTBox.SizeMode = PictureBoxSizeMode.Zoom;
             CTBox.TabIndex = 6;
             CTBox.TabStop = false;
@@ -106,7 +106,7 @@ namespace HoloRepository
             // 
             OrganSliceLabel.AutoSize = true;
             OrganSliceLabel.Font = new Font("Poppins", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            OrganSliceLabel.Location = new Point(37, 18);
+            OrganSliceLabel.Location = new Point(0, 15);
             OrganSliceLabel.Name = "OrganSliceLabel";
             OrganSliceLabel.Size = new Size(440, 39);
             OrganSliceLabel.TabIndex = 7;
@@ -119,7 +119,7 @@ namespace HoloRepository
             EditButton.FlatAppearance.BorderSize = 0;
             EditButton.FlatStyle = FlatStyle.Flat;
             EditButton.ImageFileName = "EditButton.png";
-            EditButton.Location = new Point(1127, 18);
+            EditButton.Location = new Point(947, 15);
             EditButton.Name = "EditButton";
             EditButton.Size = new Size(30, 30);
             EditButton.TabIndex = 8;
@@ -132,7 +132,7 @@ namespace HoloRepository
             BinButton.FlatAppearance.BorderSize = 0;
             BinButton.FlatStyle = FlatStyle.Flat;
             BinButton.ImageFileName = "BinButton.png";
-            BinButton.Location = new Point(1190, 18);
+            BinButton.Location = new Point(999, 15);
             BinButton.Name = "BinButton";
             BinButton.Size = new Size(30, 30);
             BinButton.TabIndex = 9;
@@ -152,7 +152,7 @@ namespace HoloRepository
             Controls.Add(lineControl1);
             Controls.Add(OrganSliceBox);
             Name = "OrganSlicePanel";
-            Size = new Size(1240, 543);
+            Size = new Size(1040, 543);
             ((System.ComponentModel.ISupportInitialize)OrganSliceBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CTBox).EndInit();
             ResumeLayout(false);
