@@ -43,16 +43,47 @@ namespace HoloRepository.AddCase
                 }
                 pageNameLabel.Text = "Case Overview";
                 caseNoLabel.Text = $"Case {donorId}";
-                caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width, 35);
+                //caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width, 35);
                 LoadControl(new CaseView());
             }
         }
 
         public void LoadControl(UserControl userControl)
         {
+            if (userControl is CaseView && this.pageName == "caseOverview")
+            {
+                caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width - deleteCaseBtn.Width - 2, 35);
+                deleteCaseBtn.Location = new Point(divider.Location.X + divider.Size.Width - deleteCaseBtn.Width, 32);
+                deleteCaseBtn.Visible = true;
+            }
+            else
+            {
+                deleteCaseBtn.Visible = false;
+            }
             caseOrganContainer.Controls.Clear();
             userControl.Dock = DockStyle.Fill;
             caseOrganContainer.Controls.Add(userControl);
+        }
+
+        private void deleteCaseBtn_Click(object sender, EventArgs e)
+        {
+            using (var popup = new PopupWindow("Are you sure you want to delete?", this.ParentForm))
+            {
+                var result = popup.ShowDialog(this.ParentForm);
+
+                if (result == DialogResult.Yes)
+                {
+                    // Code for deleting the case
+                    var dbConnection = new DatabaseConnection();
+
+                    string deleteQuery = $"DELETE FROM donor WHERE donor_id = {donorId}";
+                    dbConnection.ExecuteNonQuery(deleteQuery);
+                    if (this.Parent.Parent.Parent.Parent is HomePage homePage)
+                    {
+                        homePage.LoadControl(new ViewCasesControl());
+                    }
+                }
+            }
         }
     }
 }

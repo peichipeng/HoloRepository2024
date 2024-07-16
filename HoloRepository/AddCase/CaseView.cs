@@ -50,16 +50,25 @@ namespace HoloRepository.AddCase
             while (await reader.ReadAsync())
             {
                 int organId = reader.GetFieldValue<int>(0);
-                int organNameId = reader.GetFieldValue<int>(1);
 
-                // Retrieve the organ name
-                string queryOrganName = $"SELECT organ_name FROM organname WHERE organ_name_id = {organNameId}";
-                var readerName = dbConnection.ExecuteReader(queryOrganName);
+                int organNameId;
                 string organName = "";
-                while (await readerName.ReadAsync())
+
+                // Check if the organNameId is null
+                if (!reader.IsDBNull(1))
                 {
-                    organName = readerName.GetFieldValue<string>(0);
+                    organNameId = reader.GetFieldValue<int>(1);
+
+                    // Retrieve the organ name
+                    string queryOrganName = $"SELECT organ_name FROM organname WHERE organ_name_id = {organNameId}";
+                    var readerName = dbConnection.ExecuteReader(queryOrganName);
+
+                    while (await readerName.ReadAsync())
+                    {
+                        organName = readerName.GetFieldValue<string>(0);
+                    }
                 }
+
                 // Retrieve the corresponding organ slices
                 string queryOrganSlices = $"SELECT image_path FROM sliceimage WHERE organ_id = {organId}";
                 var readerSlice = dbConnection.ExecuteReader(queryOrganSlices);
@@ -85,6 +94,7 @@ namespace HoloRepository.AddCase
             if (this.Parent.Parent.Parent.Parent is AddCaseFramework framework)
             {
                 framework.LoadControl(new DonorInfo(donorInfo));
+                framework.nextBtn.Text = "Save";
                 framework.ShowFooterBtns();
             }
         }

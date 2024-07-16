@@ -17,6 +17,7 @@ namespace HoloRepository.AddCase
         private string accessedFrom; // This variable is for the cancel button
         public string destination;
 
+
         // This constructor is for adding a case
         public AddCaseFramework(string route, string destination)
         {
@@ -80,7 +81,8 @@ namespace HoloRepository.AddCase
                     {
                         homePage.LoadControl(new ViewCasesControl());
                     }
-                } else if (caseOrganPage.pageNameLabel.Text == "Add an Organ")
+                }
+                else if (caseOrganPage.pageNameLabel.Text == "Add an Organ")
                 {
                     // When clicking on the add button...
                     // Add the function for inserting the organ record
@@ -91,7 +93,8 @@ namespace HoloRepository.AddCase
 
                     // Go back to the previous page
                     LoadControl(new CaseOrganFramework(destination, caseOrganPage.donorId));
-                } else if (caseOrganPage.pageNameLabel.Text == "Update an Organ")
+                }
+                else if (caseOrganPage.pageNameLabel.Text == "Update an Organ")
                 {
                     // When clicking on the update button...
                     // Add the function for updating the organ record
@@ -114,6 +117,44 @@ namespace HoloRepository.AddCase
                 userControls += control.Name;
             }
             return userControls;
+        }
+
+        private void cancelBtn_Click(object sender, EventArgs e)
+        {
+            HomePage homePage = this.Parent.Parent as HomePage;
+            using (var popup = new PopupWindow("Are you sure you want to cancel?", this.ParentForm))
+            {
+
+                var result = popup.ShowDialog(this.ParentForm);
+
+                if (result == DialogResult.Yes)
+                {
+                    // When the user is on the add/ update donor info page
+                    if (addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
+                    {
+                        if (donorInfoPage.title.Text == "Add Donor's Basic")
+                        {
+                            if (accessedFrom == "home")
+                            {
+                                //MessageBox.Show(this.Parent.Parent.Name);
+                                homePage.LoadHomePage();
+                            } else if (accessedFrom == "viewCases")
+                            {
+                                homePage.LoadControl(new ViewCasesControl());
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    /*
+                    if (this.Parent.Parent.Parent.Parent is HomePage homePage)
+                    {
+                        homePage.LoadControl(new ViewCasesControl());
+                    }*/
+                }
+            }
         }
     }
 }

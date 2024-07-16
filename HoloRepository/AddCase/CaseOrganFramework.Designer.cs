@@ -28,16 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CaseOrganFramework));
             header = new Panel();
+            deleteCaseBtn = new PictureBox();
             caseNoLabel = new Label();
             divider = new MaterialSkin.Controls.MaterialDivider();
             pageNameLabel = new Label();
             caseOrganContainer = new Panel();
             header.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)deleteCaseBtn).BeginInit();
             SuspendLayout();
             // 
             // header
             // 
+            header.Controls.Add(deleteCaseBtn);
             header.Controls.Add(caseNoLabel);
             header.Controls.Add(divider);
             header.Controls.Add(pageNameLabel);
@@ -46,6 +50,19 @@
             header.Name = "header";
             header.Size = new Size(800, 64);
             header.TabIndex = 0;
+            // 
+            // deleteCaseBtn
+            // 
+            deleteCaseBtn.Anchor = AnchorStyles.None;
+            deleteCaseBtn.BackColor = Color.Transparent;
+            deleteCaseBtn.Image = (Image)resources.GetObject("deleteCaseBtn.Image");
+            deleteCaseBtn.Location = new Point(515, 13);
+            deleteCaseBtn.Name = "deleteCaseBtn";
+            deleteCaseBtn.Size = new Size(26, 24);
+            deleteCaseBtn.SizeMode = PictureBoxSizeMode.Zoom;
+            deleteCaseBtn.TabIndex = 55;
+            deleteCaseBtn.TabStop = false;
+            deleteCaseBtn.Click += deleteCaseBtn_Click;
             // 
             // caseNoLabel
             // 
@@ -77,11 +94,11 @@
             // 
             pageNameLabel.Anchor = AnchorStyles.Top;
             pageNameLabel.AutoSize = true;
-            pageNameLabel.Font = new Font("Tahoma", 24F, FontStyle.Bold, GraphicsUnit.Point);
-            pageNameLabel.Location = new Point(69, 12);
+            pageNameLabel.Font = new Font("Microsoft YaHei UI", 23.25F, FontStyle.Bold, GraphicsUnit.Point);
+            pageNameLabel.Location = new Point(68, 13);
             pageNameLabel.Margin = new Padding(14, 0, 2, 0);
             pageNameLabel.Name = "pageNameLabel";
-            pageNameLabel.Size = new Size(191, 39);
+            pageNameLabel.Size = new Size(190, 40);
             pageNameLabel.TabIndex = 52;
             pageNameLabel.Text = "Add a Case";
             // 
@@ -103,6 +120,7 @@
             Size = new Size(800, 286);
             header.ResumeLayout(false);
             header.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)deleteCaseBtn).EndInit();
             ResumeLayout(false);
         }
 
@@ -113,5 +131,6 @@
         private Label caseNoLabel;
         private MaterialSkin.Controls.MaterialDivider divider;
         public Label pageNameLabel;
+        private PictureBox deleteCaseBtn;
     }
 }
