@@ -109,7 +109,7 @@
         #endregion
 
         private Panel header;
-        private Panel caseOrganContainer;
+        public Panel caseOrganContainer;
         private Label caseNoLabel;
         private MaterialSkin.Controls.MaterialDivider divider;
         public Label pageNameLabel;

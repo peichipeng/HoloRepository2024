@@ -1,5 +1,4 @@
 ﻿using HoloRepository.ContextMenu;
-using HoloRepository.Dialog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -180,9 +179,21 @@ namespace HoloRepository.AddCase
             contextMenu.Show(downArrow, e.Location);
         }
 
+        // The button for updating the organ
         private void updateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Add the code for updating the organ here
+            if (this.Parent.Parent.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
+            {
+                caseFramework.nextBtn.Text = "Update";
+                caseFramework.ShowFooterBtns();
+            }
+
+            if (this.Parent.Parent.Parent.Parent is CaseOrganFramework caseOrganFramework)
+            {
+                caseOrganFramework.pageNameLabel.Text = "Update an Organ";
+                // The organ ID is available as a field in this class
+                caseOrganFramework.LoadControl(new AddCaseControl());
+            }
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)

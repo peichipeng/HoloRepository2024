@@ -100,7 +100,7 @@
 
         private Panel panel1;
         private Panel addCaseContainer;
-        private RoundedButton nextBtn;
+        public RoundedButton nextBtn;
         private RoundedButton cancelBtn;
     }
 }

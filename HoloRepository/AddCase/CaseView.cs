@@ -14,17 +14,24 @@ namespace HoloRepository.AddCase
     public partial class CaseView : UserControl
     {
         private int donorId;
-        public CaseView(int donorId)
+        public CaseView()
         {
             InitializeComponent();
-            this.donorId = donorId;
+            this.Load += CaseView_Load;
+        }
+
+        private void CaseView_Load(object sender, EventArgs e)
+        {
+            if (this.Parent.Parent is CaseOrganFramework framework)
+            {
+                this.donorId = framework.donorId;
+            }
             LoadData();
         }
 
         private async void LoadData()
         {
-            var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
-            var dbConnection = new DatabaseConnection(connectionString);
+            var dbConnection = new DatabaseConnection();
 
             string queryInfo = $"SELECT age, date_of_death, cause_of_death FROM donor WHERE donor_id = {donorId}";
             var reader = dbConnection.ExecuteReader(queryInfo);
@@ -44,7 +51,7 @@ namespace HoloRepository.AddCase
             {
                 int organId = reader.GetFieldValue<int>(0);
                 int organNameId = reader.GetFieldValue<int>(1);
-                
+
                 // Retrieve the organ name
                 string queryOrganName = $"SELECT organ_name FROM organname WHERE organ_name_id = {organNameId}";
                 var readerName = dbConnection.ExecuteReader(queryOrganName);
@@ -63,25 +70,6 @@ namespace HoloRepository.AddCase
                 }
                 OrganPanel organPanel = new OrganPanel(organId, organName, sliceList);
                 flowLayoutPanel1.Controls.Add(organPanel);
-            }
-        }
-
-        private async void LoadOrgans()
-        {
-            var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
-            await using var conn = new NpgsqlConnection(connectionString);
-            await conn.OpenAsync();
-
-            string query = $"SELECT age, date_of_death, cause_of_death FROM donor WHERE donor_id = {donorId}";
-            await using var cmd = new NpgsqlCommand(query, conn);
-
-            await using var reader = await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                ageLabel.Text = reader.GetFieldValue<int>(0).ToString();
-                idLabel.Text = donorId.ToString();
-                causeOfDeathLabel.Text = reader.GetFieldValue<string>(2);
-                dodLabel.Text = reader.GetFieldValue<DateTime>(1).ToString("dd/MM/yyyy");
             }
         }
 
@@ -111,10 +99,20 @@ namespace HoloRepository.AddCase
             updateBtn.BackColor = Color.Transparent;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        // The button for adding an organ
+        private void addOrganBtn_Click(object sender, EventArgs e)
         {
-            //OrganPanel organPanel = new OrganPanel("kidney");
-            //flowLayoutPanel1.Controls.Add(organPanel);
+            if (this.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
+            {
+                caseFramework.ShowFooterBtns();
+                caseFramework.nextBtn.Text = "Add";
+            }
+
+            if (this.Parent.Parent is CaseOrganFramework caseOrganFramework)
+            {
+                caseOrganFramework.pageNameLabel.Text = "Add an Organ";
+                caseOrganFramework.LoadControl(new AddCaseControl());
+            }
         }
     }
 }

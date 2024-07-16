@@ -15,12 +15,14 @@ namespace HoloRepository.AddCase
     public partial class CaseOrganFramework : UserControl
     {
         private string pageName;
-        private int passedData;
+        public int donorId;
+
+        // The constructor for viewing the case
         public CaseOrganFramework(string name, int data)
         {
             InitializeComponent();
             this.pageName = name;
-            this.passedData = data;
+            this.donorId = data;
             this.Load += CaseOrganFramework_Load;
         }
 
@@ -29,9 +31,9 @@ namespace HoloRepository.AddCase
             if (this.pageName == "addCase")
             {
                 pageNameLabel.Text = "Add a Case";
-                caseNoLabel.Text = $"Case {passedData}";
+                caseNoLabel.Text = $"Case {donorId}";
                 caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width, 35);
-                LoadControl(new CaseView(passedData));
+                LoadControl(new CaseView());
             }
             if (this.pageName == "caseOverview")
             {
@@ -40,13 +42,13 @@ namespace HoloRepository.AddCase
                     framework.HideFooterBtns();
                 }
                 pageNameLabel.Text = "Case Overview";
-                caseNoLabel.Text = $"Case {passedData}";
+                caseNoLabel.Text = $"Case {donorId}";
                 caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width, 35);
-                LoadControl(new CaseView(passedData));
+                LoadControl(new CaseView());
             }
         }
 
-        private void LoadControl(UserControl userControl)
+        public void LoadControl(UserControl userControl)
         {
             caseOrganContainer.Controls.Clear();
             userControl.Dock = DockStyle.Fill;

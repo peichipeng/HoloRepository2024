@@ -32,7 +32,7 @@
             updateBtn = new PictureBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
             materialDivider2 = new MaterialSkin.Controls.MaterialDivider();
-            nextBtn = new RoundedButton();
+            addOrganBtn = new RoundedButton();
             label8 = new Label();
             causeOfDeathLabel = new Label();
             ageLabel = new Label();
@@ -43,7 +43,6 @@
             label3 = new Label();
             label2 = new Label();
             label6 = new Label();
-            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)updateBtn).BeginInit();
             SuspendLayout();
             // 
@@ -86,20 +85,21 @@
             materialDivider2.TabIndex = 73;
             materialDivider2.Text = "materialDivider2";
             // 
-            // nextBtn
+            // addOrganBtn
             // 
-            nextBtn.Anchor = AnchorStyles.Top;
-            nextBtn.BackColor = Color.FromArgb(51, 129, 202);
-            nextBtn.BorderRadius = 15;
-            nextBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            nextBtn.ForeColor = Color.White;
-            nextBtn.Location = new Point(588, 146);
-            nextBtn.Margin = new Padding(2, 2, 14, 2);
-            nextBtn.Name = "nextBtn";
-            nextBtn.Size = new Size(143, 25);
-            nextBtn.TabIndex = 72;
-            nextBtn.Text = "+ Add an Organ";
-            nextBtn.UseVisualStyleBackColor = false;
+            addOrganBtn.Anchor = AnchorStyles.Top;
+            addOrganBtn.BackColor = Color.FromArgb(51, 129, 202);
+            addOrganBtn.BorderRadius = 15;
+            addOrganBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            addOrganBtn.ForeColor = Color.White;
+            addOrganBtn.Location = new Point(588, 146);
+            addOrganBtn.Margin = new Padding(2, 2, 14, 2);
+            addOrganBtn.Name = "addOrganBtn";
+            addOrganBtn.Size = new Size(143, 25);
+            addOrganBtn.TabIndex = 72;
+            addOrganBtn.Text = "+ Add an Organ";
+            addOrganBtn.UseVisualStyleBackColor = false;
+            addOrganBtn.Click += addOrganBtn_Click;
             // 
             // label8
             // 
@@ -227,25 +227,14 @@
             label6.TabIndex = 62;
             label6.Text = "Donor's Basic Information";
             // 
-            // button1
-            // 
-            button1.Location = new Point(240, 148);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 76;
-            button1.Text = "add";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // CaseView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(button1);
             Controls.Add(updateBtn);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(materialDivider2);
-            Controls.Add(nextBtn);
+            Controls.Add(addOrganBtn);
             Controls.Add(label8);
             Controls.Add(causeOfDeathLabel);
             Controls.Add(ageLabel);
@@ -268,7 +257,7 @@
         private PictureBox updateBtn;
         private FlowLayoutPanel flowLayoutPanel1;
         private MaterialSkin.Controls.MaterialDivider materialDivider2;
-        private RoundedButton nextBtn;
+        private RoundedButton addOrganBtn;
         private Label label8;
         private Label causeOfDeathLabel;
         private Label ageLabel;
@@ -279,6 +268,5 @@
         private Label label3;
         private Label label2;
         private Label label6;
-        private Button button1;
     }
 }

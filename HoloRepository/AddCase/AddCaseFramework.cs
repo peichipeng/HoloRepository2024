@@ -32,18 +32,14 @@ namespace HoloRepository.AddCase
             this.accessedFrom = route;
             this.destination = destination;
             InitializeComponent();
-            if (destination == "caseOverview")
-            {
-                //HideFooterBtns();
-                LoadControl(new CaseOrganFramework(destination, data));
-            }
+            LoadControl(new CaseOrganFramework(destination, data));
         }
 
         public void ShowFooterBtns()
         {
             nextBtn.Visible = true;
             cancelBtn.Visible = true;
-            nextBtn.Text = "Save";
+            //nextBtn.Text = "Save";
         }
 
         public void HideFooterBtns()
@@ -74,45 +70,7 @@ namespace HoloRepository.AddCase
                     {
                         donorInfoPage.UpdateDonorInfo();
                     }
-                    /*
-                    int donorId = donorInfoPage.donorId;
-                    if (accessedFrom == "viewCases")
-                    {
-                        LoadControl(new CaseOrganFramework("caseOverview", donorId));
-                    }
-                    else
-                    {
-                        LoadControl(new CaseOrganFramework("addCase", donorId));
-                        nextBtn.Text = "save";
-                    }*/
                 }
-                /*
-                Dictionary<string, string> donorInfo = new Dictionary<string, string>
-                {
-                    {"id", donorInfoPage.donorIdTxt.Text },
-                    {"dod", donorInfoPage.dodTxt.Text},
-                    {"age", donorInfoPage.ageTxt.Text},
-                    {"causeOfDeath", donorInfoPage.causeOfDeathTxt.Text}
-                };
-                if (donorInfoPage.title.Text == "Add Donor's Basic")
-                {
-                    MessageBox.Show("add");
-                }
-                else
-                {
-                    MessageBox.Show("update");
-                }
-                // If the update donor information page is loaded from the case overview page
-                if (accessedFrom == "viewCases")
-                {
-                    LoadControl(new CaseOrganFramework("caseOverview", donorInfo));
-                    HideFooterBtns();
-                } else
-                {
-                    LoadControl(new CaseOrganFramework("addCase", donorInfo));
-                    nextBtn.Text = "save";
-                }*/
-
             }
             else if (addCaseContainer.Controls[0] is CaseOrganFramework caseOrganPage)
             {
@@ -122,6 +80,27 @@ namespace HoloRepository.AddCase
                     {
                         homePage.LoadControl(new ViewCasesControl());
                     }
+                } else if (caseOrganPage.pageNameLabel.Text == "Add an Organ")
+                {
+                    // When clicking on the add button...
+                    // Add the function for inserting the organ record
+                    //MessageBox.Show(caseOrganPage.caseOrganContainer.Controls[0].Name);
+
+                    // Set the button back to 'save'
+                    nextBtn.Text = "Save";
+
+                    // Go back to the previous page
+                    LoadControl(new CaseOrganFramework(destination, caseOrganPage.donorId));
+                } else if (caseOrganPage.pageNameLabel.Text == "Update an Organ")
+                {
+                    // When clicking on the update button...
+                    // Add the function for updating the organ record
+
+                    // Set the button back to 'save'
+                    nextBtn.Text = "Save";
+
+                    // Go back to the previous page
+                    LoadControl(new CaseOrganFramework(destination, caseOrganPage.donorId));
                 }
             }
         }
