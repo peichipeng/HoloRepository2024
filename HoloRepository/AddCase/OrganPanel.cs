@@ -26,7 +26,14 @@ namespace HoloRepository.AddCase
             InitializeComponent();
 
             this.organId = organId;
-            this.organName = name;
+
+            if (name == "")
+            {
+                this.organName = "Unknown";
+            } else
+            {
+                this.organName = name;
+            }
             this.organSlices = organSlices;
 
             sliceImages.Controls.Add(leftArrow);
@@ -196,28 +203,22 @@ namespace HoloRepository.AddCase
             }
         }
 
+        // The button for deleting the organ
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Add the code for deleting the organ here
-            //OverlayForm overlayForm = new OverlayForm();
-            //overlayForm.Show(this.ParentForm);
-
-            using (var popup = new PopupWindow("Are you sure you want to delete?"))
+            using (var popup = new PopupWindow("Are you sure you want to delete?", this.ParentForm))
             {
                 var result = popup.ShowDialog(this.ParentForm);
 
-                // Hide and dispose the overlay form
-                //overlayForm.HideOverlay();
-                //overlayForm.Dispose();
-
                 if (result == DialogResult.Yes)
                 {
-                    // Code for deleting the organ
                     this.Parent.Controls.Remove(this);
-                }
-                else if (result == DialogResult.No)
-                {
-                    // Code for handling the "No" case (optional)
+
+                    // Code for deleting the organ
+                    var dbConnection = new DatabaseConnection();
+
+                    string deleteQuery = $"DELETE FROM organ WHERE organ_id = {organId}";
+                    dbConnection.ExecuteNonQuery(deleteQuery);
                 }
             }
         }

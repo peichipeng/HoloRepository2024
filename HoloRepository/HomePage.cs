@@ -9,6 +9,12 @@ namespace HoloRepository
         {
             InitializeComponent();
         }
+
+        public void LoadHomePage ()
+        {
+            mainContainer.Controls.Clear();
+        }
+
         public void LoadControl(UserControl userControl)
         {
             mainContainer.Controls.Clear();

@@ -40,9 +40,9 @@
             panel1.Controls.Add(nextBtn);
             panel1.Controls.Add(cancelBtn);
             panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(0, 311);
+            panel1.Location = new Point(0, 283);
             panel1.Name = "panel1";
-            panel1.Size = new Size(800, 62);
+            panel1.Size = new Size(800, 90);
             panel1.TabIndex = 0;
             // 
             // nextBtn
@@ -52,7 +52,7 @@
             nextBtn.BorderRadius = 15;
             nextBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             nextBtn.ForeColor = Color.White;
-            nextBtn.Location = new Point(646, 9);
+            nextBtn.Location = new Point(646, 23);
             nextBtn.Margin = new Padding(2, 2, 14, 2);
             nextBtn.Name = "nextBtn";
             nextBtn.Size = new Size(81, 31);
@@ -68,20 +68,21 @@
             cancelBtn.BorderRadius = 15;
             cancelBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             cancelBtn.ForeColor = Color.White;
-            cancelBtn.Location = new Point(73, 9);
+            cancelBtn.Location = new Point(73, 23);
             cancelBtn.Margin = new Padding(14, 2, 2, 2);
             cancelBtn.Name = "cancelBtn";
             cancelBtn.Size = new Size(81, 31);
             cancelBtn.TabIndex = 6;
             cancelBtn.Text = "Cancel";
             cancelBtn.UseVisualStyleBackColor = false;
+            cancelBtn.Click += cancelBtn_Click;
             // 
             // addCaseContainer
             // 
             addCaseContainer.Dock = DockStyle.Fill;
             addCaseContainer.Location = new Point(0, 0);
             addCaseContainer.Name = "addCaseContainer";
-            addCaseContainer.Size = new Size(800, 311);
+            addCaseContainer.Size = new Size(800, 283);
             addCaseContainer.TabIndex = 1;
             // 
             // AddCaseFramework

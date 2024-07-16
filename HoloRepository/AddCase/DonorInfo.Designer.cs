@@ -163,11 +163,11 @@
             // 
             title.Anchor = AnchorStyles.None;
             title.AutoSize = true;
-            title.Font = new Font("Tahoma", 24F, FontStyle.Bold, GraphicsUnit.Point);
-            title.Location = new Point(66, 22);
+            title.Font = new Font("Microsoft YaHei UI", 24F, FontStyle.Bold, GraphicsUnit.Point);
+            title.Location = new Point(66, 20);
             title.Margin = new Padding(14, 0, 2, 0);
             title.Name = "title";
-            title.Size = new Size(304, 39);
+            title.Size = new Size(314, 42);
             title.TabIndex = 25;
             title.Text = "Add Donor's Basic";
             // 
@@ -175,11 +175,11 @@
             // 
             label1.Anchor = AnchorStyles.None;
             label1.AutoSize = true;
-            label1.Font = new Font("Tahoma", 24F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(66, 68);
+            label1.Font = new Font("Microsoft YaHei UI", 24F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(66, 66);
             label1.Margin = new Padding(14, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(211, 39);
+            label1.Size = new Size(211, 42);
             label1.TabIndex = 34;
             label1.Text = "Information";
             // 

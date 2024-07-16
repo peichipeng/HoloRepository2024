@@ -28,16 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CaseOrganFramework));
             header = new Panel();
+            deleteCaseBtn = new PictureBox();
             caseNoLabel = new Label();
             divider = new MaterialSkin.Controls.MaterialDivider();
             pageNameLabel = new Label();
             caseOrganContainer = new Panel();
             header.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)deleteCaseBtn).BeginInit();
             SuspendLayout();
             // 
             // header
             // 
+            header.Controls.Add(deleteCaseBtn);
             header.Controls.Add(caseNoLabel);
             header.Controls.Add(divider);
             header.Controls.Add(pageNameLabel);
@@ -47,6 +51,19 @@
             header.Name = "header";
             header.Size = new Size(1257, 102);
             header.TabIndex = 0;
+            // 
+            // deleteCaseBtn
+            // 
+            deleteCaseBtn.Anchor = AnchorStyles.None;
+            deleteCaseBtn.BackColor = Color.Transparent;
+            deleteCaseBtn.Image = (Image)resources.GetObject("deleteCaseBtn.Image");
+            deleteCaseBtn.Location = new Point(515, 13);
+            deleteCaseBtn.Name = "deleteCaseBtn";
+            deleteCaseBtn.Size = new Size(26, 24);
+            deleteCaseBtn.SizeMode = PictureBoxSizeMode.Zoom;
+            deleteCaseBtn.TabIndex = 55;
+            deleteCaseBtn.TabStop = false;
+            deleteCaseBtn.Click += deleteCaseBtn_Click;
             // 
             // caseNoLabel
             // 
@@ -68,7 +85,7 @@
             divider.Location = new Point(108, 97);
             divider.MouseState = MaterialSkin.MouseState.HOVER;
             divider.Name = "divider";
-            divider.Size = new Size(1040, 2);
+            divider.Size = new Size(662, 1);
             divider.TabIndex = 53;
             divider.Text = "materialDivider1";
             // 
@@ -104,6 +121,7 @@
             Size = new Size(1257, 458);
             header.ResumeLayout(false);
             header.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)deleteCaseBtn).EndInit();
             ResumeLayout(false);
         }
 
@@ -114,5 +132,6 @@
         private Label caseNoLabel;
         private MaterialSkin.Controls.MaterialDivider divider;
         public Label pageNameLabel;
+        private PictureBox deleteCaseBtn;
     }
 }
