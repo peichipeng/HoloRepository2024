@@ -54,6 +54,29 @@ namespace HoloRepository.AddCase
             addCaseContainer.Controls.Clear();
             userControl.Dock = DockStyle.Fill;
             addCaseContainer.Controls.Add(userControl);
+
+            if (userControl is CaseOrganFramework casePage)
+            {
+                if (casePage.pageName == "caseOverview")
+                {
+                    HideFooterBtns();
+                }
+                else
+                {
+                    ShowFooterBtns();
+                }
+            }
+            else
+            {
+                ShowFooterBtns();
+            }
+
+            MainForm mainForm = FindMainForm(this);
+
+            if (mainForm != null)
+            {
+                mainForm.OnContentChanged(); // This is for deciding if the microphone should appear
+            }
         }
 
         private void nextBtn_Click(object sender, EventArgs e)
@@ -65,7 +88,7 @@ namespace HoloRepository.AddCase
                     if (donorInfoPage.title.Text == "Add Donor's Basic")
                     {
                         donorInfoPage.AddDonorInfo(); // If on the add info page, insert the record into the database
-                        nextBtn.Text = "Save";
+                        nextBtn.Text = "Save"; // needs to make sure this happens only if there is no duplicate primary key
                     }
                     else
                     {
@@ -73,55 +96,37 @@ namespace HoloRepository.AddCase
                     }
                 }
             }
-            else if (addCaseContainer.Controls[0] is CaseOrganFramework caseOrganPage)
+            else if (addCaseContainer.Controls[0] is CaseOrganFramework casePage)
             {
-                if (caseOrganPage.pageNameLabel.Text == "Add a Case")
+                if (casePage.headerContainer.Controls[0] is CaseOrganHeader header)
                 {
-                    if (this.Parent.Parent is HomePage homePage)
+                    // If on the add a case page
+                    if (header.pageNameLabel.Text == "Add a Case")
                     {
-                        homePage.LoadControl(new ViewCasesControl());
+                        if (this.Parent.Parent is MainForm homePage)
+                        {
+                            homePage.LoadControl(new ViewCasesControl());
+                        }
                     }
                 }
-                else if (caseOrganPage.pageNameLabel.Text == "Add an Organ")
-                {
-                    // When clicking on the add button...
-                    // Add the function for inserting the organ record
-                    //MessageBox.Show(caseOrganPage.caseOrganContainer.Controls[0].Name);
-
-                    // Set the button back to 'save'
-                    nextBtn.Text = "Save";
-
-                    // Go back to the previous page
-                    LoadControl(new CaseOrganFramework(destination, caseOrganPage.donorId));
-                }
-                else if (caseOrganPage.pageNameLabel.Text == "Update an Organ")
-                {
-                    // When clicking on the update button...
-                    // Add the function for updating the organ record
-
-                    // Set the button back to 'save'
-                    nextBtn.Text = "Save";
-
-                    // Go back to the previous page
-                    LoadControl(new CaseOrganFramework(destination, caseOrganPage.donorId));
-                }
             }
-        }
-
-        public string InspectControls()
-        {
-            string userControls = string.Empty;
-
-            foreach (Control control in addCaseContainer.Controls)
+            else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
             {
-                userControls += control.Name;
+                // Add the logic here to determine whether the user is on the add or update organ page
+                // and add functions to upsert the organ
+
+                // Set the button back to 'save'
+                nextBtn.Text = "Save";
+
+                // Go back to the previous page (replace the donorId below)
+                //LoadControl(new CaseOrganFramework(destination, caseOrganPage.donorId));
             }
-            return userControls;
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
         {
-            HomePage homePage = this.Parent.Parent as HomePage;
+            MainForm mainForm = FindMainForm(this);
+
             using (var popup = new PopupWindow("Are you sure you want to cancel?", this.ParentForm))
             {
 
@@ -136,25 +141,48 @@ namespace HoloRepository.AddCase
                         {
                             if (accessedFrom == "home")
                             {
-                                //MessageBox.Show(this.Parent.Parent.Name);
-                                homePage.LoadHomePage();
-                            } else if (accessedFrom == "viewCases")
+                                mainForm.LoadControl(new HomePageControl());
+                            }
+                            else if (accessedFrom == "viewCases")
                             {
-                                homePage.LoadControl(new ViewCasesControl());
+                                mainForm.LoadControl(new ViewCasesControl());
                             }
                         }
                         else
                         {
-
+                            int originalId = donorInfoPage.originalId;
+                            LoadControl(new CaseOrganFramework(destination, originalId));
                         }
-                    }
-                    /*
-                    if (this.Parent.Parent.Parent.Parent is HomePage homePage)
+                    } else if (addCaseContainer.Controls[0] is CaseOrganFramework casePage)
                     {
-                        homePage.LoadControl(new ViewCasesControl());
-                    }*/
+                        // Remove all the records related to the donor
+                        var dbConnection = new DatabaseConnection();
+
+                        string deleteQuery = $"DELETE FROM donor WHERE donor_id = {casePage.donorId}";
+                        dbConnection.ExecuteNonQuery(deleteQuery);
+
+                        if (accessedFrom == "home")
+                        {
+                            mainForm.LoadControl(new HomePageControl());
+                        }
+                        else if (accessedFrom == "viewCases")
+                        {
+                            mainForm.LoadControl(new ViewCasesControl());
+                        }
+                    } else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
+                    {
+
+                    }
                 }
             }
+        }
+        private MainForm FindMainForm(Control control)
+        {
+            while (control != null && !(control is MainForm))
+            {
+                control = control.Parent;
+            }
+            return control as MainForm;
         }
     }
 }

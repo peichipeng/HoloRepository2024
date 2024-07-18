@@ -14,7 +14,7 @@ namespace HoloRepository.AddCase
 {
     public partial class DonorInfo : UserControl
     {
-        private int originalId;
+        public int originalId;
         public int donorId;
         private int age;
         private string causeOfDeath;

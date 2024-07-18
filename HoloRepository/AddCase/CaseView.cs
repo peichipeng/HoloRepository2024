@@ -13,7 +13,7 @@ namespace HoloRepository.AddCase
 {
     public partial class CaseView : UserControl
     {
-        private int donorId;
+        public int donorId;
         public CaseView()
         {
             InitializeComponent();
@@ -114,14 +114,8 @@ namespace HoloRepository.AddCase
         {
             if (this.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
             {
-                caseFramework.ShowFooterBtns();
                 caseFramework.nextBtn.Text = "Add";
-            }
-
-            if (this.Parent.Parent is CaseOrganFramework caseOrganFramework)
-            {
-                caseOrganFramework.pageNameLabel.Text = "Add an Organ";
-                caseOrganFramework.LoadControl(new AddCaseControl());
+                caseFramework.LoadControl(new AddCaseControl());
             }
         }
     }

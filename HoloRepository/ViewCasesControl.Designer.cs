@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             pageNameLabel = new Label();
             addCaseBtn = new RoundedButton();
             button1 = new Button();
+            databaseConnectionBindingSource = new BindingSource(components);
+            ((System.ComponentModel.ISupportInitialize)databaseConnectionBindingSource).BeginInit();
             SuspendLayout();
             // 
             // pageNameLabel
@@ -63,13 +66,17 @@
             // 
             // button1
             // 
-            button1.Location = new Point(257, 174);
+            button1.Location = new Point(125, 65);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 75;
             button1.Text = "button1";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
+            // 
+            // databaseConnectionBindingSource
+            // 
+            databaseConnectionBindingSource.DataSource = typeof(DatabaseConnection);
             // 
             // ViewCasesControl
             // 
@@ -80,6 +87,7 @@
             Controls.Add(pageNameLabel);
             Name = "ViewCasesControl";
             Size = new Size(846, 415);
+            ((System.ComponentModel.ISupportInitialize)databaseConnectionBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -89,5 +97,6 @@
         private Label pageNameLabel;
         private RoundedButton addCaseBtn;
         private Button button1;
+        private BindingSource databaseConnectionBindingSource;
     }
 }

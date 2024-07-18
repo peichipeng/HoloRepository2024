@@ -100,7 +100,7 @@
         #endregion
 
         private Panel panel1;
-        private Panel addCaseContainer;
+        public Panel addCaseContainer;
         public RoundedButton nextBtn;
         private RoundedButton cancelBtn;
     }

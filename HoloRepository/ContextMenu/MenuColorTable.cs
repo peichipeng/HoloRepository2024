@@ -13,7 +13,7 @@ namespace HoloRepository.ContextMenu
         private Color leftColumnColor;
         private Color borderColor;
         private Color menuItemBorderColor;
-        private Color menuItemSelectedColor;
+        // private Color menuItemSelectedColor;
 
         public MenuColorTable()
         {
