@@ -33,7 +33,7 @@ namespace HoloRepository
                 if (control is AddCaseFramework caseFramework)
                 {
                     if (caseFramework.addCaseContainer.Controls.Count > 0 &&
-                        caseFramework.addCaseContainer.Controls[0] is CaseOrganFramework casePage &&
+                        caseFramework.addCaseContainer.Controls[0] is CasePage casePage &&
                         casePage.pageName == "caseOverview")
                     {
                         modeSwitch.Visible = false;

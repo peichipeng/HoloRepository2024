@@ -22,7 +22,7 @@ namespace HoloRepository.AddCase
 
         private void CaseView_Load(object sender, EventArgs e)
         {
-            if (this.Parent.Parent is CaseOrganFramework framework)
+            if (this.Parent.Parent is CasePage framework)
             {
                 this.donorId = framework.donorId;
             }

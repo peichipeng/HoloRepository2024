@@ -12,12 +12,12 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace HoloRepository.AddCase
 {
-    public partial class CaseOrganFramework : UserControl
+    public partial class CasePage : UserControl
     {
         public string pageName;
         public int donorId;
 
-        public CaseOrganFramework(string name, int data)
+        public CasePage(string name, int data)
         {
             InitializeComponent();
             this.pageName = name;
