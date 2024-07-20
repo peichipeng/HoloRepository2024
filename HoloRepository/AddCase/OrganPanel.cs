@@ -192,14 +192,9 @@ namespace HoloRepository.AddCase
             if (this.Parent.Parent.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
             {
                 caseFramework.nextBtn.Text = "Update";
-                caseFramework.ShowFooterBtns();
-            }
 
-            if (this.Parent.Parent.Parent.Parent is CaseOrganFramework caseOrganFramework)
-            {
-                caseOrganFramework.pageNameLabel.Text = "Update an Organ";
                 // The organ ID is available as a field in this class
-                caseOrganFramework.LoadControl(new AddCaseControl());
+                caseFramework.LoadControl(new AddCaseControl());
             }
         }
 

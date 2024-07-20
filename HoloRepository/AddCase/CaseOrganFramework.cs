@@ -14,10 +14,9 @@ namespace HoloRepository.AddCase
 {
     public partial class CaseOrganFramework : UserControl
     {
-        private string pageName;
+        public string pageName;
         public int donorId;
 
-        // The constructor for viewing the case
         public CaseOrganFramework(string name, int data)
         {
             InitializeComponent();
@@ -28,62 +27,29 @@ namespace HoloRepository.AddCase
 
         private void CaseOrganFramework_Load(object sender, EventArgs e)
         {
-            if (this.pageName == "addCase")
-            {
-                pageNameLabel.Text = "Add a Case";
-                caseNoLabel.Text = $"Case {donorId}";
-                caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width, 35);
-                LoadControl(new CaseView());
-            }
             if (this.pageName == "caseOverview")
             {
                 if (Parent.Parent is AddCaseFramework framework)
                 {
                     framework.HideFooterBtns();
                 }
-                pageNameLabel.Text = "Case Overview";
-                caseNoLabel.Text = $"Case {donorId}";
-                //caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width, 35);
-                LoadControl(new CaseView());
             }
+            LoadControls();
         }
 
-        public void LoadControl(UserControl userControl)
+        public void LoadControls()
         {
-            if (userControl is CaseView && this.pageName == "caseOverview")
-            {
-                caseNoLabel.Location = new Point(divider.Location.X + divider.Size.Width - caseNoLabel.Size.Width - deleteCaseBtn.Width - 2, 35);
-                deleteCaseBtn.Location = new Point(divider.Location.X + divider.Size.Width - deleteCaseBtn.Width, 32);
-                deleteCaseBtn.Visible = true;
-            }
-            else
-            {
-                deleteCaseBtn.Visible = false;
-            }
+            // Load the header control
+            headerContainer.Controls.Clear();
+            UserControl header = new CaseOrganHeader(this.pageName, this.donorId);
+            header.Dock = DockStyle.Fill;
+            headerContainer.Controls.Add(header);
+
+            // Load content
+            UserControl content = new CaseView();
             caseOrganContainer.Controls.Clear();
-            userControl.Dock = DockStyle.Fill;
-            caseOrganContainer.Controls.Add(userControl);
-        }
-
-        private void deleteCaseBtn_Click(object sender, EventArgs e)
-        {
-            using (var popup = new PopupWindow("Are you sure you want to delete?", this.ParentForm))
-            {
-                var result = popup.ShowDialog(this.ParentForm);
-
-                if (result == DialogResult.Yes)
-                {
-                    // Code for deleting the case
-                    var dbConnection = new DatabaseConnection();
-
-                    string deleteQuery = $"DELETE FROM donor WHERE donor_id = {donorId}";
-                    dbConnection.ExecuteNonQuery(deleteQuery);
-                    if (this.Parent.Parent.Parent.Parent is HomePage homePage)
-                    {
-                        homePage.LoadControl(new ViewCasesControl());
-                    }
-                }
-            }
+            content.Dock = DockStyle.Fill;
+            caseOrganContainer.Controls.Add(content);
         }
     }
 }

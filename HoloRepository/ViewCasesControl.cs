@@ -20,7 +20,7 @@ namespace HoloRepository
 
         private void addCaseBtn_Click(object sender, EventArgs e)
         {
-            if (this.Parent.Parent is HomePage homePage)
+            if (this.Parent.Parent is MainForm homePage)
             {
                 homePage.LoadControl(new AddCaseFramework("viewCases", "addCase"));
             }
@@ -35,7 +35,7 @@ namespace HoloRepository
                         {"age", "34"},
                         {"causeOfDeath", "cancer"}
                     };
-            if (this.Parent.Parent is HomePage homePage)
+            if (this.Parent.Parent is MainForm homePage)
             {
                 homePage.LoadControl(new AddCaseFramework("viewCases", "caseOverview", 21));
             }
