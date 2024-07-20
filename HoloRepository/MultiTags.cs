@@ -17,6 +17,9 @@ namespace HoloRepository
         public List<string> SelectedItems { get; private set; }
         private DatabaseConnection dbConnection;
 
+        private string placeholderText = "Add tags";
+
+
         public MultiTags()
         {
             InitializeComponent();
@@ -43,18 +46,23 @@ namespace HoloRepository
             // 
             this.textBox.Location = new Point(0, 0);
             this.textBox.Name = "textBox";
-            this.textBox.Size = new Size(100, 20);
+            this.textBox.Size = new Size(150, 20);
             this.textBox.TabIndex = 0;
             this.textBox.Margin = new Padding(5, 10, 5, 10);
+            this.textBox.ForeColor = Color.Gray;
             this.textBox.TextChanged += new EventHandler(this.TextBox_TextChanged);
-             this.textBox.Click += new EventHandler(this.TextBox_Click);
+            this.textBox.Click += new EventHandler(this.TextBox_Click);
+            this.textBox.Text = placeholderText;
+            this.textBox.ForeColor = Color.Gray;
+            this.textBox.Enter += new EventHandler(this.TextBox_Enter);
+            this.textBox.Leave += new EventHandler(this.TextBox_Leave);
             // 
             // listBox
             // 
             this.listBox.FormattingEnabled = true;
             this.listBox.Location = new System.Drawing.Point(0, this.textBox.Bottom + 2);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(100, 95);
+            this.listBox.Size = new System.Drawing.Size(150, 95);
             this.listBox.TabIndex = 1;
             this.listBox.Visible = false;
             this.listBox.Click += new System.EventHandler(this.ListBox_Click);
@@ -110,9 +118,31 @@ namespace HoloRepository
             }
         }
 
+        private void TextBox_Enter(object sender, EventArgs e)
+        {
+            if (textBox.Text == placeholderText)
+            {
+                textBox.Text = "";
+                textBox.ForeColor = Color.Black;
+            }
+        }
+
+        private void TextBox_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBox.Text))
+            {
+                textBox.Text = placeholderText;
+                textBox.ForeColor = Color.Gray;
+            }
+        }
+
 
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
+            // Skip processing if placeholder text is present
+            if (textBox.Text == placeholderText)
+                return;
+
             string query = textBox.Text.ToLower();
             var filteredData = data.Where(d => d.ToLower().Contains(query) && !SelectedItems.Contains(d)).ToList();
             listBox.Items.Clear();
@@ -126,6 +156,8 @@ namespace HoloRepository
                 listBox.Visible = true;
             }
         }
+
+
 
         private void ListBox_Click(object sender, EventArgs e)
         {

@@ -16,6 +16,7 @@ namespace HoloRepository
         private List<string> imagePaths = new List<string>();
         private List<OrganSlicePanel> organSlicePanels = new List<OrganSlicePanel>();  // 保存所有的 OrganSlicePanel
         private int selectedIndex;
+        private List<string> organData = new List<string> { "Heart", "Liver", "Kidney", "Lung", "Brain" };
 
         public AddCaseControl()
         {
@@ -151,6 +152,68 @@ namespace HoloRepository
             if (parentForm != null)
             {
                 parentForm.Close();
+            }
+        }
+
+        private void OrganNameTextBox_GotFocus(object sender, EventArgs e)
+        {
+            ShowOrganListBox();
+        }
+
+        private void OrganNameTextBox_LostFocus(object sender, EventArgs e)
+        {
+            if (!organListBox.Focused)
+            {
+                if (!organListBox.Items.Contains(organNameTextBox.Text))
+                {
+                    organNameTextBox.Clear();
+                }
+                organListBox.Visible = false;
+            }
+        }
+        private void OrganNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            string query = organNameTextBox.Text.ToLower();
+            var filteredData = organData.Where(d => d.ToLower().Contains(query)).ToList();
+
+            organListBox.Items.Clear();
+            organListBox.Items.AddRange(filteredData.ToArray());
+
+            organListBox.Visible = filteredData.Any();
+        }
+
+        private void OrganNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (organListBox.Items.Count > 0)
+                {
+                    organNameTextBox.Text = organListBox.Items[0].ToString();
+                    organListBox.Visible = false;
+                }
+                else
+                {
+                    organNameTextBox.Clear();
+                    organNameTextBox.Parent.Focus();  // 确保TextBox失去焦点
+                }
+                e.Handled = true;
+                e.SuppressKeyPress = true; // 防止“叮”声
+            }
+        }
+
+
+        private void ShowOrganListBox()
+        {
+            this.organListBox.BringToFront();
+            this.organListBox.Visible = true;
+        }
+
+        private void OrganListBox_Click(object sender, EventArgs e)
+        {
+            if (organListBox.SelectedItem != null)
+            {
+                organNameTextBox.Text = organListBox.SelectedItem.ToString();
+                organListBox.Visible = false;
             }
         }
 
