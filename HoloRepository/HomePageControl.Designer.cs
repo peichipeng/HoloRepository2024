@@ -32,7 +32,6 @@
             organArchiveBtn = new RoundedButton();
             viewCasesBtn = new RoundedButton();
             addCaseBtn = new RoundedButton();
-            tempBtn = new Button();
             Title = new Label();
             SuspendLayout();
             // 
@@ -100,18 +99,6 @@
             addCaseBtn.UseVisualStyleBackColor = false;
             addCaseBtn.Click += addCaseBtn_Click;
             // 
-            // tempBtn
-            // 
-            tempBtn.Anchor = AnchorStyles.None;
-            tempBtn.Font = new Font("Century Gothic", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            tempBtn.Location = new Point(112, 177);
-            tempBtn.Name = "tempBtn";
-            tempBtn.Size = new Size(90, 38);
-            tempBtn.TabIndex = 78;
-            tempBtn.Text = "temp";
-            tempBtn.UseVisualStyleBackColor = true;
-            tempBtn.Click += tempBtn_Click;
-            // 
             // Title
             // 
             Title.Anchor = AnchorStyles.None;
@@ -132,7 +119,6 @@
             Controls.Add(organArchiveBtn);
             Controls.Add(viewCasesBtn);
             Controls.Add(addCaseBtn);
-            Controls.Add(tempBtn);
             Controls.Add(Title);
             Name = "HomePageControl";
             Size = new Size(846, 415);
@@ -146,7 +132,6 @@
         private RoundedButton organArchiveBtn;
         private RoundedButton viewCasesBtn;
         private RoundedButton addCaseBtn;
-        private Button tempBtn;
         private Label Title;
     }
 }

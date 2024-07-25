@@ -28,7 +28,8 @@ namespace HoloRepository
 
         private void addCaseBtn_Click(object sender, EventArgs e)
         {
-            LoadControl(new AddCaseControl());
+            LoadControl(new AddCaseFramework("home", "addCase"));
+            //LoadControl(new AddCaseControl());
         }
 
         private void viewCasesBtn_Click(object sender, EventArgs e)
@@ -48,7 +49,7 @@ namespace HoloRepository
 
         private void tempBtn_Click(object sender, EventArgs e)
         {
-            LoadControl(new AddCaseFramework("home", "addCase"));
+            //LoadControl(new AddCaseFramework("home", "addCase"));
         }
     }
 }
