@@ -381,7 +381,7 @@ namespace HoloRepository
 
                 if (this.Parent.Parent is MainForm homePage)
                 {
-                    homePage.LoadControl(new AddCaseFramework("viewCases", "caseOverview", donorId));
+                    homePage.AddControl(new AddCaseFramework("viewCases", "caseOverview", donorId));
                 }
             }
         }
@@ -472,12 +472,27 @@ namespace HoloRepository
             }
             else
             {
+                // Split the keyword into groups based on '&', removing any empty or whitespace-only groups
+                var groups = keyword.Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(g => g.Trim())
+                                    .Where(g => !string.IsNullOrEmpty(g));
+
                 filteredCases = cases.Where(c =>
-                c.DonorId.ToString().Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                c.DOD.ToString().Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                c.Age.ToString().Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                c.CauseOfDeath.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                c.Organs.Contains(keyword, StringComparison.OrdinalIgnoreCase)
+                    // For each group, split further by spaces, removing any empty or whitespace-only terms
+                    groups.All(group =>
+                    {
+                        var terms = group.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                         .Select(t => t.Trim())
+                                         .Where(t => !string.IsNullOrEmpty(t));
+                        // Within each group, any term must be present (OR logic)
+                        return terms.Any(term =>
+                            c.DonorId.ToString().Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                            c.DOD.ToString().Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                            c.Age.ToString().Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                            c.CauseOfDeath.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                            c.Organs.Contains(term, StringComparison.OrdinalIgnoreCase)
+                        );
+                    })
                 ).ToList();
 
                 selectedPage = 1;
@@ -507,7 +522,7 @@ namespace HoloRepository
 
                     if (this.Parent.Parent is MainForm homePage)
                     {
-                        homePage.LoadControl(new AddCaseFramework("viewCases", "caseOverview", donorId));
+                        homePage.AddControl(new AddCaseFramework("viewCases", "caseOverview", donorId));
                     }
 
                 }
