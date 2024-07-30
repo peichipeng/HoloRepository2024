@@ -1,5 +1,6 @@
 
 using HoloRepository.AddCase;
+using HoloRepository.UserGuide;
 using System.Runtime.InteropServices;
 
 namespace HoloRepository
@@ -34,9 +35,21 @@ namespace HoloRepository
         public void OnContentChanged()
         {
             int controlsCount = mainContainer.Controls.Count;
+
             // Please don't remove the following code snippet when changing the control.
-            if (controlsCount > 0)
+            if (mainContainer.Controls.OfType<UserGuideHome>().Any())
             {
+                modeSwitch.Visible = false;
+                breadcrumbPanel.Visible = false;
+
+                previousPageBtn.Location = new Point(breadcrumbPanel.Location.X, blackHomeBtn.Location.Y);
+                previousPageBtn.Visible = true;
+                blackHomeBtn.Visible = true;
+            }
+            else if (controlsCount > 0)
+            {
+                previousPageBtn.Visible = false;
+                blackHomeBtn.Visible = false;
                 var control = mainContainer.Controls[controlsCount - 1];
 
                 if (control is AddCaseFramework caseFramework)
@@ -183,7 +196,8 @@ namespace HoloRepository
             if (buttonText == "View Cases")
             {
                 AddControl(new ViewCasesControl());
-            } else
+            }
+            else
             {
                 // If the button of case overview page was clicked
                 string[] words = buttonText.Split(' ');
@@ -193,6 +207,21 @@ namespace HoloRepository
         }
 
         private void homeBtn_Click(object sender, EventArgs e)
+        {
+            LoadControl(new HomePageControl());
+        }
+
+        private void previousPageBtn_Click(object sender, EventArgs e)
+        {
+            mainContainer.Controls.RemoveAt(0);
+        }
+
+        private void mainContainer_ControlRemoved(object sender, ControlEventArgs e)
+        {
+            OnContentChanged();
+        }
+
+        private void blackHomeBtn_Click(object sender, EventArgs e)
         {
             LoadControl(new HomePageControl());
         }

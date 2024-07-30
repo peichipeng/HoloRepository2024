@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             header = new Panel();
+            blackHomeBtn = new PictureBox();
+            previousPageBtn = new PictureBox();
             breadcrumbPanel = new FlowLayoutPanel();
             homeBtn = new PictureBox();
             arrow = new PictureBox();
@@ -37,6 +39,8 @@
             modeSwitch = new Button();
             mainContainer = new Panel();
             header.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)blackHomeBtn).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)previousPageBtn).BeginInit();
             breadcrumbPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)homeBtn).BeginInit();
             ((System.ComponentModel.ISupportInitialize)arrow).BeginInit();
@@ -44,6 +48,8 @@
             // 
             // header
             // 
+            header.Controls.Add(blackHomeBtn);
+            header.Controls.Add(previousPageBtn);
             header.Controls.Add(breadcrumbPanel);
             header.Controls.Add(modeSwitch);
             header.Dock = DockStyle.Top;
@@ -51,6 +57,30 @@
             header.Name = "header";
             header.Size = new Size(846, 30);
             header.TabIndex = 0;
+            // 
+            // blackHomeBtn
+            // 
+            blackHomeBtn.Anchor = AnchorStyles.Top;
+            blackHomeBtn.Image = (Image)resources.GetObject("blackHomeBtn.Image");
+            blackHomeBtn.Location = new Point(789, 4);
+            blackHomeBtn.Name = "blackHomeBtn";
+            blackHomeBtn.Size = new Size(25, 25);
+            blackHomeBtn.SizeMode = PictureBoxSizeMode.Zoom;
+            blackHomeBtn.TabIndex = 18;
+            blackHomeBtn.TabStop = false;
+            blackHomeBtn.Click += blackHomeBtn_Click;
+            // 
+            // previousPageBtn
+            // 
+            previousPageBtn.Anchor = AnchorStyles.Top;
+            previousPageBtn.Image = (Image)resources.GetObject("previousPageBtn.Image");
+            previousPageBtn.Location = new Point(417, 0);
+            previousPageBtn.Name = "previousPageBtn";
+            previousPageBtn.Size = new Size(25, 25);
+            previousPageBtn.SizeMode = PictureBoxSizeMode.Zoom;
+            previousPageBtn.TabIndex = 0;
+            previousPageBtn.TabStop = false;
+            previousPageBtn.Click += previousPageBtn_Click;
             // 
             // breadcrumbPanel
             // 
@@ -125,6 +155,7 @@
             mainContainer.Size = new Size(846, 415);
             mainContainer.TabIndex = 1;
             mainContainer.ControlAdded += mainContainer_ControlAdded;
+            mainContainer.ControlRemoved += mainContainer_ControlRemoved;
             // 
             // MainForm
             // 
@@ -139,6 +170,8 @@
             Text = "HoloRepository";
             header.ResumeLayout(false);
             header.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)blackHomeBtn).EndInit();
+            ((System.ComponentModel.ISupportInitialize)previousPageBtn).EndInit();
             breadcrumbPanel.ResumeLayout(false);
             breadcrumbPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)homeBtn).EndInit();
@@ -155,5 +188,7 @@
         private PictureBox homeBtn;
         private PictureBox arrow;
         private Button page1;
+        private PictureBox previousPageBtn;
+        private PictureBox blackHomeBtn;
     }
 }

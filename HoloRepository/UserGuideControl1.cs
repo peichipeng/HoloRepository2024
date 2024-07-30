@@ -4,10 +4,10 @@ using System.Windows.Forms;
 
 namespace HoloRepository
 {
-    public partial class UserGuideControl : UserControl
+    public partial class UserGuideControl1 : UserControl
     {
 
-        public UserGuideControl()
+        public UserGuideControl1()
         {
             InitializeComponent();
         }
