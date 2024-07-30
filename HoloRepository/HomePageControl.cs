@@ -35,23 +35,23 @@ namespace HoloRepository
             }
         }
 
-        private void addCaseBtn_Click(object sender, EventArgs e)
+        public void addCaseBtn_Click(object sender, EventArgs e)
         {
             LoadControl(new AddCaseFramework("home", "addCase"));
             //LoadControl(new AddCaseControl());
         }
 
-        private void viewCasesBtn_Click(object sender, EventArgs e)
+        public void viewCasesBtn_Click(object sender, EventArgs e)
         {
             LoadControl(new ViewCasesControl());
         }
 
-        private void organArchiveBtn_Click(object sender, EventArgs e)
+        public void organArchiveBtn_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void userGuideBtn_Click(object sender, EventArgs e)
+        public void userGuideBtn_Click(object sender, EventArgs e)
         {
             AddControl(new UserGuideHome());
         }

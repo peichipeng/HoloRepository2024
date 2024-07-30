@@ -1,6 +1,7 @@
 
 using HoloRepository.AddCase;
 using HoloRepository.UserGuide;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace HoloRepository
@@ -8,11 +9,96 @@ namespace HoloRepository
     public partial class MainForm : Form
     {
         private bool isSpeechMode = false;
+        private Process? _pythonProcess;
+        private StreamWriter? _pythonInput;
+        private StreamReader? _pythonOutput;
+        private Thread? _outputThread;
+
         public MainForm()
         {
             InitializeComponent();
             LoadControl(new HomePageControl());
+            InitializePythonProcess();
         }
+
+        private void InitializePythonProcess()
+        {
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string pythonExePath = Path.GetFullPath(Path.Combine(baseDirectory, @"..\..\..\..\env\python.exe"));
+            string pythonScriptPath = Path.GetFullPath(Path.Combine(baseDirectory, @"..\..\..\transcription.py"));
+
+            if (!File.Exists(pythonExePath))
+            {
+                MessageBox.Show($"Python interpreter not found at {pythonExePath}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!File.Exists(pythonScriptPath))
+            {
+                MessageBox.Show($"Python script not found at {pythonScriptPath}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = pythonExePath,
+                Arguments = $"\"{pythonScriptPath}\"",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            _pythonProcess = new Process { StartInfo = startInfo };
+            try
+            {
+                _pythonProcess.Start();
+                _pythonInput = _pythonProcess.StandardInput;
+                _pythonOutput = _pythonProcess.StandardOutput;
+
+                _outputThread = new Thread(() =>
+                {
+                    while (!_pythonOutput.EndOfStream)
+                    {
+                        var output = _pythonOutput.ReadLine();
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            Invoke(new Action(() => ProcessTranscription(output)));
+                        }
+                    }
+                });
+                _outputThread.IsBackground = true;
+                _outputThread.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to start Python script: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ProcessTranscription(string transcription)
+        {
+            if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is HomePageControl homePageControl)
+            {
+                if (transcription.ToLower().Contains("add a case"))
+                {
+                    homePageControl.addCaseBtn_Click(this, EventArgs.Empty);
+                }
+                else if (transcription.ToLower().Contains("view cases"))
+                {
+                    homePageControl.viewCasesBtn_Click(this, EventArgs.Empty);
+                }
+                else if (transcription.ToLower().Contains("organ archive"))
+                {
+                    homePageControl.organArchiveBtn_Click(this, EventArgs.Empty);
+                }
+                else if (transcription.ToLower().Contains("user guide"))
+                {
+                    homePageControl.userGuideBtn_Click(this, EventArgs.Empty);
+                }
+            }
+        }
+
         public void LoadControl(UserControl userControl)
         {
             mainContainer.Controls.Clear();
@@ -95,10 +181,50 @@ namespace HoloRepository
             if (isSpeechMode)
             {
                 modeSwitch.BackColor = Color.IndianRed;
+                StartTranscription();
             }
             else
             {
                 modeSwitch.BackColor = SystemColors.Control;
+                StopTranscription();
+            }
+        }
+
+        private void StartTranscription()
+        {
+            if (_pythonInput != null)
+            {
+                _pythonInput.WriteLine("start_transcription");
+            }
+            else
+            {
+                MessageBox.Show("Failed to start transcription. Python process is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void StopTranscription()
+        {
+            if (_pythonInput != null)
+            {
+                _pythonInput.WriteLine("stop_transcription");
+            }
+            else
+            {
+                MessageBox.Show("Failed to stop transcription. Python process is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isSpeechMode)
+            {
+                StopTranscription();
+            }
+
+            if (_pythonProcess != null && !_pythonProcess.HasExited)
+            {
+                _pythonProcess.Kill();
+                _pythonProcess.Dispose();
             }
         }
 
