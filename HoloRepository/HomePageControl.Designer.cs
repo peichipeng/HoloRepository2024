@@ -44,7 +44,7 @@
             userGuideBtn.BorderRadius = 15;
             userGuideBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             userGuideBtn.ForeColor = Color.Black;
-            userGuideBtn.Location = new Point(323, 321);
+            userGuideBtn.Location = new Point(323, 323);
             userGuideBtn.Margin = new Padding(2, 2, 14, 2);
             userGuideBtn.Name = "userGuideBtn";
             userGuideBtn.Size = new Size(201, 36);
@@ -109,7 +109,7 @@
             Title.Location = new Point(192, 58);
             Title.Margin = new Padding(5, 0, 5, 0);
             Title.Name = "Title";
-            Title.Size = new Size(463, 68);
+            Title.Size = new Size(691, 101);
             Title.TabIndex = 77;
             Title.Text = "HoloRepository";
             // 
@@ -145,7 +145,6 @@
             Controls.Add(organArchiveBtn);
             Controls.Add(viewCasesBtn);
             Controls.Add(addCaseBtn);
-            Controls.Add(tempBtn);
             Controls.Add(Title);
             Margin = new Padding(5);
             Name = "HomePageControl";
