@@ -75,7 +75,7 @@
             searchBox.StateCommon.Content.Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             searchBox.StateCommon.Content.Padding = new Padding(30, 5, -1, -1);
             searchBox.TabIndex = 81;
-            searchBox.Text = "Search Cases";
+            searchBox.Text = "Search Keywords";
             // 
             // BaseUserGuideControl
             // 

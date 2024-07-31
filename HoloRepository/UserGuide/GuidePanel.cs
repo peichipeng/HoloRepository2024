@@ -21,6 +21,7 @@ namespace HoloRepository.UserGuide
         public GuidePanel(GuidePanelData data)
         {
             InitializeComponent();
+            AttachClickEventHandlers(this);
 
             guideControl = data.GuideControl;
 
@@ -79,6 +80,15 @@ namespace HoloRepository.UserGuide
             if (this.Parent.Parent.Parent is MainForm mainForm)
             {
                 mainForm.AddControl(guideControl);
+            }
+        }
+
+        private void AttachClickEventHandlers(Control control)
+        {
+            control.Click += GuidePanel_Click;
+            foreach (Control child in control.Controls)
+            {
+                AttachClickEventHandlers(child);
             }
         }
     }
