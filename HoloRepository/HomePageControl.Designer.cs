@@ -32,7 +32,6 @@
             organArchiveBtn = new RoundedButton();
             viewCasesBtn = new RoundedButton();
             addCaseBtn = new RoundedButton();
-            tempBtn = new Button();
             Title = new Label();
             btnUpdateOrgan = new Button();
             button1 = new Button();
@@ -45,10 +44,10 @@
             userGuideBtn.BorderRadius = 15;
             userGuideBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             userGuideBtn.ForeColor = Color.Black;
-            userGuideBtn.Location = new Point(508, 514);
-            userGuideBtn.Margin = new Padding(3, 3, 22, 3);
+            userGuideBtn.Location = new Point(323, 321);
+            userGuideBtn.Margin = new Padding(2, 2, 14, 2);
             userGuideBtn.Name = "userGuideBtn";
-            userGuideBtn.Size = new Size(316, 58);
+            userGuideBtn.Size = new Size(201, 36);
             userGuideBtn.TabIndex = 82;
             userGuideBtn.Text = "User Guide";
             userGuideBtn.UseVisualStyleBackColor = false;
@@ -61,10 +60,10 @@
             organArchiveBtn.BorderRadius = 15;
             organArchiveBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             organArchiveBtn.ForeColor = Color.White;
-            organArchiveBtn.Location = new Point(508, 437);
-            organArchiveBtn.Margin = new Padding(3, 3, 22, 3);
+            organArchiveBtn.Location = new Point(323, 273);
+            organArchiveBtn.Margin = new Padding(2, 2, 14, 2);
             organArchiveBtn.Name = "organArchiveBtn";
-            organArchiveBtn.Size = new Size(316, 58);
+            organArchiveBtn.Size = new Size(201, 36);
             organArchiveBtn.TabIndex = 81;
             organArchiveBtn.Text = "Organ Archive";
             organArchiveBtn.UseVisualStyleBackColor = false;
@@ -77,10 +76,10 @@
             viewCasesBtn.BorderRadius = 15;
             viewCasesBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             viewCasesBtn.ForeColor = Color.White;
-            viewCasesBtn.Location = new Point(508, 360);
-            viewCasesBtn.Margin = new Padding(3, 3, 22, 3);
+            viewCasesBtn.Location = new Point(323, 225);
+            viewCasesBtn.Margin = new Padding(2, 2, 14, 2);
             viewCasesBtn.Name = "viewCasesBtn";
-            viewCasesBtn.Size = new Size(316, 58);
+            viewCasesBtn.Size = new Size(201, 36);
             viewCasesBtn.TabIndex = 80;
             viewCasesBtn.Text = "View Cases";
             viewCasesBtn.UseVisualStyleBackColor = false;
@@ -93,37 +92,24 @@
             addCaseBtn.BorderRadius = 15;
             addCaseBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             addCaseBtn.ForeColor = Color.White;
-            addCaseBtn.Location = new Point(508, 283);
-            addCaseBtn.Margin = new Padding(3, 3, 22, 3);
+            addCaseBtn.Location = new Point(323, 177);
+            addCaseBtn.Margin = new Padding(2, 2, 14, 2);
             addCaseBtn.Name = "addCaseBtn";
-            addCaseBtn.Size = new Size(316, 58);
+            addCaseBtn.Size = new Size(201, 36);
             addCaseBtn.TabIndex = 79;
             addCaseBtn.Text = " Add a Case";
             addCaseBtn.UseVisualStyleBackColor = false;
             addCaseBtn.Click += addCaseBtn_Click;
-            // 
-            // tempBtn
-            // 
-            tempBtn.Anchor = AnchorStyles.None;
-            tempBtn.Font = new Font("Century Gothic", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            tempBtn.Location = new Point(176, 283);
-            tempBtn.Margin = new Padding(5);
-            tempBtn.Name = "tempBtn";
-            tempBtn.Size = new Size(141, 61);
-            tempBtn.TabIndex = 78;
-            tempBtn.Text = "temp";
-            tempBtn.UseVisualStyleBackColor = true;
-            tempBtn.Click += tempBtn_Click;
             // 
             // Title
             // 
             Title.Anchor = AnchorStyles.None;
             Title.AutoSize = true;
             Title.Font = new Font("Tahoma", 42F, FontStyle.Bold, GraphicsUnit.Point);
-            Title.Location = new Point(302, 93);
-            Title.Margin = new Padding(8, 0, 8, 0);
+            Title.Location = new Point(192, 58);
+            Title.Margin = new Padding(5, 0, 5, 0);
             Title.Name = "Title";
-            Title.Size = new Size(691, 101);
+            Title.Size = new Size(463, 68);
             Title.TabIndex = 77;
             Title.Text = "HoloRepository";
             // 

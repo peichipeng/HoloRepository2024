@@ -64,7 +64,7 @@ namespace HoloRepository.AddCase
                 await cmd.ExecuteNonQueryAsync();
                 if (Parent.Parent is AddCaseFramework framework)
                 {
-                    framework.LoadControl(new CaseOrganFramework("addCase", donorId));
+                    framework.LoadControl(new CasePage("addCase", donorId));
                 }
             }
             catch (PostgresException e)
@@ -111,10 +111,10 @@ namespace HoloRepository.AddCase
                 {
                     if (framework.destination == "addCase")
                     {
-                        framework.LoadControl(new CaseOrganFramework("addCase", donorId));
+                        framework.LoadControl(new CasePage("addCase", donorId));
                     } else
                     {
-                        framework.LoadControl(new CaseOrganFramework("caseOverview", donorId));
+                        framework.LoadControl(new CasePage("caseOverview", donorId));
                     }
                 }
             }

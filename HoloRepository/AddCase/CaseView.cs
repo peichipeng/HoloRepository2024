@@ -14,7 +14,7 @@ namespace HoloRepository.AddCase
     public partial class CaseView : UserControl
     {
         public int donorId;
-        public CaseView(int donorId)
+        public CaseView()
         {
             InitializeComponent();
             this.donorId = donorId;
@@ -23,7 +23,7 @@ namespace HoloRepository.AddCase
 
         private void CaseView_Load(object sender, EventArgs e)
         {
-            if (this.Parent.Parent is CaseOrganFramework framework)
+            if (this.Parent.Parent is CasePage framework)
             {
                 this.donorId = framework.donorId;
             }
@@ -116,7 +116,7 @@ namespace HoloRepository.AddCase
             if (this.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
             {
                 caseFramework.nextBtn.Text = "Add";
-                caseFramework.LoadControl(new AddCaseControl(donorId));
+                caseFramework.LoadControl(new AddCaseControl());
             }
         }
     }
