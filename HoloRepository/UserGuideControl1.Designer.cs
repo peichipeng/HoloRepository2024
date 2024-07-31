@@ -1,6 +1,6 @@
 ﻿namespace HoloRepository
 {
-    partial class UserGuideControl
+    partial class UserGuideControl1
     {
         /// <summary> 
         /// 必需的设计器变量。

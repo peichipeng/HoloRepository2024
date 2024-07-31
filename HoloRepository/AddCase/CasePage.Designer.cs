@@ -1,6 +1,6 @@
 ﻿namespace HoloRepository.AddCase
 {
-    partial class CaseOrganFramework
+    partial class CasePage
     {
         /// <summary> 
         /// Required designer variable.

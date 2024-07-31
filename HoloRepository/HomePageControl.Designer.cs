@@ -32,7 +32,6 @@
             organArchiveBtn = new RoundedButton();
             viewCasesBtn = new RoundedButton();
             addCaseBtn = new RoundedButton();
-            tempBtn = new Button();
             Title = new Label();
             btnUpdateOrgan = new Button();
             button1 = new Button();

@@ -1,4 +1,5 @@
 ﻿using HoloRepository.AddCase;
+using HoloRepository.UserGuide;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,9 +27,18 @@ namespace HoloRepository
             }
         }
 
+        public void AddControl(UserControl userControl)
+        {
+            if (this.Parent.Parent is MainForm mainForm)
+            {
+                mainForm.AddControl(userControl);
+            }
+        }
+
         private void addCaseBtn_Click(object sender, EventArgs e)
         {
-            LoadControl(new AddCaseControl(12));
+            LoadControl(new AddCaseFramework("home", "addCase"));
+            //LoadControl(new AddCaseControl());
         }
 
         private void viewCasesBtn_Click(object sender, EventArgs e)
@@ -43,7 +53,7 @@ namespace HoloRepository
 
         private void userGuideBtn_Click(object sender, EventArgs e)
         {
-            LoadControl(new UserGuideControl());
+            AddControl(new UserGuideHome());
         }
 
         private void tempBtn_Click(object sender, EventArgs e)

@@ -33,7 +33,7 @@ namespace HoloRepository.AddCase
             this.accessedFrom = route;
             this.destination = destination;
             InitializeComponent();
-            LoadControl(new CaseOrganFramework(destination, data));
+            LoadControl(new CasePage(destination, data));
         }
 
         public void ShowFooterBtns()
@@ -55,7 +55,7 @@ namespace HoloRepository.AddCase
             userControl.Dock = DockStyle.Fill;
             addCaseContainer.Controls.Add(userControl);
 
-            if (userControl is CaseOrganFramework casePage)
+            if (userControl is CasePage casePage)
             {
                 if (casePage.pageName == "caseOverview")
                 {
@@ -96,7 +96,7 @@ namespace HoloRepository.AddCase
                     }
                 }
             }
-            else if (addCaseContainer.Controls[0] is CaseOrganFramework casePage)
+            else if (addCaseContainer.Controls[0] is CasePage casePage)
             {
                 if (casePage.headerContainer.Controls[0] is CaseOrganHeader header)
                 {
@@ -151,9 +151,9 @@ namespace HoloRepository.AddCase
                         else
                         {
                             int originalId = donorInfoPage.originalId;
-                            LoadControl(new CaseOrganFramework(destination, originalId));
+                            LoadControl(new CasePage(destination, originalId));
                         }
-                    } else if (addCaseContainer.Controls[0] is CaseOrganFramework casePage)
+                    } else if (addCaseContainer.Controls[0] is CasePage casePage)
                     {
                         // Remove all the records related to the donor
                         var dbConnection = new DatabaseConnection();
