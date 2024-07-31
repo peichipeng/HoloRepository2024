@@ -41,7 +41,6 @@
             btnUpload.TabIndex = 0;
             btnUpload.Text = "Upload";
             btnUpload.UseVisualStyleBackColor = true;
-            btnUpload.Click += btnUpload_Click;
             // 
             // pictureBox
             // 

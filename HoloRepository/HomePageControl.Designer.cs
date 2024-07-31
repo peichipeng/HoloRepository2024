@@ -101,19 +101,6 @@
             addCaseBtn.UseVisualStyleBackColor = false;
             addCaseBtn.Click += addCaseBtn_Click;
             // 
-            // tempBtn
-            // 
-            tempBtn.Anchor = AnchorStyles.None;
-            tempBtn.Font = new Font("Century Gothic", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            tempBtn.Location = new Point(176, 283);
-            tempBtn.Margin = new Padding(5);
-            tempBtn.Name = "tempBtn";
-            tempBtn.Size = new Size(141, 61);
-            tempBtn.TabIndex = 78;
-            tempBtn.Text = "temp";
-            tempBtn.UseVisualStyleBackColor = true;
-            tempBtn.Click += tempBtn_Click;
-            // 
             // Title
             // 
             Title.Anchor = AnchorStyles.None;
@@ -158,7 +145,6 @@
             Controls.Add(organArchiveBtn);
             Controls.Add(viewCasesBtn);
             Controls.Add(addCaseBtn);
-            Controls.Add(tempBtn);
             Controls.Add(Title);
             Margin = new Padding(5);
             Name = "HomePageControl";
@@ -173,7 +159,6 @@
         private RoundedButton organArchiveBtn;
         private RoundedButton viewCasesBtn;
         private RoundedButton addCaseBtn;
-        private Button tempBtn;
         private Label Title;
         private Button btnUpdateOrgan;
         private Button button1;
