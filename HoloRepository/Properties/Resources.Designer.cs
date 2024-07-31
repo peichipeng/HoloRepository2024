@@ -10,9 +10,8 @@
 
 namespace HoloRepository.Properties {
     using System;
-    using System.Drawing;
-
-
+    
+    
     /// <summary>
     ///   一个强类型的资源类，用于查找本地化的字符串等。
     /// </summary>
@@ -32,9 +31,7 @@ namespace HoloRepository.Properties {
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-
-        public static Image EditButton { get; internal set; }
-
+        
         /// <summary>
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>

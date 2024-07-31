@@ -43,7 +43,7 @@ namespace HoloRepository
             PopupTitle.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point);
             PopupTitle.Location = new Point(64, 102);
             PopupTitle.Name = "PopupTitle";
-            PopupTitle.Size = new Size(376, 32);
+            PopupTitle.Size = new Size(560, 48);
             PopupTitle.TabIndex = 0;
             PopupTitle.Text = "Are you sure you want to cancel?";
             // 
@@ -77,7 +77,7 @@ namespace HoloRepository
             // PopupWindow
             // 
             BackColor = Color.White;
-            ClientSize = new Size(500, 300);
+            ClientSize = new Size(632, 288);
             ControlBox = false;
             Controls.Add(PopupNoButton);
             Controls.Add(PopupYesButton);
@@ -107,7 +107,7 @@ namespace HoloRepository
             WindowClosed();
         }
 
-        private void WindowClosed ()
+        private void WindowClosed()
         {
             overlay.Dispose();
         }

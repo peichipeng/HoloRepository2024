@@ -28,54 +28,46 @@
         /// </summary>
         private void InitializeComponent()
         {
-            kryptonTextBox1 = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            btnUpload = new Button();
+            pictureBox = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             SuspendLayout();
             // 
-            // kryptonTextBox1
+            // btnUpload
             // 
-            kryptonTextBox1.AccessibleDescription = "";
-            kryptonTextBox1.AlwaysActive = false;
-            kryptonTextBox1.Location = new Point(262, 301);
-            kryptonTextBox1.Multiline = true;
-            kryptonTextBox1.Name = "kryptonTextBox1";
-            kryptonTextBox1.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            kryptonTextBox1.Size = new Size(405, 92);
-            kryptonTextBox1.StateActive.Back.Color1 = Color.White;
-            kryptonTextBox1.StateActive.Border.Color1 = Color.FromArgb(201, 201, 201);
-            kryptonTextBox1.StateActive.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
-            kryptonTextBox1.StateActive.Border.Rounding = 5;
-            kryptonTextBox1.StateActive.Border.Width = 1;
-            kryptonTextBox1.StateActive.Content.Color1 = Color.Black;
-            kryptonTextBox1.StateActive.Content.Font = new Font("Arial", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            kryptonTextBox1.StateActive.Content.Padding = new Padding(4, 8, 4, 8);
-            kryptonTextBox1.StateCommon.Content.Color1 = Color.Transparent;
-            kryptonTextBox1.StateCommon.Content.Font = new Font("宋体", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            kryptonTextBox1.StateNormal.Back.Color1 = Color.White;
-            kryptonTextBox1.StateNormal.Border.Color1 = Color.FromArgb(201, 201, 201);
-            kryptonTextBox1.StateNormal.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
-            kryptonTextBox1.StateNormal.Border.Rounding = 5;
-            kryptonTextBox1.StateNormal.Border.Width = 1;
-            kryptonTextBox1.StateNormal.Content.Color1 = Color.DimGray;
-            kryptonTextBox1.StateNormal.Content.Font = new Font("Arial", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            kryptonTextBox1.StateNormal.Content.Padding = new Padding(4, 8, 4, 8);
-            kryptonTextBox1.TabIndex = 0;
-            kryptonTextBox1.Text = "Describe additional information about the organ slice ...\r\n\r\n";
+            btnUpload.Location = new Point(537, 675);
+            btnUpload.Name = "btnUpload";
+            btnUpload.Size = new Size(112, 34);
+            btnUpload.TabIndex = 0;
+            btnUpload.Text = "Upload";
+            btnUpload.UseVisualStyleBackColor = true;
+            btnUpload.Click += btnUpload_Click;
+            // 
+            // pictureBox
+            // 
+            pictureBox.Location = new Point(368, 200);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new Size(466, 443);
+            pictureBox.TabIndex = 1;
+            pictureBox.TabStop = false;
             // 
             // UserGuideControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            Controls.Add(kryptonTextBox1);
-            Margin = new Padding(4);
+            Controls.Add(pictureBox);
+            Controls.Add(btnUpload);
+            Margin = new Padding(6);
             Name = "UserGuideControl";
-            Size = new Size(907, 678);
+            Size = new Size(1425, 957);
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private ComponentFactory.Krypton.Toolkit.KryptonTextBox kryptonTextBox1;
+        private Button btnUpload;
+        private PictureBox pictureBox;
     }
 }

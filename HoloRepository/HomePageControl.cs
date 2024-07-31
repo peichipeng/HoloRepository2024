@@ -28,7 +28,7 @@ namespace HoloRepository
 
         private void addCaseBtn_Click(object sender, EventArgs e)
         {
-            LoadControl(new AddCaseControl());
+            LoadControl(new AddCaseControl(12));
         }
 
         private void viewCasesBtn_Click(object sender, EventArgs e)
@@ -38,7 +38,7 @@ namespace HoloRepository
 
         private void organArchiveBtn_Click(object sender, EventArgs e)
         {
-
+            LoadControl(new OrganArchiveControl());
         }
 
         private void userGuideBtn_Click(object sender, EventArgs e)
@@ -49,6 +49,17 @@ namespace HoloRepository
         private void tempBtn_Click(object sender, EventArgs e)
         {
             LoadControl(new AddCaseFramework("home", "addCase"));
+        }
+
+        private void btnUpdateOrgan_Click(object sender, EventArgs e)
+        {
+            LoadControl(new AddCaseControl(12, 33));
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            _3DModelFormWindow modelFormWindow = new _3DModelFormWindow(33);
+            modelFormWindow.Show();
         }
     }
 }

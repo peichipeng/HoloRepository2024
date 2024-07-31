@@ -132,6 +132,25 @@ namespace HoloRepository
         {
             circleX = Math.Max(0, Math.Min(mouseX - CircleSize / 2, Width - CircleSize));
             Invalidate();
+
+            // Trigger the event with the nearest index
+            if (divisions.Length > 0)
+            {
+                int nearestIndex = 0;
+                int minDistance = Math.Abs(circleX - divisions[0]);
+
+                for (int i = 1; i < divisions.Length; i++)
+                {
+                    int distance = Math.Abs(circleX - divisions[i]);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        nearestIndex = i;
+                    }
+                }
+
+                OnImageSelected(nearestIndex);
+            }
         }
 
         private void SnapToNearestDivision()

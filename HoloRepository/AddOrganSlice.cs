@@ -28,6 +28,8 @@ namespace HoloRepository
 
         public event Action<Image, Image, string, int> OrganSliceUpdated;
 
+        public string OrganSliceImagePath { get; private set; }
+
 
         public AddOrganSlice()
         {
@@ -150,14 +152,15 @@ namespace HoloRepository
             HideOverlayPanel(0);
         }
 
-        public void HideOverlayPanel(int hideNum){
+        public void HideOverlayPanel(int hideNum)
+        {
             // Hide overlay panel
             overlayPanel.Visible = false;
 
             // Display SliderControl and PictureBox
             sliderControl1.Visible = true;
             DICOMFilePicture.Visible = true;
-            if (hideNum == 1) 
+            if (hideNum == 1)
             {
                 OrganSliceDescription.Visible = false;
             }
@@ -181,10 +184,11 @@ namespace HoloRepository
             }
         }
 
-        public void SetOrganSlice(Image image)
+        public void SetOrganSlice(Image image, string imagePath)
         {
             OrganSlicePicture.SizeMode = PictureBoxSizeMode.Zoom;
             OrganSlicePicture.Image = image;
+            OrganSliceImagePath = imagePath;
         }
 
         public void SetDescription(string description)
@@ -234,6 +238,8 @@ namespace HoloRepository
                     {
                         Image selectedImage = new Bitmap(filePath);
                         OrganSlicePicture.Image = selectedImage;
+
+                        OrganSliceImagePath = filePath;
 
                         OrganSlicePicture.SizeMode = PictureBoxSizeMode.Zoom;
 

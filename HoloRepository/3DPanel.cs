@@ -1,4 +1,5 @@
 ﻿using HoloRepository.ContextMenu;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,39 +11,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace HoloRepository.AddCase
+namespace HoloRepository
 {
-    public partial class OrganPanel : UserControl
+    public partial class _3DPanel : UserControl
     {
         private int organId;
+        private int donorId;
         private string organName;
         private List<string> organSlices;
         private int imageShown;
-        public int BorderRadius { get; set; } = 20;
+        private DatabaseConnection dbConnection;
+        public int BorderRadius { get; set; } = 2;
         public Color BorderColor { get; set; } = Color.LightGray;
         public int BorderThickness { get; set; } = 1;
-        public OrganPanel(int organId, string name, List<string> organSlices)
+        public _3DPanel(int organId, int donorId, List<string> organSlices)
         {
             InitializeComponent();
 
             this.organId = organId;
-
-            if (name == "")
-            {
-                this.organName = "Unknown";
-            }
-            else
-            {
-                this.organName = name;
-            }
+            this.donorId = donorId;
             this.organSlices = organSlices;
-
-            sliceImages.Controls.Add(leftArrow);
-            sliceImages.Controls.Add(rightArrow);
-            int leftArrowYPosition = (sliceImages.Height - leftArrow.Height) / 2;
-            int rightArrowXPosition = sliceImages.Width - rightArrow.Width;
-            leftArrow.Location = new Point(0, leftArrowYPosition);
-            rightArrow.Location = new Point(rightArrowXPosition, leftArrowYPosition);
+            this.dbConnection = new DatabaseConnection();
 
             contextMenu.Renderer = new MenuRenderer();
 
@@ -51,9 +40,10 @@ namespace HoloRepository.AddCase
 
         private void setOrganPanel()
         {
-            organNameLabel.Text = organName;
-            organNameLabel.Location = new Point(this.Width / 2 - organNameLabel.Width / 2, 210);
-            downArrow.Location = new Point(organNameLabel.Location.X + organNameLabel.Width - 2, 210);
+            organName = GetOrganName(donorId, organId);
+            organNameLabel.Text = $"{donorId}-{organName}";
+            organNameLabel.Location = new Point(this.Width / 2 - organNameLabel.Width / 2, 130);
+            downArrow.Location = new Point(organNameLabel.Location.X + organNameLabel.Width - 2, 130);
 
             try
             {
@@ -71,7 +61,10 @@ namespace HoloRepository.AddCase
                 {
                     sliceImages.Image = null;
                     placeholderLabel.Visible = true;
-                    placeholderLabel.Location = new Point(this.Width / 2 - placeholderLabel.Width / 2, 100);
+                    placeholderLabel.Location = new Point(
+                        sliceImages.Location.X + (sliceImages.Width - placeholderLabel.Width) / 2,
+                        sliceImages.Location.Y + (sliceImages.Height - placeholderLabel.Height) / 2
+                    );
                 }
             }
             catch (Exception ex)
@@ -79,6 +72,38 @@ namespace HoloRepository.AddCase
                 MessageBox.Show($"Error loading image: {ex.Message}");
                 // Optionally handle the exception here
             }
+        }
+
+        private string GetOrganName(int donorId, int organId)
+        {
+            string organName = string.Empty;
+
+            try
+            {
+                string organQuery = "SELECT organ_name FROM organ o JOIN organname on o.organ_name_id = organname.organ_name_id WHERE o.donor_id = @donorId AND o.organ_id = @organId";
+                using (var connection = dbConnection.GetConnection())
+                using (var command = new NpgsqlCommand(organQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@donorId", donorId);
+                    command.Parameters.AddWithValue("@organId", organId);
+
+                    object result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        organName = result.ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Organ name not found.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving organ name: " + ex.Message);
+            }
+
+            return organName;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -89,11 +114,11 @@ namespace HoloRepository.AddCase
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             RectangleF rectSurface = new RectangleF(0, 0, this.Width, this.Height);
-            RectangleF rectBorder = new RectangleF(1, 1, this.Width - 0.8F, this.Height - 0.8F);
+            RectangleF rectBorder = new RectangleF(0.5f, 0.5f, this.Width - 1, this.Height - 1);
 
             using (GraphicsPath pathSurface = GetRoundedRectanglePath(rectSurface, BorderRadius))
             using (GraphicsPath pathBorder = GetRoundedRectanglePath(rectBorder, BorderRadius - 1F))
-            using (Pen penSurface = new Pen(this.Parent.BackColor, 2))
+            using (Pen penSurface = new Pen(this.Parent.BackColor, BorderThickness))
             using (Pen penBorder = new Pen(BorderColor, BorderThickness))
             {
                 penBorder.Alignment = PenAlignment.Inset;
@@ -115,32 +140,6 @@ namespace HoloRepository.AddCase
 
             path.CloseFigure();
             return path;
-        }
-
-        private void leftArrow_MouseEnter(object sender, EventArgs e)
-        {
-            if (organSlices.Count > 1)
-            {
-                leftArrow.BackColor = Color.LightGray;
-            }
-        }
-
-        private void leftArrow_MouseLeave(object sender, EventArgs e)
-        {
-            leftArrow.BackColor = Color.Transparent;
-        }
-
-        private void rightArrow_MouseEnter(object sender, EventArgs e)
-        {
-            if (organSlices.Count > 1)
-            {
-                rightArrow.BackColor = Color.LightGray;
-            }
-        }
-
-        private void rightArrow_MouseLeave(object sender, EventArgs e)
-        {
-            rightArrow.BackColor = Color.Transparent;
         }
 
         private void leftArrow_Click(object sender, EventArgs e)
@@ -187,18 +186,6 @@ namespace HoloRepository.AddCase
             contextMenu.Show(downArrow, e.Location);
         }
 
-        // The button for updating the organ
-        private void updateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.Parent.Parent.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
-            {
-                caseFramework.nextBtn.Text = "Update";
-
-                // The organ ID is available as a field in this class
-                caseFramework.LoadControl(new AddCaseControl(12));
-            }
-        }
-
         // The button for deleting the organ
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -217,6 +204,12 @@ namespace HoloRepository.AddCase
                     dbConnection.ExecuteNonQuery(deleteQuery);
                 }
             }
+        }
+
+        public string GetDonorId()
+        {
+            string DonorID = donorId.ToString();
+            return DonorID;
         }
     }
 }

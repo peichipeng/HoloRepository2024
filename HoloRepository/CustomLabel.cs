@@ -58,7 +58,7 @@ namespace HoloRepository
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    float y = i * (font.Height * 1.5f); // 调整行间距为字体高度的1.5倍
+                    float y = i * (font.Height * 1.5f);
                     RectangleF rect = new RectangleF(0, y, ClientSize.Width, font.Height * 1.5f);
 
                     e.Graphics.DrawString(lines[i], font, brush, rect, stringFormat);

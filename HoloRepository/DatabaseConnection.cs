@@ -12,7 +12,7 @@ public class DatabaseConnection
 
     public DatabaseConnection()
     {
-        this.connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
+        this.connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=holorepository1";
     }
 
     public NpgsqlConnection GetConnection()
@@ -29,21 +29,37 @@ public class DatabaseConnection
         }
     }
 
-    public void ExecuteNonQuery(string query) 
+    public void ExecuteNonQuery(string query, Dictionary<string, object> parameters = null)
     {
         using (NpgsqlConnection connection = GetConnection())
         {
             using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+            {
+                if (parameters != null)
                 {
-                command.ExecuteNonQuery();
+                    foreach (var param in parameters)
+                    {
+                        command.Parameters.AddWithValue(param.Key, param.Value);
+                    }
                 }
+                command.ExecuteNonQuery();
+            }
         }
     }
 
-    public NpgsqlDataReader ExecuteReader(string query) 
+    public NpgsqlDataReader ExecuteReader(string query, Dictionary<string, object> parameters = null)
     {
         NpgsqlConnection connection = GetConnection();
         NpgsqlCommand command = new NpgsqlCommand(query, connection);
+
+        if (parameters != null)
+        {
+            foreach (var param in parameters)
+            {
+                command.Parameters.AddWithValue(param.Key, param.Value);
+            }
+        }
+
         return command.ExecuteReader(CommandBehavior.CloseConnection);
     }
 }

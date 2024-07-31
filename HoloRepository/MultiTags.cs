@@ -14,7 +14,9 @@ namespace HoloRepository
         private FlowLayoutPanel selectedPanel;
         private List<string> data;
 
-        public List<string> SelectedItems { get; private set; }
+        private Dictionary<string, int> tagDictionary;
+
+        public List<int> SelectedTagIds { get; private set; }
         private DatabaseConnection dbConnection;
 
         private string placeholderText = "Add tags";
@@ -92,8 +94,9 @@ namespace HoloRepository
 
         private void InitializeControls()
         {
-            SelectedItems = new List<string>();
+            SelectedTagIds = new List<int>();
             data = new List<string>();
+            tagDictionary = new Dictionary<string, int>();
 
             LoadTagData();
         }
@@ -102,13 +105,15 @@ namespace HoloRepository
         {
             try
             {
-                string sql = "SELECT * FROM tag";
+                string sql = "SELECT tag_id, tag_name FROM tag";
                 using (NpgsqlDataReader reader = dbConnection.ExecuteReader(sql))
                 {
                     while (reader.Read())
                     {
+                        int id = reader.GetInt32(0);
                         string tagName = reader.GetString(1);
                         data.Add(tagName);
+                        tagDictionary[tagName] = id;
                     }
                 }
             }
@@ -144,7 +149,7 @@ namespace HoloRepository
                 return;
 
             string query = textBox.Text.ToLower();
-            var filteredData = data.Where(d => d.ToLower().Contains(query) && !SelectedItems.Contains(d)).ToList();
+            var filteredData = data.Where(d => d.ToLower().Contains(query) && !SelectedTagIds.Contains(tagDictionary[d])).ToList();
             listBox.Items.Clear();
             listBox.Items.AddRange(filteredData.ToArray());
             listBox.Visible = filteredData.Any() || string.IsNullOrEmpty(query);
@@ -152,12 +157,10 @@ namespace HoloRepository
             if (string.IsNullOrEmpty(query))
             {
                 listBox.Items.Clear();
-                listBox.Items.AddRange(data.Where(d => !SelectedItems.Contains(d)).ToArray());
+                listBox.Items.AddRange(data.Where(d => !SelectedTagIds.Contains(tagDictionary[d])).ToArray());
                 listBox.Visible = true;
             }
         }
-
-
 
         private void ListBox_Click(object sender, EventArgs e)
         {
@@ -172,7 +175,7 @@ namespace HoloRepository
 
         private void AddTag(string tag)
         {
-            SelectedItems.Add(tag);
+            SelectedTagIds.Add(tagDictionary[tag]);
 
             var tagLabel = new Label
             {
@@ -224,7 +227,7 @@ namespace HoloRepository
         {
             var button = sender as Button;
             var tag = button.Tag.ToString();
-            SelectedItems.Remove(tag);
+            SelectedTagIds.Remove(tagDictionary[tag]);
 
             var tagPanel = button.Parent as FlowLayoutPanel;
             selectedPanel.Controls.Remove(tagPanel);
@@ -235,7 +238,7 @@ namespace HoloRepository
         private void ShowListBox()
         {
             listBox.Items.Clear();
-            listBox.Items.AddRange(data.Where(d => !SelectedItems.Contains(d)).ToArray());
+            listBox.Items.AddRange(data.Where(d => !SelectedTagIds.Contains(tagDictionary[d])).ToArray());
 
             // Adjust the location of listBox
             listBox.Location = new Point(textBox.Location.X + 9, textBox.Location.Y + textBox.Height + 2);
@@ -260,5 +263,19 @@ namespace HoloRepository
                 textBox.Location = new Point(3, 3);
             }
         }
+
+        public void AddSelectedTagId(int tagId)
+        {
+            if (!SelectedTagIds.Contains(tagId))
+            {
+                var tagName = tagDictionary.FirstOrDefault(x => x.Value == tagId).Key;
+                if (!string.IsNullOrEmpty(tagName))
+                {
+                    AddTag(tagName);
+                }
+            }
+        }
+
+
     }
 }

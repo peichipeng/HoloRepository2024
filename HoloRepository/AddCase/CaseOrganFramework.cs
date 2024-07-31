@@ -46,7 +46,7 @@ namespace HoloRepository.AddCase
             headerContainer.Controls.Add(header);
 
             // Load content
-            UserControl content = new CaseView();
+            UserControl content = new CaseView(donorId);
             caseOrganContainer.Controls.Clear();
             content.Dock = DockStyle.Fill;
             caseOrganContainer.Controls.Add(content);

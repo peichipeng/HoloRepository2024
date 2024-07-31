@@ -34,6 +34,7 @@
             ImportDICOMButton = new RoundedButton();
             RemoveAllButton = new RoundedButton();
             panel1 = new Panel();
+            caseNo = new Label();
             organListBox = new ListBox();
             organNameTextBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             OrganNameLabel = new Label();
@@ -45,6 +46,12 @@
             updateBtn = new PictureBox();
             TagsTitle = new Label();
             multiTags1 = new MultiTags();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            btnSave = new RoundedButton();
+            panel3 = new Panel();
+            Toggle = new Toggle();
+            ConstructLabel = new Label();
+            btnCancel = new RoundedButton();
             fileListBox = new RoundedListBox();
             lineControl1 = new LineControl();
             OrganSlicesTitle = new Label();
@@ -53,6 +60,8 @@
             addOrganSlicePanel.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)updateBtn).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
+            panel3.SuspendLayout();
             SuspendLayout();
             // 
             // AddOrganTitle
@@ -120,6 +129,7 @@
             panel1.AutoScroll = true;
             panel1.AutoSize = true;
             panel1.BackColor = Color.White;
+            panel1.Controls.Add(caseNo);
             panel1.Controls.Add(organListBox);
             panel1.Controls.Add(organNameTextBox);
             panel1.Controls.Add(OrganNameLabel);
@@ -139,6 +149,19 @@
             panel1.Size = new Size(1425, 957);
             panel1.TabIndex = 7;
             // 
+            // caseNo
+            // 
+            caseNo.Anchor = AnchorStyles.Top;
+            caseNo.AutoSize = true;
+            caseNo.Font = new Font("Segoe UI", 12F, FontStyle.Italic, GraphicsUnit.Point);
+            caseNo.ForeColor = Color.Black;
+            caseNo.Location = new Point(1109, 71);
+            caseNo.Name = "caseNo";
+            caseNo.Size = new Size(187, 32);
+            caseNo.TabIndex = 59;
+            caseNo.Text = "Case 123456789";
+            caseNo.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // organListBox
             // 
             organListBox.Anchor = AnchorStyles.Top;
@@ -150,7 +173,6 @@
             organListBox.TabIndex = 24;
             organListBox.Visible = false;
             organListBox.Click += OrganListBox_Click;
-            organListBox.Items.AddRange(organData.ToArray());
             // 
             // organNameTextBox
             // 
@@ -166,10 +188,10 @@
             organNameTextBox.StateActive.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             organNameTextBox.StateActive.Border.Rounding = 5;
             organNameTextBox.TabIndex = 23;
-            organNameTextBox.GotFocus += OrganNameTextBox_GotFocus;
-            organNameTextBox.LostFocus += OrganNameTextBox_LostFocus;
             organNameTextBox.TextChanged += OrganNameTextBox_TextChanged;
+            organNameTextBox.GotFocus += OrganNameTextBox_GotFocus;
             organNameTextBox.KeyDown += OrganNameTextBox_KeyDown;
+            organNameTextBox.LostFocus += OrganNameTextBox_LostFocus;
             // 
             // OrganNameLabel
             // 
@@ -190,10 +212,11 @@
             organSlicesPanel.Controls.Add(addOrganSlicePanel);
             organSlicesPanel.Controls.Add(panel2);
             organSlicesPanel.Controls.Add(multiTags1);
+            organSlicesPanel.Controls.Add(tableLayoutPanel1);
             organSlicesPanel.FlowDirection = FlowDirection.TopDown;
-            organSlicesPanel.Location = new Point(57, 681);
+            organSlicesPanel.Location = new Point(49, 682);
             organSlicesPanel.Name = "organSlicesPanel";
-            organSlicesPanel.Size = new Size(1255, 306);
+            organSlicesPanel.Size = new Size(1255, 462);
             organSlicesPanel.TabIndex = 21;
             // 
             // addOrganSlicePanel
@@ -262,7 +285,7 @@
             TagsTitle.Anchor = AnchorStyles.None;
             TagsTitle.AutoSize = true;
             TagsTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            TagsTitle.Location = new Point(5, 8);
+            TagsTitle.Location = new Point(-3, 8);
             TagsTitle.Margin = new Padding(5, 0, 5, 10);
             TagsTitle.Name = "TagsTitle";
             TagsTitle.Size = new Size(372, 42);
@@ -278,6 +301,96 @@
             multiTags1.Name = "multiTags1";
             multiTags1.Size = new Size(1243, 174);
             multiTags1.TabIndex = 16;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(btnSave, 1, 1);
+            tableLayoutPanel1.Controls.Add(panel3, 0, 0);
+            tableLayoutPanel1.Controls.Add(btnCancel, 0, 1);
+            tableLayoutPanel1.Location = new Point(3, 309);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new Size(1247, 150);
+            tableLayoutPanel1.TabIndex = 62;
+            // 
+            // btnSave
+            // 
+            btnSave.Anchor = AnchorStyles.Right;
+            btnSave.BackColor = Color.FromArgb(51, 129, 202);
+            btnSave.BorderRadius = 10;
+            btnSave.FlatAppearance.BorderSize = 0;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnSave.ForeColor = Color.White;
+            btnSave.Location = new Point(1149, 89);
+            btnSave.Margin = new Padding(5, 4, 5, 4);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(93, 47);
+            btnSave.TabIndex = 61;
+            btnSave.Text = "Add";
+            btnSave.UseVisualStyleBackColor = false;
+            btnSave.Click += this.btnSave_Click;
+            // 
+            // panel3
+            // 
+            panel3.Anchor = AnchorStyles.Left;
+            panel3.Controls.Add(Toggle);
+            panel3.Controls.Add(ConstructLabel);
+            panel3.Location = new Point(3, 14);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(564, 46);
+            panel3.TabIndex = 63;
+            // 
+            // Toggle
+            // 
+            Toggle.Anchor = AnchorStyles.Left;
+            Toggle.BorderColor = Color.LightGray;
+            Toggle.ForeColor = Color.White;
+            Toggle.IsOn = false;
+            Toggle.Location = new Point(3, 3);
+            Toggle.Name = "Toggle";
+            Toggle.OffColor = Color.DarkGray;
+            Toggle.OffText = "";
+            Toggle.OnColor = Color.FromArgb(94, 148, 255);
+            Toggle.OnText = "";
+            Toggle.Size = new Size(78, 41);
+            Toggle.TabIndex = 61;
+            Toggle.Text = "toggle1";
+            Toggle.TextEnabled = true;
+            // 
+            // ConstructLabel
+            // 
+            ConstructLabel.Anchor = AnchorStyles.None;
+            ConstructLabel.AutoSize = true;
+            ConstructLabel.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            ConstructLabel.Location = new Point(89, 8);
+            ConstructLabel.Margin = new Padding(5, 0, 5, 0);
+            ConstructLabel.Name = "ConstructLabel";
+            ConstructLabel.Size = new Size(258, 31);
+            ConstructLabel.TabIndex = 62;
+            ConstructLabel.Text = "Construct 3D Model";
+            // 
+            // btnCancel
+            // 
+            btnCancel.Anchor = AnchorStyles.Left;
+            btnCancel.BackColor = Color.FromArgb(180, 63, 63);
+            btnCancel.BorderRadius = 10;
+            btnCancel.FlatAppearance.BorderSize = 0;
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnCancel.ForeColor = Color.White;
+            btnCancel.Location = new Point(5, 89);
+            btnCancel.Margin = new Padding(5, 4, 5, 4);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(112, 47);
+            btnCancel.TabIndex = 61;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
             // 
             // fileListBox
             // 
@@ -308,7 +421,7 @@
             OrganSlicesTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             OrganSlicesTitle.AutoSize = true;
             OrganSlicesTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganSlicesTitle.Location = new Point(60, 624);
+            OrganSlicesTitle.Location = new Point(49, 628);
             OrganSlicesTitle.Margin = new Padding(5, 0, 5, 0);
             OrganSlicesTitle.Name = "OrganSlicesTitle";
             OrganSlicesTitle.Size = new Size(392, 42);
@@ -330,6 +443,9 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)updateBtn).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -360,5 +476,12 @@
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox organNameTextBox;
         private Label OrganNameLabel;
         private ListBox organListBox;
+        private Label caseNo;
+        private Toggle Toggle;
+        private Label ConstructLabel;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Panel panel3;
+        private RoundedButton btnSave;
+        private RoundedButton btnCancel;
     }
 }

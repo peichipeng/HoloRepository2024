@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace HoloRepository
 {
@@ -12,11 +13,24 @@ namespace HoloRepository
         private Label MatchedSliceLabel;
         private PictureBox CTBox;
         private Label OrganSliceLabel;
-        private IconButton EditButton;
-        private IconButton BinButton;
+        private PictureBox EditButton;
+        private PictureBox BinButton;
         private LineControl lineControl1;
 
-        public int SelectedIndex { get; set; }
+        private int selectedIndex;
+        public int DicomId { get; set; }
+        public string Description { get; set; }
+        public string OrganSlicePath { get; set; }
+
+        public int SelectedIndex
+        {
+            get { return selectedIndex; }
+            set
+            {
+                selectedIndex = value;
+                Debug.WriteLine($"SelectedIndex changed to: {selectedIndex}");
+            }
+        }
 
         public OrganSlicePanel()
         {
@@ -26,6 +40,7 @@ namespace HoloRepository
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OrganSlicePanel));
             OrganSliceBox = new PictureBox();
             lineControl1 = new LineControl();
             textBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
@@ -33,10 +48,12 @@ namespace HoloRepository
             MatchedSliceLabel = new Label();
             CTBox = new PictureBox();
             OrganSliceLabel = new Label();
-            EditButton = new IconButton();
-            BinButton = new IconButton();
+            EditButton = new PictureBox();
+            BinButton = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)OrganSliceBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CTBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)EditButton).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)BinButton).BeginInit();
             SuspendLayout();
             // 
             // OrganSliceBox
@@ -114,29 +131,30 @@ namespace HoloRepository
             // 
             // EditButton
             // 
+            EditButton.Anchor = AnchorStyles.Top;
             EditButton.BackColor = Color.Transparent;
-            EditButton.Cursor = Cursors.Hand;
-            EditButton.FlatAppearance.BorderSize = 0;
-            EditButton.FlatStyle = FlatStyle.Flat;
-            EditButton.ImageFileName = "EditButton.png";
+            EditButton.Image = (Image)resources.GetObject("EditButton.Image");
             EditButton.Location = new Point(1130, 23);
+            EditButton.Margin = new Padding(5);
             EditButton.Name = "EditButton";
             EditButton.Size = new Size(30, 30);
-            EditButton.TabIndex = 8;
-            EditButton.UseVisualStyleBackColor = false;
+            EditButton.SizeMode = PictureBoxSizeMode.Zoom;
+            EditButton.TabIndex = 76;
+            EditButton.TabStop = false;
             EditButton.Click += EditButton_Click;
             // 
             // BinButton
             // 
+            BinButton.Anchor = AnchorStyles.Top;
             BinButton.BackColor = Color.Transparent;
-            BinButton.FlatAppearance.BorderSize = 0;
-            BinButton.FlatStyle = FlatStyle.Flat;
-            BinButton.ImageFileName = "BinButton.png";
+            BinButton.Image = (Image)resources.GetObject("BinButton.Image");
             BinButton.Location = new Point(1189, 23);
+            BinButton.Margin = new Padding(5);
             BinButton.Name = "BinButton";
             BinButton.Size = new Size(30, 30);
-            BinButton.TabIndex = 9;
-            BinButton.UseVisualStyleBackColor = false;
+            BinButton.SizeMode = PictureBoxSizeMode.Zoom;
+            BinButton.TabIndex = 77;
+            BinButton.TabStop = false;
             BinButton.Click += BinButton_Click;
             // 
             // OrganSlicePanel
@@ -155,6 +173,8 @@ namespace HoloRepository
             Size = new Size(1240, 560);
             ((System.ComponentModel.ISupportInitialize)OrganSliceBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CTBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)EditButton).EndInit();
+            ((System.ComponentModel.ISupportInitialize)BinButton).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -165,9 +185,10 @@ namespace HoloRepository
             this.Margin = new Padding(10);
         }
 
-        public void SetOrganSlice(Image image)
+        public void SetOrganSlice(Image image, string imagePath)
         {
             OrganSliceBox.Image = image;
+            OrganSlicePath = imagePath;
         }
 
         public void SetCTImage(Image image)
@@ -175,9 +196,10 @@ namespace HoloRepository
             CTBox.Image = image;
         }
 
-        public void SetDescription(string description, int index)
+        public void SetDescription(string description)
         {
             textBox.Text = description;
+            Description = description;
         }
 
         private void BinButton_Click(object sender, EventArgs e)
@@ -240,7 +262,7 @@ namespace HoloRepository
 
                 changeOrganSlice.HideOverlayPanel(1);
 
-                changeOrganSlice.SetOrganSlice(OrganSliceBox.Image);
+                changeOrganSlice.SetOrganSlice(OrganSliceBox.Image, OrganSlicePath);
 
                 changeOrganSlice.SetDescription(textBox.Text);
 
@@ -251,8 +273,8 @@ namespace HoloRepository
                 changeOrganSlice.OrganSliceUpdated += (organSliceImage, selectedImage, description, selectedIndex) =>
                 {
                     SetCTImage(selectedImage);
-                    SetOrganSlice(organSliceImage);
-                    SetDescription(description, selectedIndex);
+                    SetOrganSlice(organSliceImage, changeOrganSlice.OrganSliceImagePath);
+                    SetDescription(description);
                     SelectedIndex = selectedIndex;
                 };
 
