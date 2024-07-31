@@ -44,6 +44,11 @@ namespace HoloRepository.AddCase
             leftArrow.Location = new Point(0, leftArrowYPosition);
             rightArrow.Location = new Point(rightArrowXPosition, leftArrowYPosition);
 
+            int X = (sliceImages.Width - placeholderLabel.Width) / 2;
+            int Y = (sliceImages.Height - placeholderLabel.Height) / 2;
+
+            placeholderLabel.Location = new Point(X, Y);
+
             contextMenu.Renderer = new MenuRenderer();
 
             setOrganPanel();

@@ -32,22 +32,30 @@ namespace HoloRepository
         public ViewCasesControl()
         {
             InitializeComponent();
+            SetComponentPosition();
 
             DataGridViewTextBoxColumn options = new DataGridViewTextBoxColumn();
             options.Name = "options";
             options.HeaderText = "";
             options.Width = 50;
             caseTable.Columns.Add(options);
+        }
 
-            tablePanel.Location = new Point((panel.Width - tablePanel.Width) / 2, 130);
+        private void SetComponentPosition()
+        {
+            pageNameLabel.Location = new Point((this.Width - pageNameLabel.Width) / 2, 25);
+
+            int tablePanelX = (panel.Width - tablePanel.Width) / 2;
 
             searchBox.AutoSize = false;
-            searchBox.Location = new Point(tablePanel.Location.X, 78);
-            searchBox.Size = new Size(540, addCaseBtn.Height);
-
-            addCaseBtn.Location = new Point(tablePanel.Location.X + tablePanel.Width - addCaseBtn.Width, searchBox.Location.Y);
+            searchBox.Location = new Point(tablePanelX, pageNameLabel.Location.Y + pageNameLabel.Height + 15);
+            searchBox.Size = new Size(tablePanel.Width - addCaseBtn.Width - 15, addCaseBtn.Height);
 
             searchIcon.Location = new Point(searchBox.Location.X + 8, searchBox.Location.Y + 8);
+
+            addCaseBtn.Location = new Point(tablePanelX + tablePanel.Width - addCaseBtn.Width, searchBox.Location.Y);
+
+            tablePanel.Location = new Point(tablePanelX, searchBox.Location.Y + searchBox.Height + 25);
         }
 
         private void addCaseBtn_Click(object sender, EventArgs e)
