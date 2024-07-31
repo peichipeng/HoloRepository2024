@@ -186,7 +186,7 @@ namespace HoloRepository
             dODDataGridViewTextBoxColumn.HeaderText = "DATE OF DEATH";
             dODDataGridViewTextBoxColumn.Name = "dODDataGridViewTextBoxColumn";
             dODDataGridViewTextBoxColumn.ReadOnly = true;
-            dODDataGridViewTextBoxColumn.Width = 150;
+            dODDataGridViewTextBoxColumn.Width = 120;
             // 
             // ageDataGridViewTextBoxColumn
             // 
@@ -386,15 +386,15 @@ namespace HoloRepository
         public Label pageNameLabel;
         private DataGridView caseTable;
         private PictureBox searchIcon;
-        private PictureBox blackLeftArrow;
-        private PictureBox greyLeftArrow;
-        private PictureBox blackRightArrow;
-        private PictureBox greyRightArrow;
-        private Panel panel2;
         private DataGridViewTextBoxColumn donorIdDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn dODDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn ageDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private PictureBox blackLeftArrow;
+        private PictureBox greyLeftArrow;
+        private PictureBox blackRightArrow;
+        private PictureBox greyRightArrow;
+        private Panel panel2;
     }
 }

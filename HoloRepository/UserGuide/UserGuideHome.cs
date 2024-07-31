@@ -14,12 +14,9 @@ namespace HoloRepository.UserGuide
     public partial class UserGuideHome : BaseUserGuideControl
     {
         private List<GuidePanelData> guideData = new List<GuidePanelData>();
-
         public UserGuideHome()
         {
             InitializeComponent();
-
-            pageNameLabel.Text = "User Guide";
 
             SetGuideData();
             SetPanels();

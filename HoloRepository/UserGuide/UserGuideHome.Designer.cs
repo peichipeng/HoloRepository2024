@@ -28,8 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            SuspendLayout();
+            // 
+            // pageNameLabel
+            // 
+            pageNameLabel.Size = new Size(178, 39);
+            pageNameLabel.Text = "User Guide";
+            // 
+            // searchBox
+            // 
+            searchBox.StateCommon.Border.Color1 = Color.LightGray;
+            searchBox.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
+            searchBox.StateCommon.Border.Rounding = 3;
+            searchBox.StateCommon.Border.Width = 1;
+            searchBox.StateCommon.Content.Color1 = Color.DarkGray;
+            searchBox.StateCommon.Content.Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            searchBox.StateCommon.Content.Padding = new Padding(30, 5, -1, -1);
+            // 
+            // UserGuideHome
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Name = "UserGuideHome";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

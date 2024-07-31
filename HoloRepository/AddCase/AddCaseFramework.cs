@@ -129,11 +129,6 @@ namespace HoloRepository.AddCase
 
             using (var popup = new PopupWindow("Are you sure you want to cancel?", this.ParentForm))
             {
-                foreach (Form form in Application.OpenForms)
-                {
-                    string className = form.GetType().Name;
-                    MessageBox.Show(className);
-                }
 
                 var result = popup.ShowDialog(this.ParentForm);
 
