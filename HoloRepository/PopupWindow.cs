@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HoloRepository
 {
-    public partial class PopupWindow : Form
+    public class PopupWindow : Form
     {
         private OverlayForm overlay;
         public PopupWindow()
@@ -17,7 +17,7 @@ namespace HoloRepository
         public PopupWindow(string text, Form parentForm)
         {
             InitializeComponent();
-
+            
             overlay = new OverlayForm
             {
                 Location = parentForm.Location,
@@ -95,21 +95,31 @@ namespace HoloRepository
 
         private void PopupYesButton_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Yes;
-            Close();
-            WindowClosed();
+            HandleYesButtonClick();
         }
 
         private void PopupNoButton_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.No;
-            Close();
-            WindowClosed();
+            HandleNoButtonClick();
         }
 
         private void WindowClosed()
         {
             overlay.Dispose();
+        }
+
+        public void HandleYesButtonClick()
+        {
+            DialogResult = DialogResult.Yes;
+            Close();
+            WindowClosed();
+        }
+
+        public void HandleNoButtonClick()
+        {
+            DialogResult = DialogResult.No;
+            Close();
+            WindowClosed();
         }
     }
 }

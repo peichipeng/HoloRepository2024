@@ -52,6 +52,8 @@ namespace HoloRepository
                 blackHomeBtn.Visible = false;
                 var control = mainContainer.Controls[controlsCount - 1];
 
+                //MessageBox.Show(control.Name);
+
                 if (control is AddCaseFramework caseFramework)
                 {
                     if (caseFramework.addCaseContainer.Controls.Count > 0 &&

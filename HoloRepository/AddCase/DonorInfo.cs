@@ -74,6 +74,7 @@ namespace HoloRepository.AddCase
                     // need to add error handling for existing donor id
                     MessageBox.Show("duplicate primary key");
                 }
+                MessageBox.Show($"Error: {e.Message}");
             }
         }
 
@@ -88,17 +89,18 @@ namespace HoloRepository.AddCase
                 string sql;
                 if (originalId == donorId)
                 {
-                    sql = "UPDATE donor SET age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath WHERE donor_id = @donorId";
+                    sql = "UPDATE donor SET age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath, timestamp = @time WHERE donor_id = @donorId";
                 }
                 else
                 {
-                    sql = "UPDATE donor SET donor_id = @donorId, age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath WHERE donor_id = @originalId";
+                    sql = "UPDATE donor SET donor_id = @donorId, age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath, timestamp = @time WHERE donor_id = @originalId";
                 }
                 await using var cmd = new NpgsqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@donorId", donorId);
                 cmd.Parameters.AddWithValue("@age", age);
                 cmd.Parameters.AddWithValue("@dod", dod);
                 cmd.Parameters.AddWithValue("@causeOfDeath", causeOfDeath);
+                cmd.Parameters.AddWithValue("@time", DateTime.Now);
                 
                 if (originalId != donorId)
                 {
