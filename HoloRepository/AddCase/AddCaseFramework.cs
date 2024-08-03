@@ -71,14 +71,13 @@ namespace HoloRepository.AddCase
 
         public void LoadControl(UserControl userControl)
         {
-            /*
             addCaseContainer.Controls.Clear();
             userControl.Dock = DockStyle.Fill;
-            addCaseContainer.Controls.Add(userControl);*/
-
+            addCaseContainer.Controls.Add(userControl);
+            /*
             userControl.Dock = DockStyle.Fill;
             addCaseContainer.Controls.Add(userControl);
-            userControl.BringToFront();
+            userControl.BringToFront();*/
 
             if (userControl is CasePage casePage)
             {
@@ -100,7 +99,7 @@ namespace HoloRepository.AddCase
 
             if (mainForm != null)
             {
-                mainForm.OnContentChanged(); // This is for deciding if the microphone should appear
+                mainForm.OnContentChanged("case"); // This is for deciding if the microphone should appear
             }
         }
 
