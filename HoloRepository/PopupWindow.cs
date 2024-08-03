@@ -9,15 +9,23 @@ namespace HoloRepository
     public class PopupWindow : Form
     {
         private OverlayForm overlay;
-        public PopupWindow()
+        public PopupWindow(Form parentForm)
         {
             // For cancellation
             InitializeComponent();
+
+            SetComponents(parentForm);
         }
         public PopupWindow(string text, Form parentForm)
         {
             InitializeComponent();
-            
+
+            PopupTitle.Text = text;
+            SetComponents(parentForm);
+        }
+
+        private void SetComponents(Form parentForm)
+        {
             overlay = new OverlayForm
             {
                 Location = parentForm.Location,
@@ -25,11 +33,11 @@ namespace HoloRepository
             };
             overlay.Show(parentForm);
 
-            PopupTitle.Text = text;
             PopupTitle.Location = new Point(Width / 2 - PopupTitle.Width / 2, 100);
             this.Location = new Point(parentForm.Left + (parentForm.Width - this.Width) / 2, parentForm.Top + (parentForm.Height - this.Height) / 2);
             this.TopMost = true;
         }
+
         private void InitializeComponent()
         {
             PopupTitle = new Label();
@@ -91,7 +99,7 @@ namespace HoloRepository
 
         private RoundedButton PopupYesButton;
         private RoundedButton PopupNoButton;
-        private Label PopupTitle;
+        public Label PopupTitle;
 
         private void PopupYesButton_Click(object sender, EventArgs e)
         {
@@ -108,14 +116,14 @@ namespace HoloRepository
             overlay.Dispose();
         }
 
-        public void HandleYesButtonClick()
+        public virtual void HandleYesButtonClick()
         {
             DialogResult = DialogResult.Yes;
             Close();
             WindowClosed();
         }
 
-        public void HandleNoButtonClick()
+        public virtual void HandleNoButtonClick()
         {
             DialogResult = DialogResult.No;
             Close();

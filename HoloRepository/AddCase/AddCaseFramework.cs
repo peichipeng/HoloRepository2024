@@ -27,7 +27,7 @@ namespace HoloRepository.AddCase
             InitializeComponent();
             donorInfoPage = new DonorInfo();
             LoadControl(donorInfoPage);
-            InitializeTimer();
+            //InitializeTimer();
         }
 
         public AddCaseFramework(string route, string destination, int data)
@@ -38,6 +38,7 @@ namespace HoloRepository.AddCase
             LoadControl(new CasePage(destination, data));
         }
 
+        /*
         private void InitializeTimer()
         {
             timer = new System.Windows.Forms.Timer();
@@ -54,7 +55,7 @@ namespace HoloRepository.AddCase
             {
                 popupWindow.HandleYesButtonClick();
             }
-        }
+        }*/
 
         public void ShowFooterBtns()
         {

@@ -23,7 +23,11 @@ namespace HoloRepository
     public partial class ViewCasesControl : UserControl
     {
         private List<CaseData> cases = new List<CaseData>();
-        private List<CaseData> filteredCases = new List<CaseData>();
+        private List<CaseData> filteredCasesAll = new List<CaseData>();
+        private List<CaseData> filteredCasesByTime = new List<CaseData>();
+
+        private List<ComboBoxItems> comboBoxItems = new List<ComboBoxItems>();
+
         private int totalPages;
         private int selectedPage = 1;
         private int pageSize = 10;
@@ -41,13 +45,22 @@ namespace HoloRepository
 
             tablePanel.Location = new Point((panel.Width - tablePanel.Width) / 2, 130);
 
-            searchBox.AutoSize = false;
-            searchBox.Location = new Point(tablePanel.Location.X, 78);
-            searchBox.Size = new Size(540, addCaseBtn.Height);
+            int secondRowXPosition = tablePanel.Location.X;
+            int secondRowYPosition = 78;
+            int secondRowHeight = addCaseBtn.Height;
+            int space = 10;
 
-            addCaseBtn.Location = new Point(tablePanel.Location.X + tablePanel.Width - addCaseBtn.Width, searchBox.Location.Y);
+            searchBox.AutoSize = false;
+            searchBox.Location = new Point(secondRowXPosition + timeIntervalCmb.Width + space, secondRowYPosition);
+            searchBox.Size = new Size(tablePanel.Width - timeIntervalCmb.Width - addCaseBtn.Width - space * 2, secondRowHeight);
+
+            timeIntervalCmb.Location = new Point(secondRowXPosition, secondRowYPosition);
+
+            addCaseBtn.Location = new Point(tablePanel.Location.X + tablePanel.Width - addCaseBtn.Width, secondRowYPosition);
 
             searchIcon.Location = new Point(searchBox.Location.X + 8, searchBox.Location.Y + 8);
+
+            LoadComboBox();
         }
 
         private void addCaseBtn_Click(object sender, EventArgs e)
@@ -63,20 +76,39 @@ namespace HoloRepository
             LoadCaseData();
         }
 
+        private void LoadComboBox()
+        {
+            timeIntervalCmb.Items.Clear();
+
+            // Initialize data
+            comboBoxItems.Add(new ComboBoxItems() { ID = "01", TimeInterval = "All", Action = ShowAllData });
+            comboBoxItems.Add(new ComboBoxItems() { ID = "02", TimeInterval = "Last 7 days", Action = ShowLast7DaysData });
+            comboBoxItems.Add(new ComboBoxItems() { ID = "03", TimeInterval = "Last 30 days", Action = ShowLast30DaysData });
+
+            timeIntervalCmb.DataSource = comboBoxItems;
+            timeIntervalCmb.ValueMember = "ID";
+            timeIntervalCmb.DisplayMember = "TimeInterval";
+
+            timeIntervalCmb.SelectedValue = "02"; // Select the time range whose ID is 02
+        }
+
         private async void LoadCaseData()
         {
             var dataSource = DataRetrieval.CreateDataSource();
 
-            string queryCases = "SELECT * FROM donor";
+            string queryCases = "SELECT * FROM donor ORDER BY timestamp DESC";
 
             await using (var caseReader = await DataRetrieval.ExecuteQuery(queryCases, dataSource))
             {
                 while (await caseReader.ReadAsync())
                 {
+                    // Data retrieved from donor table
                     int donorId = caseReader.GetInt32(0);
                     int age = caseReader.GetInt32(1);
                     DateTime DOD = caseReader.GetDateTime(2);
                     string causeOfDeath = caseReader.GetString(3);
+                    DateTime accessTime = caseReader.GetDateTime(4);
+
                     string organs = "";
 
                     string queryOrgans = $"SELECT organ_id, organ_name_id FROM organ WHERE donor_id = {donorId} ORDER BY organ_id DESC";
@@ -130,14 +162,13 @@ namespace HoloRepository
                         Age = age,
                         CauseOfDeath = causeOfDeath,
                         Organs = organs,
+                        AccessTime = accessTime,
                     });
                 }
             }
 
-            cases.Reverse(); // Show the recently added case as the first row
-            filteredCases = cases;
-            LoadPagination();
-            LoadCaseTable();
+            filteredCasesAll = cases;
+            ShowLast7DaysData();
         }
 
         private void LoadCaseTable()
@@ -147,7 +178,7 @@ namespace HoloRepository
             int endIndex;
             if (totalPages == selectedPage)
             {
-                endIndex = filteredCases.Count;
+                endIndex = filteredCasesByTime.Count;
             }
             else
             {
@@ -158,14 +189,14 @@ namespace HoloRepository
             {
                 for (int i = (selectedPage - 1) * 10; i < endIndex; i++)
                 {
-                    caseDataBindingSource.Add(filteredCases[i]);
+                    caseDataBindingSource.Add(filteredCasesByTime[i]);
                 }
             }
         }
 
         private void LoadPagination()
         {
-            totalPages = (int)Math.Ceiling((double)filteredCases.Count / pageSize);
+            totalPages = (int)Math.Ceiling((double)filteredCasesByTime.Count / pageSize);
 
             paginationPanel.Controls.Clear();
 
@@ -401,7 +432,9 @@ namespace HoloRepository
                     if (result == DialogResult.Yes)
                     {
                         cases.Remove(caseData);
-                        filteredCases.Remove(caseData);
+                        filteredCasesAll.Remove(caseData);
+                        filteredCasesByTime.Remove(caseData);
+
                         LoadCaseTable();
                         // Code for deleting the case
                         var dbConnection = new DatabaseConnection();
@@ -468,7 +501,7 @@ namespace HoloRepository
 
             if (string.IsNullOrEmpty(keyword) || searchBox.StateCommon.Content.Color1 == Color.Gray)
             {
-                filteredCases = cases;
+                filteredCasesAll = cases;
             }
             else
             {
@@ -477,7 +510,7 @@ namespace HoloRepository
                                     .Select(g => g.Trim())
                                     .Where(g => !string.IsNullOrEmpty(g));
 
-                filteredCases = cases.Where(c =>
+                filteredCasesAll = cases.Where(c =>
                     // For each group, split further by spaces, removing any empty or whitespace-only terms
                     groups.All(group =>
                     {
@@ -497,8 +530,7 @@ namespace HoloRepository
 
                 selectedPage = 1;
             }
-            LoadPagination();
-            LoadCaseTable();
+            HandleComboBoxSelectionChange();
         }
 
         private void caseTable_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -553,6 +585,48 @@ namespace HoloRepository
             selectedPage -= 1;
             LoadCaseTable();
             ChangePaginationLayout();
+        }
+
+        private void ShowAllData()
+        {
+            filteredCasesByTime = filteredCasesAll;
+            LoadPagination();
+            LoadCaseTable();
+        }
+
+        private void ShowLast7DaysData()
+        {
+            FilterCasesByDateRange(DateTime.Now.AddDays(-7));
+            LoadPagination();
+            LoadCaseTable();
+        }
+
+        private void ShowLast30DaysData()
+        {
+            FilterCasesByDateRange(DateTime.Now.AddDays(-30));
+            LoadPagination();
+            LoadCaseTable();
+        }
+
+        private void FilterCasesByDateRange(DateTime startDate)
+        {
+            DateTime now = DateTime.Now;
+            filteredCasesByTime = filteredCasesAll.Where(c => c.AccessTime >= startDate && c.AccessTime <= now).ToList();
+        }
+
+        private void timeIntervalCmb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HandleComboBoxSelectionChange();
+        }
+
+        private void HandleComboBoxSelectionChange()
+        {
+            ComboBoxItems obj = timeIntervalCmb.SelectedItem as ComboBoxItems;
+
+            if (obj != null)
+            {
+                obj.Action.Invoke();
+            }
         }
     }
 }

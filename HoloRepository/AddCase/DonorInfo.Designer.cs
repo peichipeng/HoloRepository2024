@@ -57,6 +57,7 @@
             causeOfDeathTxt.StateCommon.Border.Width = 2;
             causeOfDeathTxt.StateCommon.Content.Color1 = Color.Black;
             causeOfDeathTxt.TabIndex = 33;
+            causeOfDeathTxt.Leave += causeOfDeathTxt_Leave;
             // 
             // ageTxt
             // 
