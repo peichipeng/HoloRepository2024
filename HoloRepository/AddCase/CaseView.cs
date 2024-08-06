@@ -116,7 +116,7 @@ namespace HoloRepository.AddCase
             if (this.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
             {
                 caseFramework.nextBtn.Text = "Add";
-                caseFramework.LoadControl(new AddCaseControl(donorId));
+                caseFramework.LoadControl(new AddCaseControl(12));
             }
         }
     }

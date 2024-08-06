@@ -52,15 +52,14 @@
             // 
             // UserGuideControl
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(pictureBox);
             Controls.Add(btnUpload);
             Margin = new Padding(6);
             Name = "UserGuideControl";
-            Size = new Size(1425, 957);
-            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            Size = new Size(907, 598);
             ResumeLayout(false);
         }
 
