@@ -35,8 +35,6 @@
             Title = new Label();
             btnUpdateOrgan = new Button();
             button1 = new Button();
-            voiceControl1 = new VoiceControl();
-            btnLaunchEOSUtility = new Button();
             SuspendLayout();
             // 
             // userGuideBtn
@@ -46,10 +44,10 @@
             userGuideBtn.BorderRadius = 15;
             userGuideBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             userGuideBtn.ForeColor = Color.Black;
-            userGuideBtn.Location = new Point(323, 323);
+            userGuideBtn.Location = new Point(533, 534);
             userGuideBtn.Margin = new Padding(2, 2, 14, 2);
             userGuideBtn.Name = "userGuideBtn";
-            userGuideBtn.Size = new Size(201, 36);
+            userGuideBtn.Size = new Size(263, 55);
             userGuideBtn.TabIndex = 82;
             userGuideBtn.Text = "User Guide";
             userGuideBtn.UseVisualStyleBackColor = false;
@@ -62,10 +60,10 @@
             organArchiveBtn.BorderRadius = 15;
             organArchiveBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             organArchiveBtn.ForeColor = Color.White;
-            organArchiveBtn.Location = new Point(323, 273);
+            organArchiveBtn.Location = new Point(533, 455);
             organArchiveBtn.Margin = new Padding(2, 2, 14, 2);
             organArchiveBtn.Name = "organArchiveBtn";
-            organArchiveBtn.Size = new Size(201, 36);
+            organArchiveBtn.Size = new Size(263, 55);
             organArchiveBtn.TabIndex = 81;
             organArchiveBtn.Text = "Organ Archive";
             organArchiveBtn.UseVisualStyleBackColor = false;
@@ -78,10 +76,10 @@
             viewCasesBtn.BorderRadius = 15;
             viewCasesBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             viewCasesBtn.ForeColor = Color.White;
-            viewCasesBtn.Location = new Point(323, 225);
+            viewCasesBtn.Location = new Point(533, 373);
             viewCasesBtn.Margin = new Padding(2, 2, 14, 2);
             viewCasesBtn.Name = "viewCasesBtn";
-            viewCasesBtn.Size = new Size(201, 36);
+            viewCasesBtn.Size = new Size(263, 55);
             viewCasesBtn.TabIndex = 80;
             viewCasesBtn.Text = "View Cases";
             viewCasesBtn.UseVisualStyleBackColor = false;
@@ -94,10 +92,10 @@
             addCaseBtn.BorderRadius = 15;
             addCaseBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             addCaseBtn.ForeColor = Color.White;
-            addCaseBtn.Location = new Point(323, 177);
+            addCaseBtn.Location = new Point(533, 296);
             addCaseBtn.Margin = new Padding(2, 2, 14, 2);
             addCaseBtn.Name = "addCaseBtn";
-            addCaseBtn.Size = new Size(201, 36);
+            addCaseBtn.Size = new Size(263, 55);
             addCaseBtn.TabIndex = 79;
             addCaseBtn.Text = " Add a Case";
             addCaseBtn.UseVisualStyleBackColor = false;
@@ -108,7 +106,7 @@
             Title.Anchor = AnchorStyles.None;
             Title.AutoSize = true;
             Title.Font = new Font("Tahoma", 42F, FontStyle.Bold, GraphicsUnit.Point);
-            Title.Location = new Point(192, 58);
+            Title.Location = new Point(319, 138);
             Title.Margin = new Padding(5, 0, 5, 0);
             Title.Name = "Title";
             Title.Size = new Size(691, 101);
@@ -137,30 +135,11 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // voiceControl1
-            // 
-            voiceControl1.BackColor = Color.Transparent;
-            voiceControl1.Location = new Point(56, 197);
-            voiceControl1.Name = "voiceControl1";
-            voiceControl1.Size = new Size(332, 115);
-            voiceControl1.TabIndex = 85;
-            // 
-            // btnLaunchEOSUtility
-            // 
-            btnLaunchEOSUtility.Location = new Point(1008, 352);
-            btnLaunchEOSUtility.Name = "btnLaunchEOSUtility";
-            btnLaunchEOSUtility.Size = new Size(112, 34);
-            btnLaunchEOSUtility.TabIndex = 86;
-            btnLaunchEOSUtility.Text = "button2";
-            btnLaunchEOSUtility.UseVisualStyleBackColor = true;
-            btnLaunchEOSUtility.Click += button2_Click;
-            // 
             // HomePageControl
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(btnLaunchEOSUtility);
-            Controls.Add(voiceControl1);
+            BackColor = Color.White;
             Controls.Add(button1);
             Controls.Add(btnUpdateOrgan);
             Controls.Add(userGuideBtn);
@@ -181,10 +160,9 @@
         private RoundedButton organArchiveBtn;
         private RoundedButton viewCasesBtn;
         private RoundedButton addCaseBtn;
+        private Button tempBtn;
         private Label Title;
         private Button btnUpdateOrgan;
         private Button button1;
-        private VoiceControl voiceControl1;
-        private Button btnLaunchEOSUtility;
     }
 }
