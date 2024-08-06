@@ -51,9 +51,9 @@ namespace HoloRepository
             {
                 string query = "SELECT dicom_id, image_path, additional_info FROM sliceimage WHERE organ_id = @organId";
                 var parameters = new Dictionary<string, object>
-                {
-                    { "@organId", organId.Value }
-                };
+        {
+            { "@organId", organId.Value }
+        };
 
                 try
                 {
@@ -65,18 +65,20 @@ namespace HoloRepository
                             string imagePath = reader.GetString(1);
                             string additionalInfo = reader.GetString(2);
 
-                            // Load images (assuming imagePath points to a valid image file)
+                            // Load pictures
                             Image organSlice = Image.FromFile(imagePath);
-                            Image dicomImage = LoadDicomImage(dicomId); // Implement this method to load DICOM image
+                            Image dicomImage = LoadDicomImage(dicomId);
+
+                            string organSliceTitle = Path.GetFileName(imagePath);
 
                             var checkTableContent = new CheckTableContent();
                             checkTableContent.SetImageInfo(organSlice, dicomImage, additionalInfo);
+                            checkTableContent.SetTitle(organSliceTitle);
+
                             checkTableContents.Add(checkTableContent);
                             flowLayoutPanel1.Controls.Add(checkTableContent);
 
-                            // Subscribe to the CheckedChanged event of each CheckBox
-                            checkTableContent.SelectBox.CheckedChanged += CheckTableContent_SelectBox_CheckedChanged;
-                        }
+                            checkTableContent.SelectBox.CheckedChanged += CheckTableContent_SelectBox_CheckedChanged;                        }
                     }
                 }
                 catch (Exception ex)
@@ -85,6 +87,7 @@ namespace HoloRepository
                 }
             }
         }
+
 
         private void CheckTableContent_SelectBox_CheckedChanged(object sender, EventArgs e)
         {

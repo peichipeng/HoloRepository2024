@@ -36,11 +36,6 @@ namespace HoloRepository
                 if (organ.organName == organName)
                 {
                     Add3DPanel(organ.donorId, organ.organId);
-                    if (organ.organName == "Kidney")
-                    {
-                        Add3DP(organ.donorId, organ.organId);
-                        Add3DPanel(organ.donorId, organ.organId);
-                    }
                 }
             }
             UpdatePanelVisibility(); // Update visibility after adding panels

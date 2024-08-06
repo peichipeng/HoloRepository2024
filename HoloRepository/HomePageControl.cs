@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,13 +64,18 @@ namespace HoloRepository
 
         private void btnUpdateOrgan_Click(object sender, EventArgs e)
         {
-            LoadControl(new AddCaseControl(12, 33));
+            LoadControl(new AddCaseControl(12, 51));
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             _3DModelFormWindow modelFormWindow = new _3DModelFormWindow(33);
             modelFormWindow.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

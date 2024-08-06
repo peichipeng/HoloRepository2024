@@ -153,5 +153,27 @@ namespace HoloRepository
             return CauseOD.Text;
         }
 
+        private void EditButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var parentForm = this.FindForm();
+
+                if (parentForm != null)
+                {
+                    parentForm.Controls.Clear();
+
+                    var addCaseControl = new AddCaseControl(donorId, organId);
+
+                    parentForm.Controls.Add(addCaseControl);
+
+                    addCaseControl.Dock = DockStyle.Fill;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error occurs when clicking update：{ex.Message}");
+            }
+        }
     }
 }

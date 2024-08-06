@@ -17,7 +17,7 @@ namespace HoloRepository
     public partial class AddCaseControl : UserControl
     {
         private List<string> imagePaths = new List<string>();
-        private List<OrganSlicePanel> organSlicePanels = new List<OrganSlicePanel>();
+        public List<OrganSlicePanel> organSlicePanels = new List<OrganSlicePanel>();
         private int selectedIndex;
 
         private List<string> organData = new List<string>();
@@ -130,6 +130,11 @@ namespace HoloRepository
 
         private void ImportDICOMButton_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(organNameTextBox.Text))
+            {
+                MessageBox.Show("Please enter an organ name before importing DICOM files.");
+                return;
+            }
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
@@ -170,7 +175,15 @@ namespace HoloRepository
 
         private void AddOrganSlicesButton_Click(object sender, EventArgs e)
         {
-            using (AddOrganSlice addOrganSlice = new())
+            if (string.IsNullOrWhiteSpace(organNameTextBox.Text))
+            {
+                MessageBox.Show("Please enter an organ name before importing DICOM files.");
+                return;
+            }
+
+            int sliceIndex = organSlicePanels.Count + 1;
+
+            using (AddOrganSlice addOrganSlice = new(donorId, organNameTextBox.Text, sliceIndex))
             {
                 addOrganSlice.StartPosition = FormStartPosition.CenterParent;
 
@@ -199,6 +212,7 @@ namespace HoloRepository
 
         private void DisplayNewOrganSlice(string imagePath, Image image, Image OrganSliceImage, string description)
         {
+            int currentIndex = organSlicePanels.Count + 1;
             // Create a new OrganSlicePanel
             OrganSlicePanel organSlicePanel = new OrganSlicePanel
             {
@@ -208,15 +222,17 @@ namespace HoloRepository
                 Margin = new Padding(10),
                 SelectedIndex = selectedIndex,
                 Description = description,
-                OrganSlicePath = imagePath
+                OrganSlicePath = imagePath,
+                OrderIndex = currentIndex
             };
 
             // Set image and description
             organSlicePanel.SetOrganSlice(OrganSliceImage, imagePath);
             organSlicePanel.SetCTImage(image);
             organSlicePanel.SetDescription(description);
+            organSlicePanel.SetOrganSliceLabel($"{donorId}-{organNameTextBox.Text}-{currentIndex:D4}-{DateTime.Now:yyyyMMdd}");
 
-            int fixedControlsCount = 3;
+            int fixedControlsCount = 4;
 
             organSlicesPanel.Controls.Add(organSlicePanel);
             organSlicesPanel.Controls.SetChildIndex(organSlicePanel, organSlicesPanel.Controls.Count - fixedControlsCount - 1);
@@ -360,143 +376,166 @@ namespace HoloRepository
                 using (var connection = dbConnection.GetConnection())
                 using (var transaction = connection.BeginTransaction())
                 {
+                    int organId;
+                    bool isUpdate = false;
+
+                    // Check if the organ already exists using donorId and organId
+                    if (this.organId.HasValue)
+                    {
+                        string checkOrganQuery = "SELECT organ_id FROM organ WHERE donor_id = @donorId AND organ_id = @organId";
+                        using (var checkCommand = new NpgsqlCommand(checkOrganQuery, connection))
+                        {
+                            checkCommand.Parameters.AddWithValue("@donorId", donorId);
+                            checkCommand.Parameters.AddWithValue("@organId", this.organId.Value);
+                            object result = checkCommand.ExecuteScalar();
+                            if (result != null)
+                            {
+                                organId = Convert.ToInt32(result);
+                                isUpdate = true;
+                            }
+                            else
+                            {
+                                // Insert into organ table
+                                string insertOrganQuery = "INSERT INTO organ (donor_id, organ_name_id) VALUES (@donorId, @organNameId) RETURNING organ_id";
+                                using (var command = new NpgsqlCommand(insertOrganQuery, connection))
+                                {
+                                    command.Parameters.AddWithValue("@donorId", donorId);
+                                    command.Parameters.AddWithValue("@organNameId", organNameId);
+                                    organId = (int)command.ExecuteScalar();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Insert into organ table
+                        string insertOrganQuery = "INSERT INTO organ (donor_id, organ_name_id) VALUES (@donorId, @organNameId) RETURNING organ_id";
+                        using (var command = new NpgsqlCommand(insertOrganQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@donorId", donorId);
+                            command.Parameters.AddWithValue("@organNameId", organNameId);
+                            organId = (int)command.ExecuteScalar();
+                        }
+                    }
+
+                    if (isUpdate)
+                    {
+                        // Delete existing tags
+                        string deleteTagQuery = "DELETE FROM organtag WHERE organ_id = @organId";
+                        using (var deleteTagCommand = new NpgsqlCommand(deleteTagQuery, connection))
+                        {
+                            deleteTagCommand.Parameters.AddWithValue("@organId", organId);
+                            deleteTagCommand.ExecuteNonQuery();
+                        }
+
+                        // Delete existing DICOM files and slices
+                        string deleteSliceQuery = "DELETE FROM sliceimage WHERE organ_id = @organId";
+                        using (var deleteSliceCommand = new NpgsqlCommand(deleteSliceQuery, connection))
+                        {
+                            deleteSliceCommand.Parameters.AddWithValue("@organId", organId);
+                            deleteSliceCommand.ExecuteNonQuery();
+                        }
+
+                        string deleteDICOMQuery = "DELETE FROM dicomfile WHERE organ_id = @organId";
+                        using (var deleteDICOMCommand = new NpgsqlCommand(deleteDICOMQuery, connection))
+                        {
+                            deleteDICOMCommand.Parameters.AddWithValue("@organId", organId);
+                            deleteDICOMCommand.ExecuteNonQuery();
+                        }
+
+                        string delete3DQuery = "DELETE FROM model3d WHERE organ_id = @organId";
+                        using (var delete3DCommand = new NpgsqlCommand(delete3DQuery, connection))
+                        {
+                            delete3DCommand.Parameters.AddWithValue("@organId", organId);
+                            delete3DCommand.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Insert into organtag table
+                    string insertTagQuery = "INSERT INTO organtag (organ_id, tag_id) VALUES (@organId, @tagId)";
+                    string tagPreview = string.Join(", ", selectedTags);
+                    Debug.WriteLine($"Selected tags: {tagPreview}");
+                    foreach (var tagId in selectedTags)
+                    {
+                        using (var command = new NpgsqlCommand(insertTagQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@organId", organId);
+                            command.Parameters.AddWithValue("@tagId", tagId);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Insert into dicomfile table
+                    string insertDICOMQuery = "INSERT INTO dicomfile (organ_id, dicom_path) VALUES (@organId, @dicomPath) RETURNING dicom_id";
+                    Dictionary<string, int> dicomIdMap = new Dictionary<string, int>();
+                    foreach (var dicomPath in DICOMPath)
+                    {
+                        int dicomId;
+                        using (var command = new NpgsqlCommand(insertDICOMQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@organId", organId);
+                            command.Parameters.AddWithValue("@dicomPath", dicomPath);
+                            dicomId = (int)command.ExecuteScalar();
+                        }
+                        dicomIdMap[dicomPath] = dicomId;
+                    }
+
+                    List<string> insertedPaths = new List<string>();
+
+                    // Insert into sliceimage
+                    string insertSliceImageQuery = "INSERT INTO sliceimage (organ_id, dicom_id, additional_info, image_path) VALUES (@organId, @dicomId, @Description, @slicePath)";
+                    foreach (var panel in organSlicePanels)
+                    {
+                        if (dicomIdMap.TryGetValue(imagePaths[panel.SelectedIndex], out int dicomId))
+                        {
+                            // Assume the panel already contains the correct new path
+                            using (var command = new NpgsqlCommand(insertSliceImageQuery, connection))
+                            {
+                                command.Parameters.AddWithValue("@organId", organId);
+                                command.Parameters.AddWithValue("@dicomId", dicomId);
+                                command.Parameters.AddWithValue("@Description", panel.Description);
+                                command.Parameters.AddWithValue("@slicePath", panel.OrganSlicePath); // Use updated path
+                                command.ExecuteNonQuery();
+
+                                insertedPaths.Add(panel.OrganSlicePath);
+                            }
+                        }
+                    }
+
                     try
                     {
-                        int organId;
-                        bool isUpdate = false;
-
-                        // Check if the organ already exists using donorId and organId
-                        if (this.organId.HasValue)
+                        foreach (string insertedPath in insertedPaths)
                         {
-                            string checkOrganQuery = "SELECT organ_id FROM organ WHERE donor_id = @donorId AND organ_id = @organId";
-                            using (var checkCommand = new NpgsqlCommand(checkOrganQuery, connection))
+                            string directoryPath = Path.GetDirectoryName(insertedPath);
+
+                            if (!string.IsNullOrEmpty(directoryPath))
                             {
-                                checkCommand.Parameters.AddWithValue("@donorId", donorId);
-                                checkCommand.Parameters.AddWithValue("@organId", this.organId.Value);
-                                object result = checkCommand.ExecuteScalar();
-                                if (result != null)
+                                // Get all files in the directory
+                                string[] allFilesInDirectory = Directory.GetFiles(directoryPath);
+
+                                foreach (string filePath in allFilesInDirectory)
                                 {
-                                    organId = Convert.ToInt32(result);
-                                    isUpdate = true;
-                                }
-                                else
-                                {
-                                    // Insert into organ table
-                                    string insertOrganQuery = "INSERT INTO organ (donor_id, organ_name_id) VALUES (@donorId, @organNameId) RETURNING organ_id";
-                                    using (var command = new NpgsqlCommand(insertOrganQuery, connection))
+                                    // If the file is not in the inserted paths list, delete it
+                                    if (!insertedPaths.Contains(filePath))
                                     {
-                                        command.Parameters.AddWithValue("@donorId", donorId);
-                                        command.Parameters.AddWithValue("@organNameId", organNameId);
-                                        organId = (int)command.ExecuteScalar();
+                                        File.Delete(filePath);
+                                        Debug.WriteLine($"Deleted unused file: {filePath}");
                                     }
                                 }
                             }
                         }
-                        else
-                        {
-                            // Insert into organ table
-                            string insertOrganQuery = "INSERT INTO organ (donor_id, organ_name_id) VALUES (@donorId, @organNameId) RETURNING organ_id";
-                            using (var command = new NpgsqlCommand(insertOrganQuery, connection))
-                            {
-                                command.Parameters.AddWithValue("@donorId", donorId);
-                                command.Parameters.AddWithValue("@organNameId", organNameId);
-                                organId = (int)command.ExecuteScalar();
-                            }
-                        }
-
-                        if (isUpdate)
-                        {
-                            // Delete existing tags
-                            string deleteTagQuery = "DELETE FROM organtag WHERE organ_id = @organId";
-                            using (var deleteTagCommand = new NpgsqlCommand(deleteTagQuery, connection))
-                            {
-                                deleteTagCommand.Parameters.AddWithValue("@organId", organId);
-                                int affectedRows = deleteTagCommand.ExecuteNonQuery();
-                            }
-
-                            // Delete existing DICOM files and slices
-                            string deleteSliceQuery = "DELETE FROM sliceimage WHERE organ_id = @organId";
-                            using (var deleteSliceCommand = new NpgsqlCommand(deleteSliceQuery, connection))
-                            {
-                                deleteSliceCommand.Parameters.AddWithValue("@organId", organId);
-                                deleteSliceCommand.ExecuteNonQuery();
-                            }
-
-                            string deleteDICOMQuery = "DELETE FROM dicomfile WHERE organ_id = @organId";
-                            using (var deleteDICOMCommand = new NpgsqlCommand(deleteDICOMQuery, connection))
-                            {
-                                deleteDICOMCommand.Parameters.AddWithValue("@organId", organId);
-                                deleteDICOMCommand.ExecuteNonQuery();
-                            }
-
-                            string delete3DQuery = "DELETE FROM model3D WHERE organ_id = @organId";
-                            using (var deleteDICOMCommand = new NpgsqlCommand(delete3DQuery, connection))
-                            {
-                                deleteDICOMCommand.Parameters.AddWithValue("@organId", organId);
-                                deleteDICOMCommand.ExecuteNonQuery();
-                            }
-                        }
-
-                        // Insert into organtag table
-                        string insertTagQuery = "INSERT INTO organtag (organ_id, tag_id) VALUES (@organId, @tagId)";
-                        string tagPreview = string.Join(", ", selectedTags);
-                        Debug.WriteLine($"Selected tags: {tagPreview}");
-                        foreach (var tagId in selectedTags)
-                        {
-                            using (var command = new NpgsqlCommand(insertTagQuery, connection))
-                            {
-                                command.Parameters.AddWithValue("@organId", organId);
-                                command.Parameters.AddWithValue("@tagId", tagId);
-                                command.ExecuteNonQuery();
-                            }
-                        }
-
-                        // Insert into dicomfile table
-                        string insertDICOMQuery = "INSERT INTO dicomfile (organ_id, dicom_path) VALUES (@organId, @dicomPath) RETURNING dicom_id";
-                        Dictionary<string, int> dicomIdMap = new Dictionary<string, int>();
-                        foreach (var dicomPath in DICOMPath)
-                        {
-                            int dicomId;
-                            using (var command = new NpgsqlCommand(insertDICOMQuery, connection))
-                            {
-                                command.Parameters.AddWithValue("@organId", organId);
-                                command.Parameters.AddWithValue("@dicomPath", dicomPath);
-                                dicomId = (int)command.ExecuteScalar();
-                            }
-                            dicomIdMap[dicomPath] = dicomId;
-                        }
-
-                        // Insert into sliceimage
-                        string insertSliceImageQuery = "INSERT INTO sliceimage (organ_id, dicom_id, additional_info, image_path) VALUES (@organId, @dicomId, @Description, @slicePath)";
-                        foreach (var panel in organSlicePanels)
-                        {
-                            if (dicomIdMap.TryGetValue(imagePaths[panel.SelectedIndex], out int dicomId))
-                            {
-                                using (var command = new NpgsqlCommand(insertSliceImageQuery, connection))
-                                {
-                                    command.Parameters.AddWithValue("@organId", organId);
-                                    command.Parameters.AddWithValue("@dicomId", dicomId);
-                                    command.Parameters.AddWithValue("@Description", panel.Description);
-                                    command.Parameters.AddWithValue("@slicePath", panel.OrganSlicePath);
-                                    command.ExecuteNonQuery();
-                                }
-                            }
-                        }
-
-                        // Check Toggle state and insert into model3d table if needed
-                        if (Toggle.IsOn)
-                        {
-                            Show3DModelFormWindow(organId);
-                        }
-
-                        // Commit transaction
-                        transaction.Commit();
                     }
                     catch (Exception ex)
                     {
-                        // If exception, roll back
-                        transaction.Rollback();
-                        MessageBox.Show("Error saving data: " + ex.Message);
+                        MessageBox.Show("Error deleting unused files: " + ex.Message);
+                    }
+
+                    // Commit transaction
+                    transaction.Commit();
+
+                    if (Toggle.IsOn)
+                    {
+                        Show3DModelFormWindow(organId);
                     }
                 }
             }
@@ -505,6 +544,7 @@ namespace HoloRepository
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
 
         private void Show3DModelFormWindow(int organId)
         {
@@ -632,12 +672,29 @@ namespace HoloRepository
 
                                     if (dicomIdToPathMap.TryGetValue(dicomId, out string dicomPath))
                                     {
-                                        Image sliceImage = Image.FromFile(sliceImagePath);
-                                        Image dicomImage = Image.FromFile(dicomPath);
+                                        try
+                                        {
+                                            // Load DICOM pictures
+                                            using (FileStream dicomStream = new FileStream(dicomPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                                            {
+                                                Image dicomImage = Image.FromStream(dicomStream).Clone() as Image;
 
-                                        selectedIndex = imagePaths.IndexOf(dicomPath);
-                                        DisplayNewOrganSlice(sliceImagePath, dicomImage, sliceImage, additionalInfo);
-                                        Debug.WriteLine($"Displayed sliceImagePath: {sliceImagePath}, dicomId: {dicomId}, additionalInfo: {additionalInfo}");
+                                                // Load slice pictures
+                                                using (FileStream sliceStream = new FileStream(sliceImagePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                                                {
+                                                    Image sliceImage = Image.FromStream(sliceStream).Clone() as Image;
+
+                                                    // Display in the control
+                                                    DisplayNewOrganSlice(sliceImagePath, dicomImage, sliceImage, additionalInfo);
+                                                    Debug.WriteLine($"Displayed sliceImagePath: {sliceImagePath}, dicomId: {dicomId}, additionalInfo: {additionalInfo}");
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            // Error handling
+                                            Debug.WriteLine($"Error loading image: {ex.Message}");
+                                        }
                                     }
                                     else
                                     {
@@ -683,5 +740,25 @@ namespace HoloRepository
                 MessageBox.Show("Error loading organ data: " + ex.Message);
             }
         }
+
+        public int GetDonorID()
+        {
+            return donorId;
+        }
+
+        public string GetOrganName()
+        {
+            return organNameTextBox.Text;
+        }
+
+        public void RemoveOrganSlicePanel(OrganSlicePanel panel)
+        {
+            if (organSlicePanels.Contains(panel))
+            {
+                organSlicePanels.Remove(panel);
+                Debug.WriteLine($"Removed OrganSlicePanel with path: {panel.OrganSlicePath}");
+            }
+        }
+
     }
 }

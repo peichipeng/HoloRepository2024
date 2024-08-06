@@ -97,6 +97,7 @@
             updateToolStripMenuItem.Name = "updateToolStripMenuItem";
             updateToolStripMenuItem.Size = new Size(152, 32);
             updateToolStripMenuItem.Text = "Update";
+            updateToolStripMenuItem.Click += UpdateToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 

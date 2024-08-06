@@ -114,6 +114,7 @@
             // 
             EditButton.Anchor = AnchorStyles.Top;
             EditButton.BackColor = Color.Transparent;
+            EditButton.Cursor = Cursors.Hand;
             EditButton.Image = (Image)resources.GetObject("EditButton.Image");
             EditButton.Location = new Point(991, 18);
             EditButton.Margin = new Padding(5);
@@ -122,6 +123,7 @@
             EditButton.SizeMode = PictureBoxSizeMode.Zoom;
             EditButton.TabIndex = 77;
             EditButton.TabStop = false;
+            EditButton.Click += EditButton_Click;
             // 
             // BinButton
             // 

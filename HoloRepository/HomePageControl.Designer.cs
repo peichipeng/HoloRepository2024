@@ -35,6 +35,8 @@
             Title = new Label();
             btnUpdateOrgan = new Button();
             button1 = new Button();
+            voiceControl1 = new VoiceControl();
+            btnLaunchEOSUtility = new Button();
             SuspendLayout();
             // 
             // userGuideBtn
@@ -135,10 +137,30 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
+            // voiceControl1
+            // 
+            voiceControl1.BackColor = Color.Transparent;
+            voiceControl1.Location = new Point(56, 197);
+            voiceControl1.Name = "voiceControl1";
+            voiceControl1.Size = new Size(332, 115);
+            voiceControl1.TabIndex = 85;
+            // 
+            // btnLaunchEOSUtility
+            // 
+            btnLaunchEOSUtility.Location = new Point(1008, 352);
+            btnLaunchEOSUtility.Name = "btnLaunchEOSUtility";
+            btnLaunchEOSUtility.Size = new Size(112, 34);
+            btnLaunchEOSUtility.TabIndex = 86;
+            btnLaunchEOSUtility.Text = "button2";
+            btnLaunchEOSUtility.UseVisualStyleBackColor = true;
+            btnLaunchEOSUtility.Click += button2_Click;
+            // 
             // HomePageControl
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(btnLaunchEOSUtility);
+            Controls.Add(voiceControl1);
             Controls.Add(button1);
             Controls.Add(btnUpdateOrgan);
             Controls.Add(userGuideBtn);
@@ -162,5 +184,7 @@
         private Label Title;
         private Button btnUpdateOrgan;
         private Button button1;
+        private VoiceControl voiceControl1;
+        private Button btnLaunchEOSUtility;
     }
 }

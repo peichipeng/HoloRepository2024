@@ -7,7 +7,6 @@ namespace HoloRepository
 {
     public partial class OrganSlicePanel : UserControl
     {
-        private PictureBox OrganSliceBox;
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox textBox;
         private Label AdditionalInfoLabel;
         private Label MatchedSliceLabel;
@@ -21,6 +20,7 @@ namespace HoloRepository
         public int DicomId { get; set; }
         public string Description { get; set; }
         public string OrganSlicePath { get; set; }
+        public int OrderIndex { get; set; }
 
         public int SelectedIndex
         {
@@ -81,7 +81,7 @@ namespace HoloRepository
             textBox.Multiline = true;
             textBox.Name = "textBox";
             textBox.ReadOnly = true;
-            textBox.Size = new Size(406, 127);
+            textBox.Size = new Size(427, 127);
             textBox.StateActive.Border.Color1 = Color.Silver;
             textBox.StateActive.Border.Color2 = Color.Silver;
             textBox.StateActive.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
@@ -114,7 +114,7 @@ namespace HoloRepository
             // 
             CTBox.Location = new Point(813, 290);
             CTBox.Name = "CTBox";
-            CTBox.Size = new Size(406, 257);
+            CTBox.Size = new Size(427, 257);
             CTBox.SizeMode = PictureBoxSizeMode.Zoom;
             CTBox.TabIndex = 6;
             CTBox.TabStop = false;
@@ -134,7 +134,7 @@ namespace HoloRepository
             EditButton.Anchor = AnchorStyles.Top;
             EditButton.BackColor = Color.Transparent;
             EditButton.Image = (Image)resources.GetObject("EditButton.Image");
-            EditButton.Location = new Point(1130, 23);
+            EditButton.Location = new Point(1158, 23);
             EditButton.Margin = new Padding(5);
             EditButton.Name = "EditButton";
             EditButton.Size = new Size(30, 30);
@@ -148,7 +148,7 @@ namespace HoloRepository
             BinButton.Anchor = AnchorStyles.Top;
             BinButton.BackColor = Color.Transparent;
             BinButton.Image = (Image)resources.GetObject("BinButton.Image");
-            BinButton.Location = new Point(1189, 23);
+            BinButton.Location = new Point(1210, 23);
             BinButton.Margin = new Padding(5);
             BinButton.Name = "BinButton";
             BinButton.Size = new Size(30, 30);
@@ -187,12 +187,22 @@ namespace HoloRepository
 
         public void SetOrganSlice(Image image, string imagePath)
         {
+            if (OrganSliceBox.Image != null)
+            {
+                OrganSliceBox.Image.Dispose();
+            }
+
             OrganSliceBox.Image = image;
             OrganSlicePath = imagePath;
         }
 
         public void SetCTImage(Image image)
         {
+            if (CTBox.Image != null)
+            {
+                CTBox.Image.Dispose();
+            }
+
             CTBox.Image = image;
         }
 
@@ -200,6 +210,11 @@ namespace HoloRepository
         {
             textBox.Text = description;
             Description = description;
+        }
+
+        public void SetOrganSliceLabel(string fileName)
+        {
+            OrganSliceLabel.Text = fileName;
         }
 
         private void BinButton_Click(object sender, EventArgs e)
@@ -235,9 +250,38 @@ namespace HoloRepository
 
                 if (result == DialogResult.Yes)
                 {
-                    // Hanlde delete event: remove the current organSlicePanel
-                    this.Parent.Controls.Remove(this);
+                    this.BeginInvoke((MethodInvoker)delegate
+                    {
+                        if (this.Parent != null)
+                        {
+                            AddCaseControl addCaseControl = FindParentControlOfType<AddCaseControl>();
+                            if (addCaseControl != null)
+                            {
+                                // Remove the current OrganSlicePanel
+                                addCaseControl.RemoveOrganSlicePanel(this);
+                                this.Parent.Controls.Remove(this);
+
+                                // Update OrganSliceLabels for remaining panels
+                                UpdateOrganSliceLabels(addCaseControl);
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Parent is null during removal.");
+                        }
+                    });
                 }
+            }
+        }
+
+        private void UpdateOrganSliceLabels(AddCaseControl addCaseControl)
+        {
+            for (int i = 0; i < addCaseControl.organSlicePanels.Count; i++)
+            {
+                var panel = addCaseControl.organSlicePanels[i];
+                int currentIndex = i + 1; // 1-based index
+                string newFileName = $"{addCaseControl.GetDonorID()}-{addCaseControl.GetOrganName()}-{currentIndex:D4}-{DateTime.Now:yyyyMMdd}.jpg";
+                panel.SetOrganSliceLabel(newFileName);
             }
         }
 
@@ -248,7 +292,7 @@ namespace HoloRepository
             {
                 return;
             }
-            using (AddOrganSlice changeOrganSlice = new AddOrganSlice())
+            using (AddOrganSlice changeOrganSlice = new AddOrganSlice(addCaseControl.GetDonorID(), addCaseControl.GetOrganName(), this.OrderIndex))
             {
                 changeOrganSlice.StartPosition = FormStartPosition.CenterParent;
 
@@ -270,6 +314,7 @@ namespace HoloRepository
 
                 changeOrganSlice.SetFormTitle("Change organ slice");
 
+                // Listen for OrganSliceUpdated event and update image name label
                 changeOrganSlice.OrganSliceUpdated += (organSliceImage, selectedImage, description, selectedIndex) =>
                 {
                     SetCTImage(selectedImage);
@@ -277,6 +322,7 @@ namespace HoloRepository
                     SetDescription(description);
                     SelectedIndex = selectedIndex;
                 };
+
 
                 changeOrganSlice.ShowDialog();
             }
@@ -296,5 +342,6 @@ namespace HoloRepository
             return null;
         }
 
+        public PictureBox OrganSliceBox;
     }
 }
