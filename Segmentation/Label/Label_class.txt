@@ -1,0 +1,4 @@
+Background: 0
+Cortex: 200
+Medulla/Pyramids: 100
+Pelvis: -100
