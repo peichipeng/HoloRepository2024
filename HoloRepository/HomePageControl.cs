@@ -67,13 +67,12 @@ namespace HoloRepository
             LoadControl(new AddCaseControl(12, 51));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            _3DModelFormWindow modelFormWindow = new _3DModelFormWindow(33);
-            modelFormWindow.Show();
+            LoadControl(new MainInterFaceControl(this, 123456, 18));
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void HomePageControl_Load(object sender, EventArgs e)
         {
 
         }

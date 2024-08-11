@@ -18,6 +18,7 @@ namespace HoloRepository
         private int donorId;
         private string organName;
         private int sliceIndex;
+        private string organSide;
 
         private List<Image> imageList = new List<Image>();
         public List<Image> ImageList => imageList;
@@ -35,7 +36,7 @@ namespace HoloRepository
         public string OrganSliceImagePath { get; private set; }
 
 
-        public AddOrganSlice(int donorId, string organName, int sliceIndex)
+        public AddOrganSlice(int donorId, string organName, int sliceIndex, string organSide)
         {
             InitializeComponent();
             InitializeOverlayPanel();
@@ -219,7 +220,7 @@ namespace HoloRepository
         {
             if (OrganSlicePicture.Image == null)
             {
-                MessageBox.Show("请先选择一张图片。");
+                MessageBox.Show("Please select an organ slice first");
                 return;
             }
 
@@ -248,6 +249,15 @@ namespace HoloRepository
                     Directory.CreateDirectory(organDirectory);
                 }
 
+                if (!string.IsNullOrEmpty(organSide))
+                {
+                    organDirectory = Path.Combine(organDirectory, organSide);
+                    if (!Directory.Exists(organDirectory))
+                    {
+                        Directory.CreateDirectory(organDirectory);
+                    }
+                }
+
                 // Define the new file name
                 string newFileName = $"{donorId}-{organName}-{sliceIndex:D4}-{DateTime.Now:yyyyMMdd}.jpg";
                 string destinationFilePath = Path.Combine(organDirectory, newFileName);
@@ -256,7 +266,7 @@ namespace HoloRepository
                 if (!string.IsNullOrEmpty(OrganSliceImagePath))
                 {
                     File.Copy(OrganSliceImagePath, destinationFilePath, true); // true to overwrite if exists
-                    
+
                     string relativePath = Path.GetRelativePath(baseDirectory, destinationFilePath);
                     OrganSliceImagePath = relativePath; // Update to relative path
                 }
@@ -271,7 +281,6 @@ namespace HoloRepository
                 MessageBox.Show($"Error when saving the picture: {ex.Message}");
             }
         }
-
 
         private void OrganSlicePicture_Click(object sender, EventArgs e)
         {

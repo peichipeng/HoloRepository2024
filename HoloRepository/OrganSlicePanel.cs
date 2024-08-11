@@ -22,6 +22,17 @@ namespace HoloRepository
         public string OrganSlicePath { get; set; }
         public int OrderIndex { get; set; }
 
+        public Image OrganSliceImage
+        {
+            get { return OrganSliceBox.Image; }
+        }
+
+        public Image DicomImage
+        {
+            get { return CTBox.Image; }
+        }
+
+
         public int SelectedIndex
         {
             get { return selectedIndex; }
@@ -292,7 +303,8 @@ namespace HoloRepository
             {
                 return;
             }
-            using (AddOrganSlice changeOrganSlice = new AddOrganSlice(addCaseControl.GetDonorID(), addCaseControl.GetOrganName(), this.OrderIndex))
+            string organSide = addCaseControl.GetOrganSide();
+            using (AddOrganSlice changeOrganSlice = new AddOrganSlice(addCaseControl.GetDonorID(), addCaseControl.GetOrganName(), this.OrderIndex, organSide))
             {
                 changeOrganSlice.StartPosition = FormStartPosition.CenterParent;
 

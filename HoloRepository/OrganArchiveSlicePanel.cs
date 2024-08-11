@@ -18,6 +18,8 @@ namespace HoloRepository
 
         private int organId;
 
+        private string organSide;
+
         private string organName;
 
         private List<string> organSlices;
@@ -59,13 +61,14 @@ namespace HoloRepository
 
                     // Load organ data
                     string organQuery = @"
-                        SELECT o.organ_name_id, oname.organ_name, COUNT(s.slice_id) AS slice_count, d.date_of_death, d.age, d.cause_of_death
+                        SELECT o.organ_name_id, oname.organ_name, o.organ_side, COUNT(s.slice_id) AS slice_count, 
+                               d.date_of_death, d.age, d.cause_of_death
                         FROM organ o
                         LEFT JOIN organname oname ON o.organ_name_id = oname.organ_name_id
                         LEFT JOIN sliceimage s ON o.organ_id = s.organ_id
                         LEFT JOIN donor d ON o.donor_id = d.donor_id
                         WHERE o.donor_id = @donorId AND o.organ_id = @organId
-                        GROUP BY o.organ_name_id, oname.organ_name, d.date_of_death, d.age, d.cause_of_death";
+                        GROUP BY o.organ_name_id, oname.organ_name, o.organ_side, d.date_of_death, d.age, d.cause_of_death";
 
                     using (var command = new NpgsqlCommand(organQuery, connection))
                     {
@@ -77,6 +80,7 @@ namespace HoloRepository
                             if (reader.Read())
                             {
                                 organName = reader.GetString(reader.GetOrdinal("organ_name"));
+                                organSide = reader.IsDBNull(reader.GetOrdinal("organ_side")) ? null : reader.GetString(reader.GetOrdinal("organ_side"));
                                 int numberOfSlices = reader.GetInt32(reader.GetOrdinal("slice_count"));
                                 DateTime? dateOfDeath = reader.IsDBNull(reader.GetOrdinal("date_of_death"))
                                     ? (DateTime?)null
@@ -86,8 +90,11 @@ namespace HoloRepository
                                     ? null
                                     : reader.GetString(reader.GetOrdinal("cause_of_death"));
 
+                                // Construct organ name with side if applicable
+                                string organNameWithSide = string.IsNullOrEmpty(organSide) ? organName : $"{organName}-{organSide}";
+
                                 // Update labels
-                                OrganName.Text = $"{organName}";
+                                OrganName.Text = $"{organNameWithSide}";
                                 DonorId.Text = $"Donor ID: {donorId}";
                                 numOfSlices.Text = $"Number of Slices: {numberOfSlices}";
                                 DateDeath.Text = $"Date of Death: {dateOfDeath?.ToString("yyyy-MM-dd") ?? "N/A"}";
@@ -130,7 +137,7 @@ namespace HoloRepository
 
         public string GetOrganName()
         {
-            return organName.ToString();
+            return OrganName.Text;
         }
 
         public string GetNumOrgans()

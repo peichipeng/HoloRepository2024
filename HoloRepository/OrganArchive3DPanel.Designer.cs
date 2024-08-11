@@ -29,23 +29,13 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OrganArchive3DPanel));
-            OrganName = new Label();
             leftArrow = new PictureBox();
             rightArrow = new PictureBox();
             ListPanel = new FlowLayoutPanel();
+            OrganName = new Label();
             ((System.ComponentModel.ISupportInitialize)leftArrow).BeginInit();
             ((System.ComponentModel.ISupportInitialize)rightArrow).BeginInit();
             SuspendLayout();
-            // 
-            // OrganName
-            // 
-            OrganName.AutoSize = true;
-            OrganName.Font = new Font("Poppins", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganName.Location = new Point(27, 18);
-            OrganName.Name = "OrganName";
-            OrganName.Size = new Size(174, 42);
-            OrganName.TabIndex = 0;
-            OrganName.Text = "Organ Name";
             // 
             // leftArrow
             // 
@@ -80,6 +70,16 @@
             ListPanel.Size = new Size(998, 187);
             ListPanel.TabIndex = 4;
             // 
+            // OrganName
+            // 
+            OrganName.AutoSize = true;
+            OrganName.Font = new Font("Poppins", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            OrganName.Location = new Point(27, 18);
+            OrganName.Name = "OrganName";
+            OrganName.Size = new Size(174, 42);
+            OrganName.TabIndex = 0;
+            OrganName.Text = "Organ Name";
+            // 
             // OrganArchive3DPanel
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
@@ -97,10 +97,9 @@
         }
 
         #endregion
-
-        private Label OrganName;
         private PictureBox leftArrow;
         private PictureBox rightArrow;
         public FlowLayoutPanel ListPanel;
+        private Label OrganName;
     }
 }
