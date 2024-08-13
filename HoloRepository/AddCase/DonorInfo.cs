@@ -14,6 +14,7 @@ namespace HoloRepository.AddCase
 {
     public partial class DonorInfo : UserControl
     {
+        private bool isNERActive = false;
         public int originalId;
         public int donorId;
         private int age;
@@ -22,6 +23,7 @@ namespace HoloRepository.AddCase
 
         private bool deleting = false;
         private string requiredFieldMsg = "Required field.";
+
         public DonorInfo()
         {
             InitializeComponent();
@@ -54,12 +56,12 @@ namespace HoloRepository.AddCase
                 await using var cmd = new NpgsqlCommand("INSERT INTO donor (donor_id, age, date_of_death, cause_of_death) VALUES ($1, $2, $3, $4)", conn)
                 {
                     Parameters =
-                    {
-                        new() { Value = donorId },
-                        new() { Value = age },
-                        new() { Value = dod },
-                        new() { Value = causeOfDeath }
-                    }
+                {
+                    new() { Value = donorId },
+                    new() { Value = age },
+                    new() { Value = dod },
+                    new() { Value = causeOfDeath }
+                }
                 };
                 await cmd.ExecuteNonQueryAsync();
                 if (Parent.Parent is AddCaseFramework framework)
@@ -85,7 +87,7 @@ namespace HoloRepository.AddCase
                 var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
                 await using var conn = new NpgsqlConnection(connectionString);
                 await conn.OpenAsync();
-                
+
                 string sql;
                 if (originalId == donorId)
                 {
@@ -101,20 +103,21 @@ namespace HoloRepository.AddCase
                 cmd.Parameters.AddWithValue("@dod", dod);
                 cmd.Parameters.AddWithValue("@causeOfDeath", causeOfDeath);
                 cmd.Parameters.AddWithValue("@time", DateTime.Now);
-                
+
                 if (originalId != donorId)
                 {
                     cmd.Parameters.AddWithValue("@originalId", originalId);
                 }
 
                 await cmd.ExecuteNonQueryAsync();
-                
+
                 if (Parent.Parent is AddCaseFramework framework)
                 {
                     if (framework.destination == "addCase")
                     {
                         framework.LoadControl(new CasePage("addCase", donorId));
-                    } else
+                    }
+                    else
                     {
                         framework.LoadControl(new CasePage("caseOverview", donorId));
                     }
@@ -149,17 +152,17 @@ namespace HoloRepository.AddCase
 
             if (string.IsNullOrEmpty(inputId))
             {
-                idErrorLabel.Text = requiredFieldMsg;
+                SetLabelText(idErrorLabel, requiredFieldMsg);
                 return false;
             }
 
             if (!int.TryParse(inputId, out donorId))
             {
-                idErrorLabel.Text = "Invalid ID. Please enter a valid number.";
+                SetLabelText(idErrorLabel, "Invalid ID. Please enter a valid number.");
                 return false;
             }
 
-            idErrorLabel.Text = "";
+            SetLabelText(idErrorLabel, "");
             return true;
         }
 
@@ -169,18 +172,18 @@ namespace HoloRepository.AddCase
 
             if (string.IsNullOrEmpty(inputAge))
             {
-                ageErrorLabel.Text = requiredFieldMsg;
+                SetLabelText(ageErrorLabel, requiredFieldMsg);
                 return false;
             }
 
             if (!int.TryParse(inputAge, out age))
             {
-                ageErrorLabel.Text = "Invalid age. Please enter a valid number.";
+                SetLabelText(ageErrorLabel, "Invalid age. Please enter a valid number.");
                 return false;
             }
 
             // Clear the error message if the age is valid
-            ageErrorLabel.Text = "";
+            SetLabelText(ageErrorLabel, "");
             return true;
         }
 
@@ -188,12 +191,12 @@ namespace HoloRepository.AddCase
         {
             if (string.IsNullOrEmpty(causeOfDeathTxt.Text))
             {
-                causeErrorLabel.Text = requiredFieldMsg;
+                SetLabelText(causeErrorLabel, requiredFieldMsg);
                 return false;
             }
 
             causeOfDeath = causeOfDeathTxt.Text;
-            causeErrorLabel.Text = "";
+            SetLabelText(causeErrorLabel, "");
             return true;
         }
 
@@ -207,7 +210,7 @@ namespace HoloRepository.AddCase
 
             if (string.IsNullOrEmpty(dateString) || dateString == "DD/MM/YYYY")
             {
-                dodErrorLabel.Text = requiredFieldMsg;
+                SetLabelText(dodErrorLabel, requiredFieldMsg);
                 return false;
             }
 
@@ -216,19 +219,31 @@ namespace HoloRepository.AddCase
 
             if (!System.Text.RegularExpressions.Regex.IsMatch(dateString, pattern))
             {
-                dodErrorLabel.Text = formatErrorMsg;
+                SetLabelText(dodErrorLabel, formatErrorMsg);
                 return false; // Date is in incorrect format
             }
 
             if (!DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out dod))
             {
-                dodErrorLabel.Text = invalidDateMsg;
+                SetLabelText(dodErrorLabel, invalidDateMsg);
                 return false; // Date is not valid
             }
 
             // Clear error message if the date is valid
-            dodErrorLabel.Text = "";
+            SetLabelText(dodErrorLabel, "");
             return true; // Date is valid
+        }
+
+        private void SetLabelText(Label label, string text)
+        {
+            if (label.InvokeRequired)
+            {
+                label.Invoke(new Action(() => label.Text = text));
+            }
+            else
+            {
+                label.Text = text;
+            }
         }
 
         private void DOD_Enter(object sender, EventArgs e)
@@ -299,6 +314,56 @@ namespace HoloRepository.AddCase
             if (!string.IsNullOrEmpty(ageTxt.Text))
             {
                 IsAgeValid();
+            }
+        }
+
+        public void ProcessVoiceCommand(string transcription)
+        {
+            if (transcription.ToLower().Contains("start entering"))
+            {
+                StartNER();
+            }
+            else if (transcription.ToLower().Contains("stop entering"))
+            {
+                StopNER();
+            }
+        }
+
+        private void StartNER()
+        {
+            if (Parent.Parent is MainForm mainForm)
+            {
+                mainForm.StartNER();
+                isNERActive = true;
+            }
+        }
+
+        private void StopNER()
+        {
+            if (Parent.Parent is MainForm mainForm)
+            {
+                mainForm.StopNER();
+                isNERActive = false;
+            }
+        }
+
+        public void ProcessNERResult(Dictionary<string, string> nerResult)
+        {
+            if (nerResult.ContainsKey("ID"))
+            {
+                donorIdTxt.Text = nerResult["ID"];
+            }
+            if (nerResult.ContainsKey("DoD"))
+            {
+                dodTxt.Text = nerResult["DoD"];
+            }
+            if (nerResult.ContainsKey("Age"))
+            {
+                ageTxt.Text = nerResult["Age"];
+            }
+            if (nerResult.ContainsKey("Cause_of_Death"))
+            {
+                causeOfDeathTxt.Text = nerResult["Cause_of_Death"];
             }
         }
     }

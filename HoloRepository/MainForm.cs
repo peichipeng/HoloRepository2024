@@ -2,18 +2,151 @@
 using HoloRepository.AddCase;
 using HoloRepository.UserGuide;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
+
 
 namespace HoloRepository
 {
     public partial class MainForm : Form
     {
         private bool isSpeechMode = false;
+        private Process? _pythonProcess;
+        private StreamWriter? _pythonInput;
+        private StreamReader? _pythonOutput;
+        private Thread? _outputThread;
+        public event Action<string>? OnTranscriptionReceived;
+
         public MainForm()
         {
             InitializeComponent();
             LoadControl(new HomePageControl());
+            InitializePythonProcess();
         }
+
+        private void InitializePythonProcess()
+        {
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string pythonExePath = Path.GetFullPath(Path.Combine(baseDirectory, @"..\..\..\..\speech_recognition_env\python.exe"));
+            string pythonScriptPath = Path.GetFullPath(Path.Combine(baseDirectory, @"..\..\..\transcription.py"));
+
+            if (!File.Exists(pythonExePath))
+            {
+                MessageBox.Show($"Python interpreter not found at {pythonExePath}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!File.Exists(pythonScriptPath))
+            {
+                MessageBox.Show($"Python script not found at {pythonScriptPath}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = pythonExePath,
+                Arguments = $"\"{pythonScriptPath}\"",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            _pythonProcess = new Process { StartInfo = startInfo };
+            try
+            {
+                _pythonProcess.Start();
+                _pythonInput = _pythonProcess.StandardInput;
+                _pythonOutput = _pythonProcess.StandardOutput;
+
+                _outputThread = new Thread(() =>
+                {
+                    while (!_pythonOutput.EndOfStream)
+                    {
+                        var output = _pythonOutput.ReadLine();
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            OnTranscriptionReceived?.Invoke(output);
+                        }
+                    }
+                });
+                _outputThread.IsBackground = true;
+                _outputThread.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to start Python script: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void StartNER()
+        {
+            if (_pythonInput != null)
+            {
+                _pythonInput.WriteLine("start_ner");
+            }
+            else
+            {
+                MessageBox.Show("Failed to start NER. Python process is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void StopNER()
+        {
+            if (_pythonInput != null)
+            {
+                _pythonInput.WriteLine("stop_ner");
+            }
+            else
+            {
+                MessageBox.Show("Failed to stop NER. Python process is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ProcessTranscription(string transcription)
+        {
+            lock (this)
+            {
+                var activePopupWindow = Application.OpenForms.OfType<PopupWindow>().FirstOrDefault();
+                if (activePopupWindow != null)
+                {
+                    activePopupWindow.OnTranscriptionReceived(transcription);
+                }
+                else
+                {
+                    if (transcription.StartsWith("NER Result:"))
+                    {
+                        var nerResultJson = transcription.Substring("NER Result:".Length).Trim();
+                        var nerResult = JsonConvert.DeserializeObject<Dictionary<string, string>>(nerResultJson);
+                        if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is AddCaseFramework addCaseFramework &&
+                            addCaseFramework.addCaseContainer.Controls.Count > 0 && addCaseFramework.addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
+                        {
+                            donorInfoPage.ProcessNERResult(nerResult);
+                        }
+                    }
+                    else
+                    {
+                        if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is HomePageControl homePageControl)
+                        {
+                            homePageControl.ProcessVoiceCommand(transcription);
+                        }
+                        else if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is AddCaseFramework addCaseFramework)
+                        {
+                            addCaseFramework.ProcessVoiceCommand(transcription);
+                            if (addCaseFramework.addCaseContainer.Controls.Count > 0 && addCaseFramework.addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
+                            {
+                                donorInfoPage.ProcessVoiceCommand(transcription);
+                            }
+                        }
+                        MessageBox.Show($"ProcessTranscription called with transcription: {transcription}");
+                        OnTranscriptionReceived?.Invoke(transcription);
+                    }
+                }
+            }
+        }
+
+
         public void LoadControl(UserControl userControl)
         {
             mainContainer.Controls.Clear();
@@ -113,10 +246,51 @@ namespace HoloRepository
             if (isSpeechMode)
             {
                 modeSwitch.BackColor = Color.IndianRed;
+                StartTranscription();
             }
             else
             {
                 modeSwitch.BackColor = SystemColors.Control;
+                StopTranscription();
+                StopNER();
+            }
+        }
+
+        public void StartTranscription()
+        {
+            if (_pythonInput != null)
+            {
+                _pythonInput.WriteLine("start_transcription");
+            }
+            else
+            {
+                MessageBox.Show("Failed to start transcription. Python process is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void StopTranscription()
+        {
+            if (_pythonInput != null)
+            {
+                _pythonInput.WriteLine("stop_transcription");
+            }
+            else
+            {
+                MessageBox.Show("Failed to stop transcription. Python process is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isSpeechMode)
+            {
+                StopTranscription();
+            }
+
+            if (_pythonProcess != null && !_pythonProcess.HasExited)
+            {
+                _pythonProcess.Kill();
+                _pythonProcess.Dispose();
             }
         }
 
@@ -127,13 +301,15 @@ namespace HoloRepository
             if (control is ViewCasesControl)
             {
                 pageBtnName = "View Cases";
-            } else if (control is AddCaseFramework framework)
+            }
+            else if (control is AddCaseFramework framework)
             {
                 if (framework.addCaseContainer.Controls[0] is CasePage casePage)
                 {
                     pageBtnName = $"Case {casePage.donorId}";
                 }
-            } else if (control is OrganArchiveControl)
+            }
+            else if (control is OrganArchiveControl)
             {
                 pageBtnName = "Organ Archive";
             }
@@ -216,7 +392,7 @@ namespace HoloRepository
             if (buttonText == "View Cases")
             {
                 AddControl(new ViewCasesControl());
-            } 
+            }
             else if (buttonText == "Organ Archive")
             {
                 AddControl(new OrganArchiveControl());
