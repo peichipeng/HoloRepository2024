@@ -70,6 +70,9 @@ def transcribe_audio():
                 audio_block = audio_block.flatten()
                 reduced_noise_audio = nr.reduce_noise(y=audio_block, sr=16000)
 
+                if np.mean(np.abs(reduced_noise_audio)) < 0.01:
+                    continue
+                
                 inputs = processor(reduced_noise_audio, sampling_rate=16000, return_tensors="pt", padding=True)
 
                 if 'input_features' in inputs:
@@ -146,16 +149,6 @@ def process_date(date_str):
         traceback.print_exc(file=sys.stderr)
         return date_str
 
-def pause_transcription():
-    global is_transcription_paused
-    is_transcription_paused = True
-    print("MessageBox: Transcription paused", flush=True)
-
-def resume_transcription():
-    global is_transcription_paused
-    is_transcription_paused = False
-    print("MessageBox: Transcription resumed", flush=True)
-
 def start_transcription():
     global stop_listening
     recognizer = sr.Recognizer()
@@ -204,10 +197,6 @@ if __name__ == "__main__":
                     stop_transcription()
                 except Exception as e:
                     print(f"Error stopping transcription: {e}", flush=True)
-            elif line == "pause_transcription":
-                pause_transcription()
-            elif line == "resume_transcription":
-                resume_transcription()
             elif line == "start_ner":
                 start_ner()
             elif line == "stop_ner":

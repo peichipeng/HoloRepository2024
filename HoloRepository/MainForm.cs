@@ -85,6 +85,7 @@ namespace HoloRepository
             if (_pythonInput != null)
             {
                 _pythonInput.WriteLine("start_ner");
+                MessageBox.Show("successfully in Mainform StartNER() function.");
             }
             else
             {
@@ -115,18 +116,7 @@ namespace HoloRepository
                 }
                 else
                 {
-                    if (transcription.StartsWith("NER Result:"))
-                    {
-                        var nerResultJson = transcription.Substring("NER Result:".Length).Trim();
-                        var nerResult = JsonConvert.DeserializeObject<Dictionary<string, string>>(nerResultJson);
-                        if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is AddCaseFramework addCaseFramework &&
-                            addCaseFramework.addCaseContainer.Controls.Count > 0 && addCaseFramework.addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
-                        {
-                            donorInfoPage.ProcessNERResult(nerResult);
-                        }
-                    }
-                    else
-                    {
+
                         if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is HomePageControl homePageControl)
                         {
                             homePageControl.ProcessVoiceCommand(transcription);
@@ -134,16 +124,29 @@ namespace HoloRepository
                         else if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is AddCaseFramework addCaseFramework)
                         {
                             addCaseFramework.ProcessVoiceCommand(transcription);
-                            if (addCaseFramework.addCaseContainer.Controls.Count > 0 && addCaseFramework.addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
-                            {
-                                donorInfoPage.ProcessVoiceCommand(transcription);
-                            }
                         }
-                        MessageBox.Show($"ProcessTranscription called with transcription: {transcription}");
                         OnTranscriptionReceived?.Invoke(transcription);
-                    }
+                    
                 }
             }
+        }
+
+        private bool IsDonorInfoPageActive()
+        {
+            if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is AddCaseFramework addCaseFramework)
+            {
+                return addCaseFramework.addCaseContainer.Controls.Count > 0 && addCaseFramework.addCaseContainer.Controls[0] is DonorInfo;
+            }
+            return false;
+        }
+
+        private DonorInfo GetCurrentDonorInfoPage()
+        {
+            if (mainContainer.Controls[0] is AddCaseFramework addCaseFramework)
+            {
+                return addCaseFramework.addCaseContainer.Controls[0] as DonorInfo;
+            }
+            return null;
         }
 
 

@@ -131,7 +131,6 @@ namespace HoloRepository.AddCase
 
         private void HandleCancelBtn_Click()
         {
-            // 确保在UI线程中执行
             if (InvokeRequired)
             {
                 Invoke(new Action(HandleCancelBtn_Click));
@@ -269,6 +268,14 @@ namespace HoloRepository.AddCase
                         _currentPopup.Refresh();
                         _currentPopup.Close();
                     }
+                }
+            }
+
+            foreach (Control control in addCaseContainer.Controls)
+            {
+                if (control is DonorInfo donorInfoPage)
+                {
+                    donorInfoPage.ProcessVoiceCommand(transcription);
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Newtonsoft.Json;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -326,45 +327,60 @@ namespace HoloRepository.AddCase
             else if (transcription.ToLower().Contains("stop entering"))
             {
                 StopNER();
+                return;
+            }
+            if (transcription.Trim().StartsWith("NER Result:", StringComparison.OrdinalIgnoreCase))
+            {
+                var nerResultJson = transcription.Substring("NER Result:".Length).Trim();
+                var nerResult = JsonConvert.DeserializeObject<Dictionary<string, string>>(nerResultJson);
+                ProcessNERResult(nerResult);
             }
         }
 
         private void StartNER()
         {
-            if (Parent.Parent is MainForm mainForm)
-            {
-                mainForm.StartNER();
-                isNERActive = true;
-            }
+            MainForm mainForm = (MainForm)Application.OpenForms[0];
+            mainForm.StartNER();
+            isNERActive = true;
         }
 
         private void StopNER()
         {
-            if (Parent.Parent is MainForm mainForm)
+            MainForm mainForm = (MainForm)Application.OpenForms[0];
+            mainForm.StopNER();
+            isNERActive = false;
+            
+        }
+
+        public void ProcessNERResult(Dictionary<string, string>? nerResult)
+        {
+            if (InvokeRequired)
             {
-                mainForm.StopNER();
-                isNERActive = false;
+                Invoke(new Action(() => ProcessNERResult(nerResult)));
+            }
+            else
+            {
+                if (nerResult.ContainsKey("id") && !string.IsNullOrEmpty(nerResult["id"]))
+                {
+                    donorIdTxt.Text = nerResult["id"];
+                }
+
+                if (nerResult.ContainsKey("dod") && !string.IsNullOrEmpty(nerResult["dod"]))
+                {
+                    dodTxt.Text = nerResult["dod"];
+                }
+
+                if (nerResult.ContainsKey("age") && !string.IsNullOrEmpty(nerResult["age"]))
+                {
+                    ageTxt.Text = nerResult["age"];
+                }
+
+                if (nerResult.ContainsKey("cause_of_death") && !string.IsNullOrEmpty(nerResult["cause_of_death"]))
+                {
+                    causeOfDeathTxt.Text = nerResult["cause_of_death"];
+                }
             }
         }
 
-        public void ProcessNERResult(Dictionary<string, string> nerResult)
-        {
-            if (nerResult.ContainsKey("ID"))
-            {
-                donorIdTxt.Text = nerResult["ID"];
-            }
-            if (nerResult.ContainsKey("DoD"))
-            {
-                dodTxt.Text = nerResult["DoD"];
-            }
-            if (nerResult.ContainsKey("Age"))
-            {
-                ageTxt.Text = nerResult["Age"];
-            }
-            if (nerResult.ContainsKey("Cause_of_Death"))
-            {
-                causeOfDeathTxt.Text = nerResult["Cause_of_Death"];
-            }
-        }
     }
 }
