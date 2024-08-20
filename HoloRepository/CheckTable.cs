@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,11 +17,13 @@ namespace HoloRepository
         private List<CheckTableContent> checkTableContents;
         private DatabaseConnection dbConnection;
         private int? organId;
+        private List<OrganSlicePanel> organSlicePanels;
         private bool internalCheckChange = false;
 
-        public CheckTable(int? organId)
+        public CheckTable(int? organId, List<OrganSlicePanel> organSlicePanels)
         {
             this.organId = organId;
+            this.organSlicePanels = organSlicePanels;
             InitializeComponent();
             InitializeCustomComponents();
             LoadCheckTableContents();
@@ -49,42 +52,68 @@ namespace HoloRepository
 
             if (organId.HasValue)
             {
-                string query = "SELECT dicom_id, image_path, additional_info FROM sliceimage WHERE organ_id = @organId";
-                var parameters = new Dictionary<string, object>
-                {
-                    { "@organId", organId.Value }
-                };
-
-                try
-                {
-                    using (var reader = dbConnection.ExecuteReader(query, parameters))
-                    {
-                        while (reader.Read())
-                        {
-                            int dicomId = reader.GetInt32(0);
-                            string imagePath = reader.GetString(1);
-                            string additionalInfo = reader.GetString(2);
-
-                            // Load images (assuming imagePath points to a valid image file)
-                            Image organSlice = Image.FromFile(imagePath);
-                            Image dicomImage = LoadDicomImage(dicomId); // Implement this method to load DICOM image
-
-                            var checkTableContent = new CheckTableContent();
-                            checkTableContent.SetImageInfo(organSlice, dicomImage, additionalInfo);
-                            checkTableContents.Add(checkTableContent);
-                            flowLayoutPanel1.Controls.Add(checkTableContent);
-
-                            // Subscribe to the CheckedChanged event of each CheckBox
-                            checkTableContent.SelectBox.CheckedChanged += CheckTableContent_SelectBox_CheckedChanged;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error loading data: " + ex.Message);
-                }
+                LoadFromDatabase();
+            }
+            else
+            {
+                LoadFromPanels();
             }
         }
+
+        private void LoadFromDatabase()
+        {
+            string query = "SELECT dicom_id, image_path, additional_info FROM sliceimage WHERE organ_id = @organId";
+            var parameters = new Dictionary<string, object> { { "@organId", organId.Value } };
+
+            try
+            {
+                using (var reader = dbConnection.ExecuteReader(query, parameters))
+                {
+                    while (reader.Read())
+                    {
+                        int dicomId = reader.GetInt32(0);
+                        string imagePath = reader.GetString(1);
+                        string additionalInfo = reader.GetString(2);
+
+                        Image organSlice = Image.FromFile(imagePath);
+                        Image dicomImage = LoadDicomImage(dicomId);
+
+                        var checkTableContent = new CheckTableContent();
+                        checkTableContent.SetImageInfo(organSlice, dicomImage, additionalInfo);
+                        checkTableContent.SetTitle(Path.GetFileName(imagePath));
+
+                        checkTableContents.Add(checkTableContent);
+                        flowLayoutPanel1.Controls.Add(checkTableContent);
+
+                        checkTableContent.SelectBox.CheckedChanged += CheckTableContent_SelectBox_CheckedChanged;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading data from database: " + ex.Message);
+            }
+        }
+
+        private void LoadFromPanels()
+        {
+            foreach (var panel in organSlicePanels)
+            {
+                Image organSlice = panel.OrganSliceImage;
+                Image dicomImage = panel.DicomImage;
+                string additionalInfo = panel.Description;
+
+                var checkTableContent = new CheckTableContent();
+                checkTableContent.SetImageInfo(organSlice, dicomImage, additionalInfo);
+                checkTableContent.SetTitle(Path.GetFileName(panel.OrganSlicePath));
+
+                checkTableContents.Add(checkTableContent);
+                flowLayoutPanel1.Controls.Add(checkTableContent);
+
+                checkTableContent.SelectBox.CheckedChanged += CheckTableContent_SelectBox_CheckedChanged;
+            }
+        }
+
 
         private void CheckTableContent_SelectBox_CheckedChanged(object sender, EventArgs e)
         {

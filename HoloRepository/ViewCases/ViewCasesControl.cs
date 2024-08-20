@@ -28,10 +28,13 @@ namespace HoloRepository
         private int selectedPage = 1;
         private int pageSize = 10;
         private Color selectedPageButtonColor = SystemColors.MenuHighlight;
+        private DatabaseConnection dbConnection;
 
         public ViewCasesControl()
         {
             InitializeComponent();
+
+            dbConnection = new DatabaseConnection();
 
             DataGridViewTextBoxColumn options = new DataGridViewTextBoxColumn();
             options.Name = "options";
@@ -65,12 +68,15 @@ namespace HoloRepository
 
         private async void LoadCaseData()
         {
-            var dataSource = DataRetrieval.CreateDataSource();
+            var db = new DatabaseConnection(); // Create an instance of the DatabaseConnection class
 
             string queryCases = "SELECT * FROM donor";
 
-            await using (var caseReader = await DataRetrieval.ExecuteQuery(queryCases, dataSource))
+            try
             {
+                // Execute the query to retrieve donors
+                using (var caseReader = db.ExecuteReader(queryCases))
+                {
                 while (await caseReader.ReadAsync())
                 {
                     int donorId = caseReader.GetInt32(0);
@@ -79,11 +85,14 @@ namespace HoloRepository
                     string causeOfDeath = caseReader.GetString(3);
                     string organs = "";
 
-                    string queryOrgans = $"SELECT organ_id, organ_name_id FROM organ WHERE donor_id = {donorId} ORDER BY organ_id DESC";
+                        // Query to retrieve organs for the current donor
+                        string queryOrgans = "SELECT organ_id, organ_name_id FROM organ WHERE donor_id = @donorId ORDER BY organ_id DESC";
+                        var organParams = new Dictionary<string, object> { { "@donorId", donorId } };
 
                     List<string> organList = new List<string>();
 
-                    await using (var organReader = await DataRetrieval.ExecuteQuery(queryOrgans, dataSource))
+                        // Execute the query to retrieve organs
+                        using (var organReader = db.ExecuteReader(queryOrgans, organParams))
                     {
                         while (await organReader.ReadAsync())
                         {
@@ -92,15 +101,16 @@ namespace HoloRepository
                             int organNameId;
                             string organName = "";
 
-                            // Check if the organNameId is null
+                                // Check if the organNameId is not null
                             if (!organReader.IsDBNull(1))
                             {
                                 organNameId = organReader.GetFieldValue<int>(1);
 
                                 // Retrieve the organ name
-                                string queryOrganName = $"SELECT organ_name FROM organname WHERE organ_name_id = {organNameId}";
+                                    string queryOrganName = "SELECT organ_name FROM organname WHERE organ_name_id = @organNameId";
+                                    var organNameParams = new Dictionary<string, object> { { "@organNameId", organNameId } };
 
-                                await using (var nameReader = await DataRetrieval.ExecuteQuery(queryOrganName, dataSource))
+                                    using (var nameReader = db.ExecuteReader(queryOrganName, organNameParams))
                                 {
                                     while (await nameReader.ReadAsync())
                                     {
@@ -111,6 +121,8 @@ namespace HoloRepository
                             }
                         }
                     }
+
+                        // Construct the organ names string
                     for (int i = 0; i < organList.Count; i++)
                     {
                         if (i != organList.Count - 1)
@@ -123,6 +135,7 @@ namespace HoloRepository
                         }
                     }
 
+                        // Add the case data to the list
                     cases.Add(new CaseData
                     {
                         DonorId = donorId,
@@ -134,11 +147,17 @@ namespace HoloRepository
                 }
             }
 
-            cases.Reverse(); // Show the recently added case as the first row
+                cases.Reverse(); // Show the most recently added case as the first row
             filteredCases = cases;
             LoadPagination();
             LoadCaseTable();
         }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while loading case data: {ex.Message}");
+            }
+        }
+
 
         private void LoadCaseTable()
         {

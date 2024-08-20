@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OrganArchiveControl));
             OrganArchivePanel = new Panel();
+            placeholder = new Label();
             OrganDisplayPanel = new FlowLayoutPanel();
             TabControl = new CustomTabControl();
             SearchIcon = new PictureBox();
@@ -41,6 +42,7 @@
             // 
             // OrganArchivePanel
             // 
+            OrganArchivePanel.Controls.Add(placeholder);
             OrganArchivePanel.Controls.Add(OrganDisplayPanel);
             OrganArchivePanel.Controls.Add(TabControl);
             OrganArchivePanel.Controls.Add(SearchIcon);
@@ -51,6 +53,18 @@
             OrganArchivePanel.Name = "OrganArchivePanel";
             OrganArchivePanel.Size = new Size(1425, 1300);
             OrganArchivePanel.TabIndex = 0;
+            // 
+            // placeholder
+            // 
+            placeholder.Anchor = AnchorStyles.Top;
+            placeholder.AutoSize = true;
+            placeholder.ForeColor = Color.Gray;
+            placeholder.Location = new Point(353, 156);
+            placeholder.Name = "placeholder";
+            placeholder.Size = new Size(120, 24);
+            placeholder.TabIndex = 5;
+            placeholder.Text = "Search Cases";
+            placeholder.Click += placeholder_Click;
             // 
             // OrganDisplayPanel
             // 
@@ -89,14 +103,16 @@
             OrganArchiveSearchBox.Anchor = AnchorStyles.Top;
             OrganArchiveSearchBox.Location = new Point(311, 145);
             OrganArchiveSearchBox.Name = "OrganArchiveSearchBox";
-            OrganArchiveSearchBox.Size = new Size(831, 47);
+            OrganArchiveSearchBox.Size = new Size(831, 46);
             OrganArchiveSearchBox.StateActive.Border.Color1 = Color.Silver;
             OrganArchiveSearchBox.StateActive.Border.Color2 = Color.Silver;
             OrganArchiveSearchBox.StateActive.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
             OrganArchiveSearchBox.StateActive.Border.Rounding = 5;
             OrganArchiveSearchBox.StateActive.Content.Padding = new Padding(40, 8, 8, 8);
             OrganArchiveSearchBox.TabIndex = 1;
-            OrganArchiveSearchBox.Text = "Search Cases";
+            OrganArchiveSearchBox.TextChanged += OrganArchiveSearchBox_TextChanged;
+            OrganArchiveSearchBox.GotFocus += OrganArchiveSearchBox_GotFocus;
+            OrganArchiveSearchBox.LostFocus += OrganArchiveSearchBox_LostFocus;
             // 
             // OrganArchiveTitle
             // 
@@ -131,5 +147,6 @@
         private PictureBox SearchIcon;
         private CustomTabControl TabControl;
         private FlowLayoutPanel OrganDisplayPanel;
+        private Label placeholder;
     }
 }

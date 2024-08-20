@@ -55,6 +55,8 @@
             fileListBox = new RoundedListBox();
             lineControl1 = new LineControl();
             OrganSlicesTitle = new Label();
+            SideBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            sideListBox = new ListBox();
             panel1.SuspendLayout();
             organSlicesPanel.SuspendLayout();
             addOrganSlicePanel.SuspendLayout();
@@ -129,6 +131,8 @@
             panel1.AutoScroll = true;
             panel1.AutoSize = true;
             panel1.BackColor = Color.White;
+            panel1.Controls.Add(sideListBox);
+            panel1.Controls.Add(SideBox);
             panel1.Controls.Add(caseNo);
             panel1.Controls.Add(organListBox);
             panel1.Controls.Add(organNameTextBox);
@@ -214,9 +218,9 @@
             organSlicesPanel.Controls.Add(multiTags1);
             organSlicesPanel.Controls.Add(tableLayoutPanel1);
             organSlicesPanel.FlowDirection = FlowDirection.TopDown;
-            organSlicesPanel.Location = new Point(49, 682);
+            organSlicesPanel.Location = new Point(62, 682);
             organSlicesPanel.Name = "organSlicesPanel";
-            organSlicesPanel.Size = new Size(1255, 462);
+            organSlicesPanel.Size = new Size(1243, 462);
             organSlicesPanel.TabIndex = 21;
             // 
             // addOrganSlicePanel
@@ -224,7 +228,7 @@
             addOrganSlicePanel.Controls.Add(AddOrganSlicesButton);
             addOrganSlicePanel.Location = new Point(3, 3);
             addOrganSlicePanel.Name = "addOrganSlicePanel";
-            addOrganSlicePanel.Size = new Size(1247, 55);
+            addOrganSlicePanel.Size = new Size(1237, 55);
             addOrganSlicePanel.TabIndex = 22;
             // 
             // AddOrganSlicesButton
@@ -236,7 +240,7 @@
             AddOrganSlicesButton.FlatStyle = FlatStyle.Flat;
             AddOrganSlicesButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             AddOrganSlicesButton.ForeColor = Color.White;
-            AddOrganSlicesButton.Location = new Point(980, 4);
+            AddOrganSlicesButton.Location = new Point(964, 4);
             AddOrganSlicesButton.Margin = new Padding(5, 4, 5, 4);
             AddOrganSlicesButton.Name = "AddOrganSlicesButton";
             AddOrganSlicesButton.Size = new Size(262, 47);
@@ -252,7 +256,7 @@
             panel2.Controls.Add(TagsTitle);
             panel2.Location = new Point(3, 64);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1245, 57);
+            panel2.Size = new Size(1237, 57);
             panel2.TabIndex = 22;
             // 
             // HelpInfo
@@ -261,7 +265,7 @@
             HelpInfo.AutoSize = true;
             HelpInfo.Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             HelpInfo.ForeColor = Color.Gray;
-            HelpInfo.Location = new Point(418, 15);
+            HelpInfo.Location = new Point(414, 15);
             HelpInfo.Name = "HelpInfo";
             HelpInfo.Size = new Size(313, 27);
             HelpInfo.TabIndex = 77;
@@ -272,7 +276,7 @@
             updateBtn.Anchor = AnchorStyles.None;
             updateBtn.BackColor = Color.Transparent;
             updateBtn.Image = (Image)resources.GetObject("updateBtn.Image");
-            updateBtn.Location = new Point(375, 5);
+            updateBtn.Location = new Point(371, 5);
             updateBtn.Margin = new Padding(5);
             updateBtn.Name = "updateBtn";
             updateBtn.Size = new Size(38, 46);
@@ -285,7 +289,7 @@
             TagsTitle.Anchor = AnchorStyles.None;
             TagsTitle.AutoSize = true;
             TagsTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            TagsTitle.Location = new Point(-3, 8);
+            TagsTitle.Location = new Point(3, 9);
             TagsTitle.Margin = new Padding(5, 0, 5, 10);
             TagsTitle.Name = "TagsTitle";
             TagsTitle.Size = new Size(372, 42);
@@ -299,7 +303,7 @@
             multiTags1.Location = new Point(5, 128);
             multiTags1.Margin = new Padding(5, 4, 5, 4);
             multiTags1.Name = "multiTags1";
-            multiTags1.Size = new Size(1243, 174);
+            multiTags1.Size = new Size(1233, 174);
             multiTags1.TabIndex = 16;
             // 
             // tableLayoutPanel1
@@ -315,7 +319,7 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(1247, 150);
+            tableLayoutPanel1.Size = new Size(1237, 150);
             tableLayoutPanel1.TabIndex = 62;
             // 
             // btnSave
@@ -327,14 +331,14 @@
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(1149, 89);
+            btnSave.Location = new Point(1139, 89);
             btnSave.Margin = new Padding(5, 4, 5, 4);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(93, 47);
             btnSave.TabIndex = 61;
             btnSave.Text = "Add";
             btnSave.UseVisualStyleBackColor = false;
-            btnSave.Click += this.btnSave_Click;
+            btnSave.Click += btnSave_Click;
             // 
             // panel3
             // 
@@ -421,12 +425,43 @@
             OrganSlicesTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             OrganSlicesTitle.AutoSize = true;
             OrganSlicesTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganSlicesTitle.Location = new Point(49, 628);
+            OrganSlicesTitle.Location = new Point(62, 637);
             OrganSlicesTitle.Margin = new Padding(5, 0, 5, 0);
             OrganSlicesTitle.Name = "OrganSlicesTitle";
             OrganSlicesTitle.Size = new Size(392, 42);
             OrganSlicesTitle.TabIndex = 7;
             OrganSlicesTitle.Text = "Organ Slice Image Files";
+            // 
+            // SideBox
+            // 
+            SideBox.Anchor = AnchorStyles.Top;
+            SideBox.Location = new Point(362, 222);
+            SideBox.Multiline = true;
+            SideBox.Name = "SideBox";
+            SideBox.Size = new Size(103, 40);
+            SideBox.StateActive.Back.Color1 = Color.White;
+            SideBox.StateActive.Border.Color1 = Color.Silver;
+            SideBox.StateActive.Border.Color2 = Color.Silver;
+            SideBox.StateActive.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
+            SideBox.StateActive.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            SideBox.StateActive.Border.Rounding = 5;
+            SideBox.TabIndex = 60;
+            SideBox.Visible = false;
+            SideBox.GotFocus += SideBox_GotFocus;
+            SideBox.LostFocus += SideBox_LostFocus;
+            // 
+            // sideListBox
+            // 
+            sideListBox.Anchor = AnchorStyles.Top;
+            sideListBox.FormattingEnabled = true;
+            sideListBox.ItemHeight = 24;
+            sideListBox.Location = new Point(362, 261);
+            sideListBox.Name = "sideListBox";
+            sideListBox.Size = new Size(103, 124);
+            sideListBox.TabIndex = 61;
+            sideListBox.UseWaitCursor = true;
+            sideListBox.Visible = false;
+            sideListBox.Click += SideListBox_Click;
             // 
             // AddCaseControl
             // 
@@ -483,5 +518,7 @@
         private Panel panel3;
         private RoundedButton btnSave;
         private RoundedButton btnCancel;
+        private ComponentFactory.Krypton.Toolkit.KryptonTextBox SideBox;
+        private ListBox sideListBox;
     }
 }

@@ -1,4 +1,5 @@
-﻿using HoloRepository.ContextMenu;
+﻿using HoloRepository.AddCase;
+using HoloRepository.ContextMenu;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -141,6 +142,30 @@ namespace HoloRepository
             path.CloseFigure();
             return path;
         }
+
+        private void UpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var parentForm = this.FindForm();
+
+                if (parentForm != null)
+                {
+                    parentForm.Controls.Clear();
+
+                    var addCaseControl = new AddCaseControl(donorId, organId);
+
+                    parentForm.Controls.Add(addCaseControl);
+
+                    addCaseControl.Dock = DockStyle.Fill;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error occurs when clicking update：{ex.Message}");
+            }
+        }
+
 
         private void leftArrow_Click(object sender, EventArgs e)
         {

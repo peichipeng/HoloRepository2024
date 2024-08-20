@@ -1,6 +1,14 @@
 ﻿using HoloRepository.AddCase;
 using HoloRepository.UserGuide;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HoloRepository
@@ -88,13 +96,17 @@ namespace HoloRepository
 
         private void btnUpdateOrgan_Click(object sender, EventArgs e)
         {
-            LoadControl(new AddCaseControl(12, 33));
+            LoadControl(new AddCaseControl(12, 51));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            _3DModelFormWindow modelFormWindow = new _3DModelFormWindow(33);
-            modelFormWindow.Show();
+            LoadControl(new MainInterFaceControl(this, 123456, 18));
+        }
+
+        private void HomePageControl_Load(object sender, EventArgs e)
+        {
+
         }
 
         public void ProcessVoiceCommand(string transcription)

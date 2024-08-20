@@ -67,6 +67,10 @@ namespace HoloRepository.AddCase
                     ShowFooterBtns();
                 }
             }
+            else if (userControl is AddCaseControl)
+            {
+                panel1.Visible = false;
+            }
             else
             {
                 ShowFooterBtns();
@@ -117,7 +121,7 @@ namespace HoloRepository.AddCase
                 // and add functions to upsert the organ
 
                 // Set the button back to 'save'
-                nextBtn.Text = "Save";
+                HideFooterBtns();
 
                 // Go back to the previous page (replace the donorId below)
                 //LoadControl(new CaseOrganFramework(destination, caseOrganPage.donorId));

@@ -35,6 +35,7 @@
             Title = new Label();
             btnUpdateOrgan = new Button();
             button1 = new Button();
+            button2 = new Button();
             SuspendLayout();
             // 
             // userGuideBtn
@@ -44,10 +45,10 @@
             userGuideBtn.BorderRadius = 15;
             userGuideBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             userGuideBtn.ForeColor = Color.Black;
-            userGuideBtn.Location = new Point(508, 514);
-            userGuideBtn.Margin = new Padding(3, 3, 22, 3);
+            userGuideBtn.Location = new Point(533, 552);
+            userGuideBtn.Margin = new Padding(2, 2, 14, 2);
             userGuideBtn.Name = "userGuideBtn";
-            userGuideBtn.Size = new Size(316, 58);
+            userGuideBtn.Size = new Size(263, 55);
             userGuideBtn.TabIndex = 82;
             userGuideBtn.Text = "User Guide";
             userGuideBtn.UseVisualStyleBackColor = false;
@@ -60,10 +61,10 @@
             organArchiveBtn.BorderRadius = 15;
             organArchiveBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             organArchiveBtn.ForeColor = Color.White;
-            organArchiveBtn.Location = new Point(508, 437);
-            organArchiveBtn.Margin = new Padding(3, 3, 22, 3);
+            organArchiveBtn.Location = new Point(533, 473);
+            organArchiveBtn.Margin = new Padding(2, 2, 14, 2);
             organArchiveBtn.Name = "organArchiveBtn";
-            organArchiveBtn.Size = new Size(316, 58);
+            organArchiveBtn.Size = new Size(263, 55);
             organArchiveBtn.TabIndex = 81;
             organArchiveBtn.Text = "Organ Archive";
             organArchiveBtn.UseVisualStyleBackColor = false;
@@ -76,10 +77,10 @@
             viewCasesBtn.BorderRadius = 15;
             viewCasesBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             viewCasesBtn.ForeColor = Color.White;
-            viewCasesBtn.Location = new Point(508, 360);
-            viewCasesBtn.Margin = new Padding(3, 3, 22, 3);
+            viewCasesBtn.Location = new Point(533, 393);
+            viewCasesBtn.Margin = new Padding(2, 2, 14, 2);
             viewCasesBtn.Name = "viewCasesBtn";
-            viewCasesBtn.Size = new Size(316, 58);
+            viewCasesBtn.Size = new Size(263, 55);
             viewCasesBtn.TabIndex = 80;
             viewCasesBtn.Text = "View Cases";
             viewCasesBtn.UseVisualStyleBackColor = false;
@@ -92,10 +93,10 @@
             addCaseBtn.BorderRadius = 15;
             addCaseBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             addCaseBtn.ForeColor = Color.White;
-            addCaseBtn.Location = new Point(508, 283);
-            addCaseBtn.Margin = new Padding(3, 3, 22, 3);
+            addCaseBtn.Location = new Point(533, 314);
+            addCaseBtn.Margin = new Padding(2, 2, 14, 2);
             addCaseBtn.Name = "addCaseBtn";
-            addCaseBtn.Size = new Size(316, 58);
+            addCaseBtn.Size = new Size(263, 55);
             addCaseBtn.TabIndex = 79;
             addCaseBtn.Text = " Add a Case";
             addCaseBtn.UseVisualStyleBackColor = false;
@@ -106,8 +107,8 @@
             Title.Anchor = AnchorStyles.None;
             Title.AutoSize = true;
             Title.Font = new Font("Tahoma", 42F, FontStyle.Bold, GraphicsUnit.Point);
-            Title.Location = new Point(302, 93);
-            Title.Margin = new Padding(8, 0, 8, 0);
+            Title.Location = new Point(319, 156);
+            Title.Margin = new Padding(5, 0, 5, 0);
             Title.Name = "Title";
             Title.Size = new Size(691, 101);
             Title.TabIndex = 77;
@@ -115,9 +116,9 @@
             // 
             // btnUpdateOrgan
             // 
-            btnUpdateOrgan.Anchor = AnchorStyles.Top;
+            btnUpdateOrgan.Anchor = AnchorStyles.None;
             btnUpdateOrgan.Font = new Font("Poppins", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnUpdateOrgan.Location = new Point(178, 398);
+            btnUpdateOrgan.Location = new Point(178, 416);
             btnUpdateOrgan.Name = "btnUpdateOrgan";
             btnUpdateOrgan.Size = new Size(139, 64);
             btnUpdateOrgan.TabIndex = 83;
@@ -127,18 +128,30 @@
             // 
             // button1
             // 
-            button1.Location = new Point(184, 508);
+            button1.Anchor = AnchorStyles.None;
+            button1.Location = new Point(178, 513);
             button1.Name = "button1";
             button1.Size = new Size(122, 49);
             button1.TabIndex = 84;
             button1.Text = "button1";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(178, 613);
+            button2.Name = "button2";
+            button2.Size = new Size(122, 34);
+            button2.TabIndex = 85;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // HomePageControl
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
+            Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(btnUpdateOrgan);
             Controls.Add(userGuideBtn);
@@ -148,7 +161,8 @@
             Controls.Add(Title);
             Margin = new Padding(5);
             Name = "HomePageControl";
-            Size = new Size(1329, 664);
+            Size = new Size(1329, 700);
+            Load += HomePageControl_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -159,8 +173,10 @@
         private RoundedButton organArchiveBtn;
         private RoundedButton viewCasesBtn;
         private RoundedButton addCaseBtn;
+        private Button tempBtn;
         private Label Title;
         private Button btnUpdateOrgan;
         private Button button1;
+        private Button button2;
     }
 }

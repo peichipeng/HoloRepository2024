@@ -15,6 +15,11 @@ namespace HoloRepository
 {
     public partial class AddOrganSlice : Form
     {
+        private int donorId;
+        private string organName;
+        private int sliceIndex;
+        private string organSide;
+
         private List<Image> imageList = new List<Image>();
         public List<Image> ImageList => imageList;
         private SliderControl sliderControl;
@@ -31,10 +36,14 @@ namespace HoloRepository
         public string OrganSliceImagePath { get; private set; }
 
 
-        public AddOrganSlice()
+        public AddOrganSlice(int donorId, string organName, int sliceIndex, string organSide)
         {
             InitializeComponent();
             InitializeOverlayPanel();
+
+            this.donorId = donorId;
+            this.organName = organName;
+            this.sliceIndex = sliceIndex;
 
             sliderControl1.Visible = false;
             DICOMFilePicture.Visible = false;
@@ -209,52 +218,126 @@ namespace HoloRepository
 
         private void Add_Click(object sender, EventArgs e)
         {
-            OrganSliceImage = OrganSlicePicture.Image;
-            SelectedImage = DICOMFilePicture.Image;
-            Description = DescriptionBox.Text;
+            if (OrganSlicePicture.Image == null)
+            {
+                MessageBox.Show("Please select an organ slice first");
+                return;
+            }
 
-            SelectedIndex = imageList.IndexOf(DICOMFilePicture.Image);
+            try
+            {
+                // Set the OrganSliceImage and other properties
+                OrganSliceImage = OrganSlicePicture.Image;
+                SelectedImage = DICOMFilePicture.Image;
+                Description = DescriptionBox.Text;
+                SelectedIndex = imageList.IndexOf(DICOMFilePicture.Image);
 
-            OrganSliceUpdated?.Invoke(OrganSliceImage, SelectedImage, Description, SelectedIndex);
+                // Define the new directory path
+                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string dataDirectory = @"data"; // Relative path for storing images
+                string donorDirectory = Path.Combine(baseDirectory, dataDirectory, donorId.ToString());
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+                // Ensure the directories exist
+                if (!Directory.Exists(donorDirectory))
+                {
+                    Directory.CreateDirectory(donorDirectory);
+                }
+
+                string organDirectory = Path.Combine(donorDirectory, organName);
+                if (!Directory.Exists(organDirectory))
+                {
+                    Directory.CreateDirectory(organDirectory);
+                }
+
+                if (!string.IsNullOrEmpty(organSide))
+                {
+                    organDirectory = Path.Combine(organDirectory, organSide);
+                    if (!Directory.Exists(organDirectory))
+                    {
+                        Directory.CreateDirectory(organDirectory);
+                    }
+                }
+
+                // Define the new file name
+                string newFileName = $"{donorId}-{organName}-{sliceIndex:D4}-{DateTime.Now:yyyyMMdd}.jpg";
+                string destinationFilePath = Path.Combine(organDirectory, newFileName);
+
+                // Copy the image to the new location
+                if (!string.IsNullOrEmpty(OrganSliceImagePath))
+                {
+                    File.Copy(OrganSliceImagePath, destinationFilePath, true); // true to overwrite if exists
+
+                    string relativePath = Path.GetRelativePath(baseDirectory, destinationFilePath);
+                    OrganSliceImagePath = relativePath; // Update to relative path
+                }
+
+                OrganSliceUpdated?.Invoke(OrganSliceImage, SelectedImage, Description, SelectedIndex);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error when saving the picture: {ex.Message}");
+            }
         }
 
         private void OrganSlicePicture_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            // Define the directory path and date format
+            string directoryPath = @"C:\Users\10927\Desktop\Pictures";
+            string datePrefix = DateTime.Now.ToString("yyyy_MM_dd"); // Use current date
+            string filePattern = $"{datePrefix}_*.jpg";
+
+            try
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.RestoreDirectory = true;
+                // Get all files matching the pattern in the directory
+                string[] files = Directory.GetFiles(directoryPath, filePattern);
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                if (files.Length == 0)
                 {
-                    string filePath = openFileDialog.FileName;
+                    MessageBox.Show("No images found with the specified pattern.");
+                    return;
+                }
 
-                    try
-                    {
-                        Image selectedImage = new Bitmap(filePath);
-                        OrganSlicePicture.Image = selectedImage;
+                // Extract numerical suffix and find the file with the maximum suffix
+                string maxFilePath = files
+                    .Select(f => new { FilePath = f, Number = GetImageNumber(Path.GetFileNameWithoutExtension(f)) })
+                    .OrderByDescending(f => f.Number)
+                    .FirstOrDefault()?.FilePath;
 
-                        OrganSliceImagePath = filePath;
+                if (maxFilePath != null)
+                {
+                    // Load and display the selected image
+                    Image selectedImage = new Bitmap(maxFilePath);
+                    OrganSlicePicture.Image = selectedImage;
+                    OrganSliceImagePath = maxFilePath;
 
-                        OrganSlicePicture.SizeMode = PictureBoxSizeMode.Zoom;
-
-                        OrganSliceDescription.Visible = false;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error loading image: {ex.Message}");
-                    }
+                    OrganSlicePicture.SizeMode = PictureBoxSizeMode.Zoom;
+                    OrganSliceDescription.Visible = false;
                 }
                 else
                 {
-                    OrganSliceDescription.Visible = true;
+                    MessageBox.Show("No suitable images found.");
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading image: {ex.Message}");
+            }
+        }
+
+
+        // Helper method to extract the numerical suffix from the filename
+        private int GetImageNumber(string filename)
+        {
+            // Assumes filename format: yyyy_MM_dd_XXXX
+            string[] parts = filename.Split('_');
+            if (parts.Length > 3 && int.TryParse(parts[3], out int number))
+            {
+                return number;
+            }
+            return -1; // Return -1 if parsing fails
         }
     }
 

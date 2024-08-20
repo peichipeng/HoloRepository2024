@@ -45,6 +45,11 @@ namespace HoloRepository
             additionalInfoContent.Text = additionalInfo;
         }
 
+        public void SetTitle(string title)
+        {
+            organSliceTitle.Text = title;
+        }
+
         private void SelectBox_CheckedChanged(object sender, EventArgs e)
         {
             if (SelectBox.Checked)

@@ -14,12 +14,30 @@ namespace HoloRepository
     public partial class OrganArchiveControl : UserControl
     {
         private DatabaseConnection dbConnection;
+        private Button invisibleButton;
         public OrganArchiveControl()
         {
+            this.Load += OrganArchiveControl_Load;
             dbConnection = new DatabaseConnection();
             InitializeComponent();
             LoadInitialPanel();
-            OrganArchiveSearchBox.TextChanged += OrganArchiveSearchBox_TextChanged;
+            InitializeInvisibleButton();
+        }
+
+        private void InitializeInvisibleButton()
+        {
+            invisibleButton = new Button
+            {
+                Size = new Size(0, 0),
+                Location = new Point(-100, -100),
+                TabStop = false
+            };
+            this.Controls.Add(invisibleButton);
+        }
+
+        private void OrganArchiveControl_Load(object sender, EventArgs e)
+        {
+            invisibleButton.Focus();
         }
 
         private void LoadInitialPanel()
@@ -121,43 +139,55 @@ namespace HoloRepository
 
         private void OrganArchiveSearchBox_TextChanged(object sender, EventArgs e)
         {
-            string searchText = OrganArchiveSearchBox.Text.ToLower();
+            placeholder.Visible = false;
+            string[] searchTerms = OrganArchiveSearchBox.Text.ToLower().Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+
             foreach (Control control in OrganDisplayPanel.Controls)
             {
                 if (control is OrganArchive3DPanel organArchive3DPanel)
                 {
-                    bool matchFound = false;
-                    foreach (Control subControl in organArchive3DPanel.ListPanel.Controls)
-                    {
-                        if (subControl is _3DPanel threeDPanel)
-                        {
-                            string donorId = threeDPanel.GetDonorId().ToLower();
-                            string organName = organArchive3DPanel.GetOrganName().ToLower();
-                            if (donorId.Contains(searchText) || organName.Contains(searchText))
-                            {
-                                matchFound = true;
-                                break;
-                            }
-                        }
-                    }
+                    bool matchFound = searchTerms.All(term =>
+                        organArchive3DPanel.ListPanel.Controls.OfType<_3DPanel>().Any(subControl =>
+                            subControl.GetDonorId().ToLower().Contains(term) ||
+                            organArchive3DPanel.GetOrganName().ToLower().Contains(term)));
+
                     organArchive3DPanel.Visible = matchFound;
                 }
                 else if (control is OrganArchiveSlicePanel organArchiveSlicePanel)
                 {
-                    bool matchFound = false;
-                    string donorId = organArchiveSlicePanel.GetDonorID().ToLower();
-                    string organName = organArchiveSlicePanel.GetOrganName().ToLower();
-                    string numSlices = organArchiveSlicePanel.GetNumOrgans().ToLower();
-                    string dateDeath = organArchiveSlicePanel.GetDateDeath().ToLower();
-                    string age = organArchiveSlicePanel.GetAge().ToLower();
-                    string causeOD = organArchiveSlicePanel.GetCauseOD().ToLower();
-                    if (donorId.Contains(searchText) || organName.Contains(searchText) || numSlices.Contains(searchText) || dateDeath.Contains(searchText) || age.Contains(searchText) || causeOD.Contains(searchText))
-                    {
-                        matchFound = true;
-                    }
+                    bool matchFound = searchTerms.All(term =>
+                        organArchiveSlicePanel.GetDonorID().ToLower().Contains(term) ||
+                        organArchiveSlicePanel.GetOrganName().ToLower().Contains(term) ||
+                        organArchiveSlicePanel.GetNumOrgans().ToLower().Contains(term) ||
+                        organArchiveSlicePanel.GetDateDeath().ToLower().Contains(term) ||
+                        organArchiveSlicePanel.GetAge().ToLower().Contains(term) ||
+                        organArchiveSlicePanel.GetCauseOD().ToLower().Contains(term));
+
                     organArchiveSlicePanel.Visible = matchFound;
                 }
             }
         }
+
+        private void placeholder_Click(object sender, EventArgs e)
+        {
+            OrganArchiveSearchBox.Focus();
+        }
+
+        private void OrganArchiveSearchBox_GotFocus(object sender, EventArgs e)
+        {
+            // Hide the placeholder when the TextBox gains focus
+            placeholder.Visible = false;
+            OrganArchiveSearchBox.ForeColor = Color.Black;
+        }
+
+        private void OrganArchiveSearchBox_LostFocus(object sender, EventArgs e)
+        {
+            // Show the placeholder if TextBox is empty when it loses focus
+            if (string.IsNullOrWhiteSpace(OrganArchiveSearchBox.Text))
+            {
+                placeholder.Visible = true;
+            }
+        }
+
     }
 }

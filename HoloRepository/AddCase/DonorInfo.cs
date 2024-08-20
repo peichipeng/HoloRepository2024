@@ -25,8 +25,10 @@ namespace HoloRepository.AddCase
         private bool deleting = false;
         private string requiredFieldMsg = "Required field.";
 
+        private DatabaseConnection dbConnection;
         public DonorInfo()
         {
+            dbConnection = new DatabaseConnection();
             InitializeComponent();
         }
 
@@ -50,21 +52,14 @@ namespace HoloRepository.AddCase
             // need to check if the donorid exists
             try
             {
-                var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
-                await using var conn = new NpgsqlConnection(connectionString);
-                await conn.OpenAsync();
-
-                await using var cmd = new NpgsqlCommand("INSERT INTO donor (donor_id, age, date_of_death, cause_of_death) VALUES ($1, $2, $3, $4)", conn)
-                {
-                    Parameters =
-                {
-                    new() { Value = donorId },
-                    new() { Value = age },
-                    new() { Value = dod },
-                    new() { Value = causeOfDeath }
-                }
-                };
-                await cmd.ExecuteNonQueryAsync();
+                string insertQuery = "INSERT INTO donor (donor_id, age, date_of_death, cause_of_death) VALUES (@donorId, @age, @dod, @causeOfDeath)";
+                dbConnection.ExecuteNonQuery(insertQuery, new Dictionary<string, object>
+                    {
+                        { "@donorId", donorId },
+                        { "@age", age },
+                        { "@dod", dod },
+                        { "@causeOfDeath", causeOfDeath }
+                    });
                 if (Parent.Parent is AddCaseFramework framework)
                 {
                     framework.LoadControl(new CasePage("addCase", donorId));
@@ -85,33 +80,25 @@ namespace HoloRepository.AddCase
         {
             try
             {
-                var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
-                await using var conn = new NpgsqlConnection(connectionString);
-                await conn.OpenAsync();
-
                 string sql;
+                var parameters = new Dictionary<string, object>
+                {
+                    { "@donorId", donorId },
+                    { "@age", age },
+                    { "@dod", dod },
+                    { "@causeOfDeath", causeOfDeath }
+                };
                 if (originalId == donorId)
                 {
                     sql = "UPDATE donor SET age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath, timestamp = @time WHERE donor_id = @donorId";
                 }
                 else
                 {
-                    sql = "UPDATE donor SET donor_id = @donorId, age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath, timestamp = @time WHERE donor_id = @originalId";
+                    sql = "UPDATE donor SET donor_id = @donorId, age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath WHERE donor_id = @originalId";
+                    parameters.Add("@originalId", originalId);
                 }
-                await using var cmd = new NpgsqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@donorId", donorId);
-                cmd.Parameters.AddWithValue("@age", age);
-                cmd.Parameters.AddWithValue("@dod", dod);
-                cmd.Parameters.AddWithValue("@causeOfDeath", causeOfDeath);
-                cmd.Parameters.AddWithValue("@time", DateTime.Now);
-
-                if (originalId != donorId)
-                {
-                    cmd.Parameters.AddWithValue("@originalId", originalId);
-                }
-
-                await cmd.ExecuteNonQueryAsync();
-
+                await Task.Run(() => dbConnection.ExecuteNonQuery(sql, parameters));
+                
                 if (Parent.Parent is AddCaseFramework framework)
                 {
                     if (framework.destination == "addCase")
