@@ -176,6 +176,12 @@ namespace HoloRepository.AddCase
 
         public void HandleCancelYes()
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(HandleCancelYes));
+                return;
+            }
+            mainForm.OnTranscriptionReceived -= OnTranscriptionReceived;
             if (addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
             {
                 if (donorInfoPage.title.Text == "Add Donor's Basic")
@@ -223,6 +229,17 @@ namespace HoloRepository.AddCase
 
         public void ProcessVoiceCommand(string transcription)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(ProcessVoiceCommand), transcription);
+                return;
+            }
+
+            if (this.IsDisposed || !this.IsHandleCreated)
+            {
+                return;
+            }
+
             transcription = transcription.ToLower().Trim();
 
             if (transcription.Contains("cancel"))
@@ -296,6 +313,11 @@ namespace HoloRepository.AddCase
 
         private void OnTranscriptionReceived(string transcription)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(OnTranscriptionReceived), transcription);
+                return;
+            }
             ProcessVoiceCommand(transcription);
         }
     }

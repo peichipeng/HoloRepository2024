@@ -343,7 +343,7 @@ namespace HoloRepository.AddCase
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => ProcessNERResult(nerResult)));
+                BeginInvoke(new Action(() => ProcessNERResult(nerResult)));
             }
             else
             {
