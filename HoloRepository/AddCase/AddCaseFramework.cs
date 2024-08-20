@@ -247,10 +247,25 @@ namespace HoloRepository.AddCase
                 HandleCancelBtn_Click();
                 return;
             }
-            else if (transcription.Contains("next"))
+            if (nextBtn.Text.Equals("Save", StringComparison.OrdinalIgnoreCase))
             {
-                nextBtn_Click(this, EventArgs.Empty);
-                return;
+                if (transcription.Contains("save"))
+                {
+                    MainForm mainForm = (MainForm)Application.OpenForms[0];
+                    mainForm.StopNER();
+                    nextBtn_Click(this, EventArgs.Empty);
+                    return;
+                }
+            }
+            else if (nextBtn.Text.Equals("Next", StringComparison.OrdinalIgnoreCase))
+            {
+                if (transcription.Contains("next"))
+                {
+                    MainForm mainForm = (MainForm)Application.OpenForms[0];
+                    mainForm.StopNER();
+                    nextBtn_Click(this, EventArgs.Empty);
+                    return;
+                }
             }
 
             if (_currentPopup != null)
@@ -297,6 +312,22 @@ namespace HoloRepository.AddCase
                 if (control is DonorInfo donorInfoPage)
                 {
                     donorInfoPage.ProcessVoiceCommand(transcription);
+                }
+                else if (control is CasePage casePage)
+                {
+                    foreach (Control casePageControl in casePage.Controls)
+                    {
+                        if (casePageControl is Panel panel)
+                        {
+                            foreach (Control panelControl in panel.Controls)
+                            {
+                                if (panelControl is CaseView caseView)
+                                {
+                                    caseView.ProcessVoiceCommand(transcription);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
