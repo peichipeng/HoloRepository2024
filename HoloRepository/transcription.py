@@ -1,4 +1,4 @@
-import torch
+﻿import torch
 from transformers import AutoModelForTokenClassification, AutoTokenizer, AutoProcessor, AutoModelForSpeechSeq2Seq, pipeline
 import speech_recognition as sr
 import queue
@@ -10,6 +10,8 @@ import sys
 import json
 import traceback
 import os
+from dateutil import parser
+import re
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
@@ -120,17 +122,18 @@ def format_ner_result(ner_results):
             if entity['entity'].endswith("ID"):
                 formatted_result["ID"] += entity['word'] + " "
             elif entity['entity'].endswith("DoD"):
-                formatted_result["DoD"] += entity['word'] + " "
+                formatted_result["DoD"] += entity['word']
             elif entity['entity'].endswith("Age"):
                 formatted_result["Age"] += entity['word'] + " "
             elif entity['entity'].endswith("Cause_of_Death"):
                 formatted_result["Cause_of_Death"] += entity['word'] + " "
 
-        # Post-process to ensure correct formats
-        formatted_result["ID"] = formatted_result["ID"].strip()
-        formatted_result["DoD"] = process_date(formatted_result["DoD"].strip())
-        formatted_result["Age"] = formatted_result["Age"].strip()
-        formatted_result["Cause_of_Death"] = formatted_result["Cause_of_Death"].strip()
+        formatted_result = {key: value.replace('#', '').strip() for key, value in formatted_result.items()}
+
+        formatted_result["ID"] = re.sub(r'\D', '', formatted_result["ID"])
+
+        formatted_result["DoD"] = process_date(formatted_result["DoD"])
+
         return formatted_result
     
     except Exception as e:
@@ -140,14 +143,46 @@ def format_ner_result(ner_results):
 
 def process_date(date_str):
     """Process date string to DD/MM/YYYY format."""
-    from dateutil import parser
     try:
-        date = parser.parse(date_str, dayfirst=True)
+        date_str = preprocess_date_string(date_str)
+
+        date_str = fix_year_format(date_str)
+
+        date = parser.parse(date_str)
+
         return date.strftime("%d/%m/%Y")
     except Exception as e:
         print(f"Error in process_date: {e}", file=sys.stderr, flush=True)
         traceback.print_exc(file=sys.stderr)
         return date_str
+
+def preprocess_date_string(date_str):
+    date_str = re.sub(r'(\d+)(th|st|nd|rd)', r'\1', date_str, flags=re.IGNORECASE)
+
+    date_str = re.sub(r',', '', date_str)
+
+    date_str = re.sub(r'\b(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth|twentieth|twenty[- ]first|twenty[- ]second|twenty[- ]third|twenty[- ]fourth|twenty[- ]fifth|twenty[- ]sixth|twenty[- ]seventh|twenty[- ]eighth|twenty[- ]ninth|thirtieth|thirty[- ]first)\b(?: of)?\b', convert_ordinal_to_number, date_str, flags=re.IGNORECASE)
+
+    return date_str
+
+def fix_year_format(date_str):
+    """Fixes the year format to ensure it is a continuous four-digit number."""
+    return re.sub(r'(\d{2})\s(\d{2})', r'\1\2', date_str)
+
+def convert_ordinal_to_number(match):
+    """Convert ordinal numbers to numeric form."""
+    ordinal_dict = {
+        'first': '1', 'second': '2', 'third': '3', 'fourth': '4', 'fifth': '5',
+        'sixth': '6', 'seventh': '7', 'eighth': '8', 'ninth': '8', 'tenth': '10',
+        'eleventh': '11', 'twelfth': '12', 'thirteenth': '13', 'fourteenth': '14',
+        'fifteenth': '15', 'sixteenth': '16', 'seventeenth': '17', 'eighteenth': '18',
+        'nineteenth': '19', 'twentieth': '20', 'twenty first': '21', 'twenty second': '22',
+        'twenty third': '23', 'twenty fourth': '24', 'twenty fifth': '25', 'twenty sixth': '26',
+        'twenty seventh': '27', 'twenty eighth': '28', 'twenty ninth': '29', 'thirtieth': '30',
+        'thirty first': '31'
+    }
+
+    return ordinal_dict[match.group(0).lower().replace(' of', '').replace('-', '')]
 
 def start_transcription():
     global stop_listening

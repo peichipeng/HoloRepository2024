@@ -48,7 +48,6 @@ namespace HoloRepository
                 Arguments = $"\"{pythonScriptPath}\"",
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
