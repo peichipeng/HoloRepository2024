@@ -104,50 +104,6 @@ namespace HoloRepository
             }
         }
 
-        private void ProcessTranscription(string transcription)
-        {
-            lock (this)
-            {
-                var activePopupWindow = Application.OpenForms.OfType<PopupWindow>().FirstOrDefault();
-                if (activePopupWindow != null)
-                {
-                    activePopupWindow.OnTranscriptionReceived(transcription);
-                }
-                else
-                {
-
-                        if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is HomePageControl homePageControl)
-                        {
-                            homePageControl.ProcessVoiceCommand(transcription);
-                        }
-                        else if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is AddCaseFramework addCaseFramework)
-                        {
-                            addCaseFramework.ProcessVoiceCommand(transcription);
-                        }
-                        OnTranscriptionReceived?.Invoke(transcription);
-                    
-                }
-            }
-        }
-
-        private bool IsDonorInfoPageActive()
-        {
-            if (mainContainer.Controls.Count > 0 && mainContainer.Controls[0] is AddCaseFramework addCaseFramework)
-            {
-                return addCaseFramework.addCaseContainer.Controls.Count > 0 && addCaseFramework.addCaseContainer.Controls[0] is DonorInfo;
-            }
-            return false;
-        }
-
-        private DonorInfo GetCurrentDonorInfoPage()
-        {
-            if (mainContainer.Controls[0] is AddCaseFramework addCaseFramework)
-            {
-                return addCaseFramework.addCaseContainer.Controls[0] as DonorInfo;
-            }
-            return null;
-        }
-
 
         public void LoadControl(UserControl userControl)
         {
