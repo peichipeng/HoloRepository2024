@@ -36,6 +36,7 @@
             btnUpdateOrgan = new Button();
             button1 = new Button();
             button2 = new Button();
+            voiceControl1 = new VoiceControl();
             SuspendLayout();
             // 
             // userGuideBtn
@@ -50,7 +51,7 @@
             userGuideBtn.Name = "userGuideBtn";
             userGuideBtn.Size = new Size(263, 55);
             userGuideBtn.TabIndex = 82;
-            userGuideBtn.Text = "User Guide";
+            userGuideBtn.Text = "&User Guide";
             userGuideBtn.UseVisualStyleBackColor = false;
             userGuideBtn.Click += userGuideBtn_Click;
             // 
@@ -66,7 +67,7 @@
             organArchiveBtn.Name = "organArchiveBtn";
             organArchiveBtn.Size = new Size(263, 55);
             organArchiveBtn.TabIndex = 81;
-            organArchiveBtn.Text = "Organ Archive";
+            organArchiveBtn.Text = "&Organ Archive";
             organArchiveBtn.UseVisualStyleBackColor = false;
             organArchiveBtn.Click += organArchiveBtn_Click;
             // 
@@ -82,7 +83,7 @@
             viewCasesBtn.Name = "viewCasesBtn";
             viewCasesBtn.Size = new Size(263, 55);
             viewCasesBtn.TabIndex = 80;
-            viewCasesBtn.Text = "View Cases";
+            viewCasesBtn.Text = "&View Cases";
             viewCasesBtn.UseVisualStyleBackColor = false;
             viewCasesBtn.Click += viewCasesBtn_Click;
             // 
@@ -98,7 +99,7 @@
             addCaseBtn.Name = "addCaseBtn";
             addCaseBtn.Size = new Size(263, 55);
             addCaseBtn.TabIndex = 79;
-            addCaseBtn.Text = " Add a Case";
+            addCaseBtn.Text = "&Add a Case";
             addCaseBtn.UseVisualStyleBackColor = false;
             addCaseBtn.Click += addCaseBtn_Click;
             // 
@@ -146,11 +147,20 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // voiceControl1
+            // 
+            voiceControl1.BackColor = Color.Transparent;
+            voiceControl1.Location = new Point(1018, 192);
+            voiceControl1.Name = "voiceControl1";
+            voiceControl1.Size = new Size(140, 65);
+            voiceControl1.TabIndex = 86;
+            // 
             // HomePageControl
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(144F, 144F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
+            Controls.Add(voiceControl1);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(btnUpdateOrgan);
@@ -178,5 +188,6 @@
         private Button btnUpdateOrgan;
         private Button button1;
         private Button button2;
+        private VoiceControl voiceControl1;
     }
 }

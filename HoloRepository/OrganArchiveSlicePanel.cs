@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Npgsql;
 using System.Windows.Forms;
+using FellowOakDicom.Imaging;
 
 namespace HoloRepository
 {
@@ -162,25 +163,111 @@ namespace HoloRepository
 
         private void EditButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                var parentForm = this.FindForm();
+            AddCaseControl addCaseControl = new AddCaseControl(donorId, organId);
 
-                if (parentForm != null)
+            MainForm mainForm = GetMainForm(this);
+
+            if (mainForm != null)
+            {
+                mainForm.LoadControl(addCaseControl);
+
+                addCaseControl.OnSaveCompleted = (id) =>
                 {
-                    parentForm.Controls.Clear();
+                    mainForm.LoadControl(new OrganArchiveControl());
+                };
 
-                    var addCaseControl = new AddCaseControl(donorId, organId);
-
-                    parentForm.Controls.Add(addCaseControl);
-
-                    addCaseControl.Dock = DockStyle.Fill;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error occurs when clicking update：{ex.Message}");
+                addCaseControl.Dock = DockStyle.Fill;
             }
         }
+
+        private void clickPanel_Click(object sender, EventArgs e)
+        {
+            MainInterFaceControl mainInterfaceControl = new MainInterFaceControl(this, donorId, organId);
+
+            MainForm mainForm = GetMainForm(this);
+
+            if (mainForm != null)
+            {
+                mainForm.Controls.Clear();
+                mainForm.Controls.Add(mainInterfaceControl);
+
+                mainInterfaceControl.Dock = DockStyle.Fill;
+            }
+        }
+
+        private MainForm GetMainForm(Control control)
+        {
+            Control current = control;
+            while (current != null)
+            {
+                if (current is MainForm)
+                {
+                    return (MainForm)current;
+                }
+                current = current.Parent;
+            }
+            return null;
+        }
+
+        private void BinButton_Click(object sender, EventArgs e)
+        {
+            using (var popup = new PopupWindow("Are you sure you want to delete this organ?", this.ParentForm))
+            {
+                var result = popup.ShowDialog(this.ParentForm);
+
+                if (result == DialogResult.Yes)
+                {
+                    this.Parent.Controls.Remove(this);
+                    DisposeImages();
+
+                    try
+                    {
+                        using (var connection = dbConnection.GetConnection())
+                        {
+                            using (var transaction = connection.BeginTransaction())
+                            {
+                                string deleteQuery = @"
+                                    DELETE FROM dicomfile WHERE organ_id = @organId;
+                                    DELETE FROM model3d WHERE organ_id = @organId;
+                                    DELETE FROM sliceimage WHERE organ_id = @organId;
+                                    DELETE FROM organtag WHERE organ_id = @organId;
+                                    DELETE FROM organ WHERE organ_id = @organId;";
+
+                                using (var command = new NpgsqlCommand(deleteQuery, connection, transaction))
+                                {
+                                    command.Parameters.AddWithValue("@organId", organId);
+                                    command.ExecuteNonQuery();
+                                }
+
+                                transaction.Commit();
+                            }
+                        }
+                        string organNameWithSide = string.IsNullOrEmpty(organSide) ? organName : $"{organName}({organSide})";
+                        string folderPath = Path.Combine("data", donorId.ToString(), organNameWithSide);
+                        if (Directory.Exists(folderPath))
+                        {
+                            Directory.Delete(folderPath, true);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error deleting organ: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void DisposeImages()
+        {
+            foreach (Control control in OrganSlicesImagePanel.Controls)
+            {
+                if (control is OrganPanel organPanel)
+                {
+                    organPanel.DisposeSliceImages();
+                }
+            }
+        }
+
     }
 }

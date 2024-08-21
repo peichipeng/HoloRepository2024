@@ -76,42 +76,43 @@ namespace HoloRepository
             addCaseBtn.BorderRadius = 15;
             addCaseBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             addCaseBtn.ForeColor = Color.White;
-            addCaseBtn.Location = new Point(648, 74);
-            addCaseBtn.Margin = new Padding(2, 2, 14, 2);
+            addCaseBtn.Location = new Point(1018, 118);
+            addCaseBtn.Margin = new Padding(3, 3, 22, 3);
             addCaseBtn.Name = "addCaseBtn";
-            addCaseBtn.Size = new Size(125, 32);
+            addCaseBtn.Size = new Size(196, 51);
             addCaseBtn.TabIndex = 74;
-            addCaseBtn.Text = "+ Add a Case";
+            addCaseBtn.Text = "+ &Add a Case";
             addCaseBtn.UseVisualStyleBackColor = false;
             addCaseBtn.Click += addCaseBtn_Click;
             // 
             // contextMenu
             // 
+            contextMenu.ImageScalingSize = new Size(24, 24);
             contextMenu.Items.AddRange(new ToolStripItem[] { viewToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
             contextMenu.Name = "contextMenuStrip1";
             contextMenu.RenderMode = ToolStripRenderMode.Professional;
-            contextMenu.Size = new Size(108, 54);
+            contextMenu.Size = new Size(145, 74);
             // 
             // viewToolStripMenuItem
             // 
             viewToolStripMenuItem.ForeColor = Color.Black;
             viewToolStripMenuItem.Image = (Image)resources.GetObject("viewToolStripMenuItem.Image");
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new Size(107, 22);
+            viewToolStripMenuItem.Size = new Size(144, 32);
             viewToolStripMenuItem.Text = "View";
             viewToolStripMenuItem.Click += viewToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(104, 6);
+            toolStripSeparator1.Size = new Size(141, 6);
             // 
             // deleteToolStripMenuItem
             // 
             deleteToolStripMenuItem.ForeColor = Color.FromArgb(207, 73, 73);
             deleteToolStripMenuItem.Image = (Image)resources.GetObject("deleteToolStripMenuItem.Image");
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(107, 22);
+            deleteToolStripMenuItem.Size = new Size(144, 32);
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
@@ -124,9 +125,10 @@ namespace HoloRepository
             tablePanel.Anchor = AnchorStyles.Top;
             tablePanel.Controls.Add(caseTable);
             tablePanel.Controls.Add(panel2);
-            tablePanel.Location = new Point(95, 120);
+            tablePanel.Location = new Point(149, 192);
+            tablePanel.Margin = new Padding(5, 5, 5, 5);
             tablePanel.Name = "tablePanel";
-            tablePanel.Size = new Size(678, 399);
+            tablePanel.Size = new Size(1065, 638);
             tablePanel.TabIndex = 77;
             // 
             // caseTable
@@ -156,18 +158,20 @@ namespace HoloRepository
             caseTable.EnableHeadersVisualStyles = false;
             caseTable.GridColor = Color.Silver;
             caseTable.Location = new Point(0, 0);
+            caseTable.Margin = new Padding(5, 5, 5, 5);
             caseTable.MultiSelect = false;
             caseTable.Name = "caseTable";
             caseTable.ReadOnly = true;
             caseTable.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             caseTable.RowHeadersVisible = false;
+            caseTable.RowHeadersWidth = 62;
             caseTable.RowTemplate.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             caseTable.RowTemplate.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
             caseTable.RowTemplate.DefaultCellStyle.SelectionBackColor = Color.WhiteSmoke;
             caseTable.RowTemplate.DefaultCellStyle.SelectionForeColor = SystemColors.WindowText;
             caseTable.RowTemplate.Height = 30;
             caseTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            caseTable.Size = new Size(678, 336);
+            caseTable.Size = new Size(1065, 538);
             caseTable.TabIndex = 78;
             caseTable.CellDoubleClick += caseTable_CellDoubleClick;
             caseTable.CellFormatting += caseTable_CellFormatting;
@@ -177,13 +181,16 @@ namespace HoloRepository
             // 
             donorIdDataGridViewTextBoxColumn.DataPropertyName = "DonorId";
             donorIdDataGridViewTextBoxColumn.HeaderText = "DONOR ID";
+            donorIdDataGridViewTextBoxColumn.MinimumWidth = 8;
             donorIdDataGridViewTextBoxColumn.Name = "donorIdDataGridViewTextBoxColumn";
             donorIdDataGridViewTextBoxColumn.ReadOnly = true;
+            donorIdDataGridViewTextBoxColumn.Width = 150;
             // 
             // dODDataGridViewTextBoxColumn
             // 
             dODDataGridViewTextBoxColumn.DataPropertyName = "DOD";
             dODDataGridViewTextBoxColumn.HeaderText = "DATE OF DEATH";
+            dODDataGridViewTextBoxColumn.MinimumWidth = 8;
             dODDataGridViewTextBoxColumn.Name = "dODDataGridViewTextBoxColumn";
             dODDataGridViewTextBoxColumn.ReadOnly = true;
             dODDataGridViewTextBoxColumn.Width = 120;
@@ -192,6 +199,7 @@ namespace HoloRepository
             // 
             ageDataGridViewTextBoxColumn.DataPropertyName = "Age";
             ageDataGridViewTextBoxColumn.HeaderText = "AGE";
+            ageDataGridViewTextBoxColumn.MinimumWidth = 8;
             ageDataGridViewTextBoxColumn.Name = "ageDataGridViewTextBoxColumn";
             ageDataGridViewTextBoxColumn.ReadOnly = true;
             ageDataGridViewTextBoxColumn.Width = 50;
@@ -202,6 +210,7 @@ namespace HoloRepository
             dataGridViewTextBoxColumn1.DataPropertyName = "CauseOfDeath";
             dataGridViewTextBoxColumn1.FillWeight = 150F;
             dataGridViewTextBoxColumn1.HeaderText = "CAUSE OF DEATH";
+            dataGridViewTextBoxColumn1.MinimumWidth = 8;
             dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             dataGridViewTextBoxColumn1.ReadOnly = true;
             // 
@@ -211,6 +220,7 @@ namespace HoloRepository
             dataGridViewTextBoxColumn2.DataPropertyName = "Organs";
             dataGridViewTextBoxColumn2.FillWeight = 120F;
             dataGridViewTextBoxColumn2.HeaderText = "ORGANS";
+            dataGridViewTextBoxColumn2.MinimumWidth = 8;
             dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
@@ -219,9 +229,10 @@ namespace HoloRepository
             panel2.BackColor = Color.Transparent;
             panel2.Controls.Add(paginationPanel);
             panel2.Dock = DockStyle.Bottom;
-            panel2.Location = new Point(0, 336);
+            panel2.Location = new Point(0, 537);
+            panel2.Margin = new Padding(5, 5, 5, 5);
             panel2.Name = "panel2";
-            panel2.Size = new Size(678, 63);
+            panel2.Size = new Size(1065, 101);
             panel2.TabIndex = 77;
             // 
             // paginationPanel
@@ -230,7 +241,8 @@ namespace HoloRepository
             paginationPanel.AutoSize = true;
             paginationPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             paginationPanel.BackColor = Color.Transparent;
-            paginationPanel.Location = new Point(137, 6);
+            paginationPanel.Location = new Point(215, 10);
+            paginationPanel.Margin = new Padding(5, 5, 5, 5);
             paginationPanel.Name = "paginationPanel";
             paginationPanel.Size = new Size(0, 0);
             paginationPanel.TabIndex = 78;
@@ -249,17 +261,18 @@ namespace HoloRepository
             panel.Controls.Add(addCaseBtn);
             panel.Dock = DockStyle.Fill;
             panel.Location = new Point(0, 0);
+            panel.Margin = new Padding(5, 5, 5, 5);
             panel.Name = "panel";
-            panel.Size = new Size(846, 415);
+            panel.Size = new Size(1329, 664);
             panel.TabIndex = 78;
             // 
             // greyRightArrow
             // 
             greyRightArrow.Image = (Image)resources.GetObject("greyRightArrow.Image");
-            greyRightArrow.Location = new Point(42, 227);
-            greyRightArrow.Margin = new Padding(0, 9, 3, 3);
+            greyRightArrow.Location = new Point(66, 363);
+            greyRightArrow.Margin = new Padding(0, 14, 5, 5);
             greyRightArrow.Name = "greyRightArrow";
-            greyRightArrow.Size = new Size(16, 16);
+            greyRightArrow.Size = new Size(25, 26);
             greyRightArrow.SizeMode = PictureBoxSizeMode.Zoom;
             greyRightArrow.TabIndex = 86;
             greyRightArrow.TabStop = false;
@@ -268,10 +281,10 @@ namespace HoloRepository
             // blackRightArrow
             // 
             blackRightArrow.Image = (Image)resources.GetObject("blackRightArrow.Image");
-            blackRightArrow.Location = new Point(55, 275);
-            blackRightArrow.Margin = new Padding(0, 10, 3, 3);
+            blackRightArrow.Location = new Point(86, 440);
+            blackRightArrow.Margin = new Padding(0, 16, 5, 5);
             blackRightArrow.Name = "blackRightArrow";
-            blackRightArrow.Size = new Size(16, 16);
+            blackRightArrow.Size = new Size(25, 26);
             blackRightArrow.SizeMode = PictureBoxSizeMode.Zoom;
             blackRightArrow.TabIndex = 85;
             blackRightArrow.TabStop = false;
@@ -281,10 +294,10 @@ namespace HoloRepository
             // greyLeftArrow
             // 
             greyLeftArrow.Image = (Image)resources.GetObject("greyLeftArrow.Image");
-            greyLeftArrow.Location = new Point(23, 299);
-            greyLeftArrow.Margin = new Padding(3, 10, 0, 3);
+            greyLeftArrow.Location = new Point(36, 478);
+            greyLeftArrow.Margin = new Padding(5, 16, 0, 5);
             greyLeftArrow.Name = "greyLeftArrow";
-            greyLeftArrow.Size = new Size(16, 16);
+            greyLeftArrow.Size = new Size(25, 26);
             greyLeftArrow.SizeMode = PictureBoxSizeMode.Zoom;
             greyLeftArrow.TabIndex = 82;
             greyLeftArrow.TabStop = false;
@@ -293,10 +306,10 @@ namespace HoloRepository
             // blackLeftArrow
             // 
             blackLeftArrow.Image = (Image)resources.GetObject("blackLeftArrow.Image");
-            blackLeftArrow.Location = new Point(23, 336);
-            blackLeftArrow.Margin = new Padding(3, 10, 0, 3);
+            blackLeftArrow.Location = new Point(36, 538);
+            blackLeftArrow.Margin = new Padding(5, 16, 0, 5);
             blackLeftArrow.Name = "blackLeftArrow";
-            blackLeftArrow.Size = new Size(16, 16);
+            blackLeftArrow.Size = new Size(25, 26);
             blackLeftArrow.SizeMode = PictureBoxSizeMode.Zoom;
             blackLeftArrow.TabIndex = 81;
             blackLeftArrow.TabStop = false;
@@ -307,9 +320,10 @@ namespace HoloRepository
             // 
             searchIcon.Anchor = AnchorStyles.Top;
             searchIcon.Image = (Image)resources.GetObject("searchIcon.Image");
-            searchIcon.Location = new Point(95, 74);
+            searchIcon.Location = new Point(149, 118);
+            searchIcon.Margin = new Padding(5, 5, 5, 5);
             searchIcon.Name = "searchIcon";
-            searchIcon.Size = new Size(16, 16);
+            searchIcon.Size = new Size(25, 26);
             searchIcon.SizeMode = PictureBoxSizeMode.Zoom;
             searchIcon.TabIndex = 80;
             searchIcon.TabStop = false;
@@ -319,20 +333,19 @@ namespace HoloRepository
             pageNameLabel.Anchor = AnchorStyles.Top;
             pageNameLabel.AutoSize = true;
             pageNameLabel.Font = new Font("Microsoft YaHei UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point);
-            pageNameLabel.Location = new Point(333, 25);
-            pageNameLabel.Margin = new Padding(14, 0, 2, 0);
+            pageNameLabel.Location = new Point(523, 40);
+            pageNameLabel.Margin = new Padding(22, 0, 3, 0);
             pageNameLabel.Name = "pageNameLabel";
-            pageNameLabel.Size = new Size(180, 39);
+            pageNameLabel.Size = new Size(270, 58);
             pageNameLabel.TabIndex = 79;
             pageNameLabel.Text = "View Cases";
             // 
             // searchBox
             // 
             searchBox.Anchor = AnchorStyles.Top;
-            searchBox.Location = new Point(95, 74);
-            searchBox.Margin = new Padding(2);
+            searchBox.Location = new Point(149, 118);
             searchBox.Name = "searchBox";
-            searchBox.Size = new Size(532, 27);
+            searchBox.Size = new Size(836, 35);
             searchBox.StateCommon.Border.Color1 = Color.LightGray;
             searchBox.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
             searchBox.StateCommon.Border.Rounding = 3;
@@ -348,11 +361,12 @@ namespace HoloRepository
             // 
             // ViewCasesControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel);
+            Margin = new Padding(5, 5, 5, 5);
             Name = "ViewCasesControl";
-            Size = new Size(846, 415);
+            Size = new Size(1329, 664);
             Load += ViewCasesControl_Load;
             contextMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)caseDataBindingSource).EndInit();

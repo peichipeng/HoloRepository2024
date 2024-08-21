@@ -8,7 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FellowOakDicom.Imaging;
+using FellowOakDicom;
 using Npgsql;
+using SixLabors.ImageSharp;
 
 namespace HoloRepository
 {
@@ -60,7 +63,7 @@ namespace HoloRepository
             }
         }
 
-        private void LoadFromDatabase()
+        private async Task LoadFromDatabase()
         {
             string query = "SELECT dicom_id, image_path, additional_info FROM sliceimage WHERE organ_id = @organId";
             var parameters = new Dictionary<string, object> { { "@organId", organId.Value } };
@@ -75,8 +78,8 @@ namespace HoloRepository
                         string imagePath = reader.GetString(1);
                         string additionalInfo = reader.GetString(2);
 
-                        Image organSlice = Image.FromFile(imagePath);
-                        Image dicomImage = LoadDicomImage(dicomId);
+                        System.Drawing.Image organSlice = System.Drawing.Image.FromFile(imagePath);
+                        System.Drawing.Image dicomImage = await LoadDicomImage(dicomId);
 
                         var checkTableContent = new CheckTableContent();
                         checkTableContent.SetImageInfo(organSlice, dicomImage, additionalInfo);
@@ -99,8 +102,8 @@ namespace HoloRepository
         {
             foreach (var panel in organSlicePanels)
             {
-                Image organSlice = panel.OrganSliceImage;
-                Image dicomImage = panel.DicomImage;
+                System.Drawing.Image organSlice = panel.OrganSliceImage;
+                System.Drawing.Image dicomImage = panel.DicomImage;
                 string additionalInfo = panel.Description;
 
                 var checkTableContent = new CheckTableContent();
@@ -127,9 +130,9 @@ namespace HoloRepository
             internalCheckChange = false;
         }
 
-        private Image LoadDicomImage(int dicomId)
+        private async Task<System.Drawing.Image> LoadDicomImage(int dicomId)
         {
-            Image CTImage = null;
+            System.Drawing.Image CTImage = null;
             var connection = dbConnection.GetConnection();
 
             try
@@ -143,7 +146,30 @@ namespace HoloRepository
                     if (result != null && result != DBNull.Value)
                     {
                         string dicomPath = result.ToString();
-                        CTImage = Image.FromFile(dicomPath);
+                        if (File.Exists(dicomPath))
+                        {
+                            try
+                            {
+                                var dicomFile = await DicomFile.OpenAsync(dicomPath);
+                                var dicomImage = new DicomImage(dicomFile.Dataset);
+
+                                using (var imageSharpImage = dicomImage.RenderImage().AsSharpImage())
+                                using (var memoryStream = new MemoryStream())
+                                {
+                                    imageSharpImage.SaveAsBmp(memoryStream);
+                                    memoryStream.Seek(0, SeekOrigin.Begin);
+                                    CTImage = new Bitmap(memoryStream);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Error processing DICOM file: {dicomPath}. Details: {ex.Message}");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show($"DICOM file not found: {dicomPath}");
+                        }
                     }
                 }
             }

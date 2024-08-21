@@ -20,6 +20,16 @@ namespace HoloRepository
             InitializeComponent();
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.A))
+            {
+                addCaseBtn_Click(this, EventArgs.Empty);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         public void LoadControl(UserControl userControl)
         {
             if (this.Parent.Parent is MainForm mainForm)
@@ -69,7 +79,7 @@ namespace HoloRepository
 
         private void button2_Click(object sender, EventArgs e)
         {
-            LoadControl(new MainInterFaceControl(this, 123456, 18));
+            LoadControl(new MainInterFaceControl(this, 12345, 32));
         }
 
         private void HomePageControl_Load(object sender, EventArgs e)

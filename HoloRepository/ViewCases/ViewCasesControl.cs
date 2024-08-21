@@ -77,81 +77,81 @@ namespace HoloRepository
                 // Execute the query to retrieve donors
                 using (var caseReader = db.ExecuteReader(queryCases))
                 {
-                while (await caseReader.ReadAsync())
-                {
-                    int donorId = caseReader.GetInt32(0);
-                    int age = caseReader.GetInt32(1);
-                    DateTime DOD = caseReader.GetDateTime(2);
-                    string causeOfDeath = caseReader.GetString(3);
-                    string organs = "";
+                    while (await caseReader.ReadAsync())
+                    {
+                        int donorId = caseReader.GetInt32(0);
+                        int age = caseReader.GetInt32(1);
+                        DateTime DOD = caseReader.GetDateTime(2);
+                        string causeOfDeath = caseReader.GetString(3);
+                        string organs = "";
 
                         // Query to retrieve organs for the current donor
                         string queryOrgans = "SELECT organ_id, organ_name_id FROM organ WHERE donor_id = @donorId ORDER BY organ_id DESC";
                         var organParams = new Dictionary<string, object> { { "@donorId", donorId } };
 
-                    List<string> organList = new List<string>();
+                        List<string> organList = new List<string>();
 
                         // Execute the query to retrieve organs
                         using (var organReader = db.ExecuteReader(queryOrgans, organParams))
-                    {
-                        while (await organReader.ReadAsync())
                         {
-                            int organId = organReader.GetFieldValue<int>(0);
+                            while (await organReader.ReadAsync())
+                            {
+                                int organId = organReader.GetFieldValue<int>(0);
 
-                            int organNameId;
-                            string organName = "";
+                                int organNameId;
+                                string organName = "";
 
                                 // Check if the organNameId is not null
-                            if (!organReader.IsDBNull(1))
-                            {
-                                organNameId = organReader.GetFieldValue<int>(1);
+                                if (!organReader.IsDBNull(1))
+                                {
+                                    organNameId = organReader.GetFieldValue<int>(1);
 
-                                // Retrieve the organ name
+                                    // Retrieve the organ name
                                     string queryOrganName = "SELECT organ_name FROM organname WHERE organ_name_id = @organNameId";
                                     var organNameParams = new Dictionary<string, object> { { "@organNameId", organNameId } };
 
                                     using (var nameReader = db.ExecuteReader(queryOrganName, organNameParams))
-                                {
-                                    while (await nameReader.ReadAsync())
                                     {
-                                        organName = nameReader.GetFieldValue<string>(0);
-                                        organList.Add(organName);
+                                        while (await nameReader.ReadAsync())
+                                        {
+                                            organName = nameReader.GetFieldValue<string>(0);
+                                            organList.Add(organName);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
                         // Construct the organ names string
-                    for (int i = 0; i < organList.Count; i++)
-                    {
-                        if (i != organList.Count - 1)
+                        for (int i = 0; i < organList.Count; i++)
                         {
-                            organs += organList[i] + " / ";
+                            if (i != organList.Count - 1)
+                            {
+                                organs += organList[i] + " / ";
+                            }
+                            else
+                            {
+                                organs += organList[i];
+                            }
                         }
-                        else
-                        {
-                            organs += organList[i];
-                        }
-                    }
 
                         // Add the case data to the list
-                    cases.Add(new CaseData
-                    {
-                        DonorId = donorId,
-                        DOD = DOD,
-                        Age = age,
-                        CauseOfDeath = causeOfDeath,
-                        Organs = organs,
-                    });
+                        cases.Add(new CaseData
+                        {
+                            DonorId = donorId,
+                            DOD = DOD,
+                            Age = age,
+                            CauseOfDeath = causeOfDeath,
+                            Organs = organs,
+                        });
+                    }
                 }
-            }
 
                 cases.Reverse(); // Show the most recently added case as the first row
-            filteredCases = cases;
-            LoadPagination();
-            LoadCaseTable();
-        }
+                filteredCases = cases;
+                LoadPagination();
+                LoadCaseTable();
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred while loading case data: {ex.Message}");

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static HoloRepository.AddCaseControl;
 
 namespace HoloRepository.AddCase
 {
@@ -66,9 +67,16 @@ namespace HoloRepository.AddCase
                     ShowFooterBtns();
                 }
             }
-            else if (userControl is AddCaseControl)
+            else if (userControl is AddCaseControl addCaseControl)
             {
-                panel1.Visible = false;
+                // Back event trigger
+                addCaseControl.OnSaveCompleted = donorId =>
+                {
+                    var caseView = new CaseView { donorId = donorId };
+                    LoadControl(caseView);
+                };
+
+                HideFooterBtns();
             }
             else
             {
@@ -157,7 +165,8 @@ namespace HoloRepository.AddCase
                             int originalId = donorInfoPage.originalId;
                             LoadControl(new CasePage(destination, originalId));
                         }
-                    } else if (addCaseContainer.Controls[0] is CasePage casePage)
+                    }
+                    else if (addCaseContainer.Controls[0] is CasePage casePage)
                     {
                         // Remove all the records related to the donor
                         var dbConnection = new DatabaseConnection();
@@ -173,7 +182,8 @@ namespace HoloRepository.AddCase
                         {
                             mainForm.LoadControl(new ViewCasesControl());
                         }
-                    } else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
+                    }
+                    else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
                     {
 
                     }

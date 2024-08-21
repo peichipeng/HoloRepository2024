@@ -247,5 +247,14 @@ namespace HoloRepository.AddCase
                 }
             }
         }
+
+        public void DisposeSliceImages()
+        {
+            if (sliceImages.Image != null)
+            {
+                sliceImages.Image.Dispose();
+                sliceImages.Image = null;
+            }
+        }
     }
 }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using FellowOakDicom.Imaging;
+using FellowOakDicom;
+using SixLabors.ImageSharp;
 using Npgsql;
 
 namespace HoloRepository
@@ -10,16 +13,17 @@ namespace HoloRepository
     {
         private List<PictureBox> pictureBoxList;
         private DatabaseConnection dbConnection;
-        private Image plusImage;
+        private System.Drawing.Image plusImage;
 
         private int donorId;
         private int organId;
 
         private int startIndex = 0; // The starting index for displaying 3D panels
-        private List<Image> sliceImages = new List<Image>(); // List of preloaded images
+        private List<System.Drawing.Image> sliceImages = new List<System.Drawing.Image>(); // List of preloaded images
+        private Dictionary<System.Drawing.Image, string> imageInfoMap = new Dictionary<System.Drawing.Image, string>();
         private const int maxPictureBoxes = 3;
 
-        public event Action<Image> PictureBoxClicked;
+        public event Action<System.Drawing.Image, string> PictureBoxClicked;
 
         public MainInterfaceSlicePanel(int donorId, int organId)
         {
@@ -35,7 +39,7 @@ namespace HoloRepository
             UpdatePictureBoxes();         // Display the first set of images
             CheckVisibility();
 
-            // 为每个 PictureBox 添加点击事件处理程序
+            // Click event for every picture box
             foreach (var pictureBox in pictureBoxList)
             {
                 pictureBox.Click += PictureBox_Click;
@@ -45,7 +49,7 @@ namespace HoloRepository
         private void LoadSlices(int donorId, int organId)
         {
             string query = @"
-                SELECT image_path 
+                SELECT image_path, additional_info
                 FROM sliceimage 
                 WHERE organ_id = @organId
                 ORDER BY slice_id"; // Assuming there is a slice_id to order the slices
@@ -70,12 +74,14 @@ namespace HoloRepository
                         while (reader.Read())
                         {
                             string imagePath = reader.GetString(0);
+                            string additionalInfo = reader.GetString(1);
 
                             // Preload the image into memory
                             if (System.IO.File.Exists(imagePath))
                             {
-                                Image image = Image.FromFile(imagePath);
+                                System.Drawing.Image image = System.Drawing.Image.FromFile(imagePath);
                                 sliceImages.Add(image);
+                                imageInfoMap[image] = additionalInfo;
                             }
                             else
                             {
@@ -93,13 +99,13 @@ namespace HoloRepository
 
         private void UpdatePictureBoxes()
         {
-            // 当 startIndex 为 0 时，第一个 PictureBox 显示加号图片
+            // Load plus picture into picture box when startindex = 0
             if (startIndex == 0)
             {
-                pictureBoxList[0].Image = plusImage; // 使用保存的加号图片
-                pictureBoxList[0].Tag = null; // 加号图片不绑定数据
+                pictureBoxList[0].Image = plusImage; 
+                pictureBoxList[0].Tag = null;
 
-                // 从第二个 PictureBox 开始显示切片图像
+                // Load organ slice pictures from second picture box
                 for (int i = 1; i < maxPictureBoxes; i++)
                 {
                     if (i - 1 + startIndex < sliceImages.Count)
@@ -109,24 +115,23 @@ namespace HoloRepository
                     }
                     else
                     {
-                        pictureBoxList[i].Image = null; // 如果没有图片，则清空
+                        pictureBoxList[i].Image = null;
                         pictureBoxList[i].Tag = null;
                     }
                 }
             }
             else
             {
-                // 当 startIndex 不为 0 时，所有 PictureBox 显示实际切片图像
                 for (int i = 0; i < maxPictureBoxes; i++)
                 {
-                    if (i + startIndex - 1 < sliceImages.Count) // 调整索引
+                    if (i + startIndex - 1 < sliceImages.Count)
                     {
                         pictureBoxList[i].Image = sliceImages[i + startIndex - 1];
                         pictureBoxList[i].Tag = sliceImages[i + startIndex - 1];
                     }
                     else
                     {
-                        pictureBoxList[i].Image = null; // 如果没有图片，则清空
+                        pictureBoxList[i].Image = null;
                         pictureBoxList[i].Tag = null;
                     }
                 }
@@ -142,13 +147,18 @@ namespace HoloRepository
             {
                 ShowAddOrganSliceDialog();
             }
-            else if (clickedPictureBox != null && clickedPictureBox.Tag is Image image)
+            else if (clickedPictureBox != null && clickedPictureBox.Tag is System.Drawing.Image image)
             {
-                PictureBoxClicked?.Invoke(image); // 触发事件并传递图片
+                if (imageInfoMap.TryGetValue(image, out string additionalInfo))
+                {
+                    PictureBoxClicked?.Invoke(image, additionalInfo);
+                }
+                else
+                {
+                    PictureBoxClicked?.Invoke(image, "No description yet");
+                }
             }
         }
-
-
 
         private void CheckVisibility()
         {
@@ -173,7 +183,7 @@ namespace HoloRepository
             }
         }
 
-        private Image CreatePlusImage()
+        private System.Drawing.Image CreatePlusImage()
         {
             int width = 100;
             int height = 100;
@@ -181,8 +191,8 @@ namespace HoloRepository
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.Clear(Color.White);
-                Pen pen = new Pen(Color.Gray, 5);
+                g.Clear(System.Drawing.Color.White);
+                Pen pen = new Pen(System.Drawing.Color.Gray, 5);
 
                 int centerX = width / 2;
                 int centerY = height / 2;
@@ -196,13 +206,13 @@ namespace HoloRepository
             return bmp;
         }
 
-        private void ShowAddOrganSliceDialog()
+        private async void ShowAddOrganSliceDialog()
         {
             string organName = string.Empty;
             string organSide = string.Empty;
-            int sliceIndex = sliceImages.Count + 1; // sliceIndex 为现有 sliceImage 的个数加 1
+            int sliceIndex = sliceImages.Count + 1;
 
-            // 查询 organ_name 和 organ_side
+            // Search organ_name and organ_side
             try
             {
                 string organQuery = @"
@@ -222,7 +232,7 @@ namespace HoloRepository
                         {
                             organName = reader.GetString(reader.GetOrdinal("organ_name"));
 
-                            // 检查 organ_side 是否为 null
+                            // Check whether organ side is null or not
                             if (!reader.IsDBNull(reader.GetOrdinal("organ_side")))
                             {
                                 organSide = reader.GetString(reader.GetOrdinal("organ_side"));
@@ -241,7 +251,7 @@ namespace HoloRepository
                 return;
             }
 
-            List<Image> dicomImages = new List<Image>();
+            List<System.Drawing.Image> dicomImages = new List<System.Drawing.Image>();
             Dictionary<int, int> dicomIdMap = new Dictionary<int, int>();
             try
             {
@@ -263,12 +273,31 @@ namespace HoloRepository
                             int dicomId = reader.GetInt32(0);
                             string dicomPath = reader.GetString(1);
 
-                            // Preload the DICOM image into memory
+                            // Pre load DICOM files into memory
                             if (System.IO.File.Exists(dicomPath))
                             {
-                                Image dicomImage = Image.FromFile(dicomPath);
-                                dicomImages.Add(dicomImage);
-                                dicomIdMap[dicomImages.Count - 1] = dicomId;  // Map index to dicomPath
+                                try
+                                {
+                                    // Load and render DICOM as Bitmap
+                                    var dicomFile = await DicomFile.OpenAsync(dicomPath);
+                                    var dicomImage = new DicomImage(dicomFile.Dataset);
+                                    Bitmap dicomBitmap;
+
+                                    using (var imageSharpImage = dicomImage.RenderImage().AsSharpImage())
+                                    using (var memoryStream = new MemoryStream())
+                                    {
+                                        imageSharpImage.SaveAsBmp(memoryStream);
+                                        memoryStream.Seek(0, SeekOrigin.Begin);
+                                        dicomBitmap = new Bitmap(memoryStream);
+                                    }
+
+                                    dicomImages.Add(dicomBitmap);
+                                    dicomIdMap[dicomImages.Count - 1] = dicomId;  // Map index to dicomId
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Error processing DICOM file: {dicomPath}. Details: {ex.Message}");
+                                }
                             }
                             else
                             {
@@ -281,16 +310,13 @@ namespace HoloRepository
             catch (Exception ex)
             {
                 MessageBox.Show("Error loading DICOM files: " + ex.Message);
-                return; // 发生错误时不显示对话框
+                return;
             }
 
-            // 创建 AddOrganSlice 窗口的实例
             AddOrganSlice addOrganSliceForm = new AddOrganSlice(donorId, organName, sliceIndex, organSide);
 
-            // 传递查询到的 DICOM 文件图像列表
-            addOrganSliceForm.SetImageList(dicomImages, 0); // 默认显示第一张图像
+            addOrganSliceForm.SetImageList(dicomImages, 0);
 
-            // 订阅 OrganSliceUpdated 事件以便在新切片添加后进行处理
             addOrganSliceForm.OrganSliceUpdated += (organSliceImage, selectedImage, description, index) =>
             {
                 string imagePath = addOrganSliceForm.OrganSliceImagePath;
@@ -305,10 +331,9 @@ namespace HoloRepository
                 }
 
                 sliceImages.Add(organSliceImage);
-                UpdatePictureBoxes(); // 更新显示
+                UpdatePictureBoxes();
             };
 
-            // 显示窗口为模态对话框
             addOrganSliceForm.ShowDialog();
         }
 
@@ -322,7 +347,6 @@ namespace HoloRepository
 
                 using (var connection = dbConnection.GetConnection())
                 {
-                    // 在这里检查连接状态，并只在必要时打开连接
                     if (connection.State != System.Data.ConnectionState.Open)
                     {
                         connection.Open();

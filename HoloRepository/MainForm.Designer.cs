@@ -54,7 +54,7 @@
             header.Controls.Add(modeSwitch);
             header.Dock = DockStyle.Top;
             header.Location = new Point(0, 0);
-            header.Margin = new Padding(5, 5, 5, 5);
+            header.Margin = new Padding(5);
             header.Name = "header";
             header.Size = new Size(1329, 48);
             header.TabIndex = 0;
@@ -64,7 +64,7 @@
             blackHomeBtn.Anchor = AnchorStyles.Top;
             blackHomeBtn.Image = (Image)resources.GetObject("blackHomeBtn.Image");
             blackHomeBtn.Location = new Point(1240, 6);
-            blackHomeBtn.Margin = new Padding(5, 5, 5, 5);
+            blackHomeBtn.Margin = new Padding(5);
             blackHomeBtn.Name = "blackHomeBtn";
             blackHomeBtn.Size = new Size(39, 40);
             blackHomeBtn.SizeMode = PictureBoxSizeMode.Zoom;
@@ -77,7 +77,7 @@
             previousPageBtn.Anchor = AnchorStyles.Top;
             previousPageBtn.Image = (Image)resources.GetObject("previousPageBtn.Image");
             previousPageBtn.Location = new Point(655, 0);
-            previousPageBtn.Margin = new Padding(5, 5, 5, 5);
+            previousPageBtn.Margin = new Padding(5);
             previousPageBtn.Name = "previousPageBtn";
             previousPageBtn.Size = new Size(39, 40);
             previousPageBtn.SizeMode = PictureBoxSizeMode.Zoom;
@@ -94,7 +94,7 @@
             breadcrumbPanel.Controls.Add(arrow);
             breadcrumbPanel.Controls.Add(page1);
             breadcrumbPanel.Location = new Point(49, 0);
-            breadcrumbPanel.Margin = new Padding(5, 5, 5, 5);
+            breadcrumbPanel.Margin = new Padding(5);
             breadcrumbPanel.Name = "breadcrumbPanel";
             breadcrumbPanel.Size = new Size(597, 63);
             breadcrumbPanel.TabIndex = 17;
@@ -143,7 +143,7 @@
             modeSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             modeSwitch.Font = new Font("Century Gothic", 10F, FontStyle.Regular, GraphicsUnit.Point);
             modeSwitch.Location = new Point(933, 0);
-            modeSwitch.Margin = new Padding(5, 5, 5, 5);
+            modeSwitch.Margin = new Padding(5);
             modeSwitch.Name = "modeSwitch";
             modeSwitch.Size = new Size(176, 43);
             modeSwitch.TabIndex = 16;

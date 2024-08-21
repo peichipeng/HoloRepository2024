@@ -34,6 +34,8 @@
             ImportDICOMButton = new RoundedButton();
             RemoveAllButton = new RoundedButton();
             panel1 = new Panel();
+            sideListBox = new ListBox();
+            SideBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             caseNo = new Label();
             organListBox = new ListBox();
             organNameTextBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
@@ -55,8 +57,6 @@
             fileListBox = new RoundedListBox();
             lineControl1 = new LineControl();
             OrganSlicesTitle = new Label();
-            SideBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
-            sideListBox = new ListBox();
             panel1.SuspendLayout();
             organSlicesPanel.SuspendLayout();
             addOrganSlicePanel.SuspendLayout();
@@ -104,7 +104,7 @@
             ImportDICOMButton.Name = "ImportDICOMButton";
             ImportDICOMButton.Size = new Size(152, 47);
             ImportDICOMButton.TabIndex = 4;
-            ImportDICOMButton.Text = "+ Import";
+            ImportDICOMButton.Text = "+ &Import";
             ImportDICOMButton.UseVisualStyleBackColor = false;
             ImportDICOMButton.Click += ImportDICOMButton_Click;
             // 
@@ -122,7 +122,7 @@
             RemoveAllButton.Name = "RemoveAllButton";
             RemoveAllButton.Size = new Size(170, 47);
             RemoveAllButton.TabIndex = 6;
-            RemoveAllButton.Text = "Remove All";
+            RemoveAllButton.Text = "&Remove All";
             RemoveAllButton.UseVisualStyleBackColor = false;
             RemoveAllButton.Click += RemoveAllButton_Click;
             // 
@@ -152,6 +152,37 @@
             panel1.Padding = new Padding(5, 6, 5, 6);
             panel1.Size = new Size(1425, 957);
             panel1.TabIndex = 7;
+            // 
+            // sideListBox
+            // 
+            sideListBox.Anchor = AnchorStyles.Top;
+            sideListBox.FormattingEnabled = true;
+            sideListBox.ItemHeight = 24;
+            sideListBox.Location = new Point(362, 261);
+            sideListBox.Name = "sideListBox";
+            sideListBox.Size = new Size(103, 124);
+            sideListBox.TabIndex = 61;
+            sideListBox.UseWaitCursor = true;
+            sideListBox.Visible = false;
+            sideListBox.Click += SideListBox_Click;
+            // 
+            // SideBox
+            // 
+            SideBox.Anchor = AnchorStyles.Top;
+            SideBox.Location = new Point(362, 222);
+            SideBox.Multiline = true;
+            SideBox.Name = "SideBox";
+            SideBox.Size = new Size(103, 40);
+            SideBox.StateActive.Back.Color1 = Color.White;
+            SideBox.StateActive.Border.Color1 = Color.Silver;
+            SideBox.StateActive.Border.Color2 = Color.Silver;
+            SideBox.StateActive.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
+            SideBox.StateActive.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            SideBox.StateActive.Border.Rounding = 5;
+            SideBox.TabIndex = 60;
+            SideBox.Visible = false;
+            SideBox.GotFocus += SideBox_GotFocus;
+            SideBox.LostFocus += SideBox_LostFocus;
             // 
             // caseNo
             // 
@@ -245,7 +276,7 @@
             AddOrganSlicesButton.Name = "AddOrganSlicesButton";
             AddOrganSlicesButton.Size = new Size(262, 47);
             AddOrganSlicesButton.TabIndex = 8;
-            AddOrganSlicesButton.Text = "+ Add an organ slice";
+            AddOrganSlicesButton.Text = "+ &Add an organ slice";
             AddOrganSlicesButton.UseVisualStyleBackColor = false;
             AddOrganSlicesButton.Click += AddOrganSlicesButton_Click;
             // 
@@ -336,7 +367,7 @@
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(93, 47);
             btnSave.TabIndex = 61;
-            btnSave.Text = "Add";
+            btnSave.Text = "&Save";
             btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
             // 
@@ -393,7 +424,7 @@
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(112, 47);
             btnCancel.TabIndex = 61;
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "&Cancel";
             btnCancel.UseVisualStyleBackColor = false;
             // 
             // fileListBox
@@ -431,37 +462,6 @@
             OrganSlicesTitle.Size = new Size(392, 42);
             OrganSlicesTitle.TabIndex = 7;
             OrganSlicesTitle.Text = "Organ Slice Image Files";
-            // 
-            // SideBox
-            // 
-            SideBox.Anchor = AnchorStyles.Top;
-            SideBox.Location = new Point(362, 222);
-            SideBox.Multiline = true;
-            SideBox.Name = "SideBox";
-            SideBox.Size = new Size(103, 40);
-            SideBox.StateActive.Back.Color1 = Color.White;
-            SideBox.StateActive.Border.Color1 = Color.Silver;
-            SideBox.StateActive.Border.Color2 = Color.Silver;
-            SideBox.StateActive.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
-            SideBox.StateActive.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            SideBox.StateActive.Border.Rounding = 5;
-            SideBox.TabIndex = 60;
-            SideBox.Visible = false;
-            SideBox.GotFocus += SideBox_GotFocus;
-            SideBox.LostFocus += SideBox_LostFocus;
-            // 
-            // sideListBox
-            // 
-            sideListBox.Anchor = AnchorStyles.Top;
-            sideListBox.FormattingEnabled = true;
-            sideListBox.ItemHeight = 24;
-            sideListBox.Location = new Point(362, 261);
-            sideListBox.Name = "sideListBox";
-            sideListBox.Size = new Size(103, 124);
-            sideListBox.TabIndex = 61;
-            sideListBox.UseWaitCursor = true;
-            sideListBox.Visible = false;
-            sideListBox.Click += SideListBox_Click;
             // 
             // AddCaseControl
             // 
