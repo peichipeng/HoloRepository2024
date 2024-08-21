@@ -329,6 +329,10 @@ namespace HoloRepository.AddCase
                         }
                     }
                 }
+                else if (control is AddCaseControl addCaseControl)
+                {
+                    addCaseControl.ProcessVoiceCommand(transcription);
+                }
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using Dicom;
+using Newtonsoft.Json;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -859,5 +860,12 @@ namespace HoloRepository
             }
         }
 
+        public void ProcessVoiceCommand(string transcription)
+        {
+            if (transcription.ToLower().Contains("add an organ slice"))
+            {
+
+            }
+        }
     }
 }
