@@ -33,6 +33,7 @@ namespace HoloRepository.AddCase
         // Update donor's basic information page
         public DonorInfo(Dictionary<string, string> donorInfo)
         {
+            dbConnection = new DatabaseConnection();
             InitializeComponent();
             originalId = int.Parse(donorInfo["id"]);
 
