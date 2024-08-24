@@ -77,7 +77,7 @@ namespace HoloRepository
             addCaseBtn.BorderRadius = 15;
             addCaseBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             addCaseBtn.ForeColor = Color.White;
-            addCaseBtn.Location = new Point(648, 74);
+            addCaseBtn.Location = new Point(640, 79);
             addCaseBtn.Margin = new Padding(2, 2, 14, 2);
             addCaseBtn.Name = "addCaseBtn";
             addCaseBtn.Size = new Size(125, 32);
@@ -125,7 +125,7 @@ namespace HoloRepository
             tablePanel.Anchor = AnchorStyles.Top;
             tablePanel.Controls.Add(caseTable);
             tablePanel.Controls.Add(panel2);
-            tablePanel.Location = new Point(95, 120);
+            tablePanel.Location = new Point(87, 130);
             tablePanel.Name = "tablePanel";
             tablePanel.Size = new Size(678, 399);
             tablePanel.TabIndex = 77;
@@ -266,7 +266,7 @@ namespace HoloRepository
             timeIntervalCmb.FormattingEnabled = true;
             timeIntervalCmb.IntegralHeight = false;
             timeIntervalCmb.ItemHeight = 19;
-            timeIntervalCmb.Location = new Point(82, 39);
+            timeIntervalCmb.Location = new Point(87, 79);
             timeIntervalCmb.Name = "timeIntervalCmb";
             timeIntervalCmb.Size = new Size(100, 27);
             timeIntervalCmb.TabIndex = 87;
@@ -326,7 +326,7 @@ namespace HoloRepository
             // 
             searchIcon.Anchor = AnchorStyles.Top;
             searchIcon.Image = (Image)resources.GetObject("searchIcon.Image");
-            searchIcon.Location = new Point(95, 74);
+            searchIcon.Location = new Point(208, 87);
             searchIcon.Name = "searchIcon";
             searchIcon.Size = new Size(16, 16);
             searchIcon.SizeMode = PictureBoxSizeMode.Zoom;
@@ -348,10 +348,10 @@ namespace HoloRepository
             // searchBox
             // 
             searchBox.Anchor = AnchorStyles.Top;
-            searchBox.Location = new Point(95, 74);
+            searchBox.Location = new Point(200, 79);
             searchBox.Margin = new Padding(2);
             searchBox.Name = "searchBox";
-            searchBox.Size = new Size(532, 27);
+            searchBox.Size = new Size(427, 27);
             searchBox.StateCommon.Border.Color1 = Color.LightGray;
             searchBox.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
             searchBox.StateCommon.Border.Rounding = 3;

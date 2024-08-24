@@ -23,6 +23,7 @@ namespace HoloRepository.AddCase
 
         private bool deleting = false;
         private string requiredFieldMsg = "Required field.";
+
         public DonorInfo()
         {
             InitializeComponent();
@@ -40,11 +41,11 @@ namespace HoloRepository.AddCase
             dodTxt.Text = donorInfo["dod"];
             causeOfDeathTxt.Text = donorInfo["causeOfDeath"];
             dodTxt.StateCommon.Content.Color1 = Color.Black;
+            donorIdTxt.Enabled = false;
         }
 
         public async void AddDonorInfo()
         {
-            // need to check if the donorid exists
             try
             {
                 var dbConnection = new DatabaseConnection();
