@@ -5,6 +5,23 @@ Here provides a setup for speech inference using a predefined Conda environment.
 ## Prerequisites
 
 - **Anaconda/Miniconda**: Make sure you have Anaconda or Miniconda installed on your system. If not, you can download and install it from the official website: [Anaconda Download](https://www.anaconda.com/download/success).
+  - **Manually Add Anaconda to System Environment Variables**
+    1. **Locate Your Anaconda Installation Path:**
+       - Common default installation paths are:
+         - For 64-bit systems: `C:\ProgramData\Anaconda3` or `C:\Users\<YourUsername>\Anaconda3`
+         - For 32-bit systems: `C:\ProgramData\Anaconda2` or `C:\Users\<YourUsername>\Anaconda2`
+    2. **Add the Path to Environment Variables:**
+       - Open the **Settings** by pressing `Win + I` or by clicking on the Start menu and selecting "Settings."
+       - In the Settings window, navigate to **System > About**.
+       - Scroll down and click on **Advanced system settings** under the "Related settings" section on the right.
+       - Click the "Environment Variables" button in the System Properties window that appears.
+       - In the "System variables" section, find the `Path` variable and click "Edit."
+       - In the window that pops up, click "New" and add the following paths:
+         - `<Your Anaconda Installation Path>`
+         - `<Your Anaconda Installation Path>\Scripts`
+         - `<Your Anaconda Installation Path>\Library\bin`
+       - Ensure these paths are added to the `Path` variable and click "OK" to save the changes.
+
 
 ## Environment Setup
 
