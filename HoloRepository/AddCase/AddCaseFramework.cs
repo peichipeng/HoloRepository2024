@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static HoloRepository.AddCaseControl;
 
 namespace HoloRepository.AddCase
 {
@@ -91,6 +92,17 @@ namespace HoloRepository.AddCase
                     ShowFooterBtns();
                 }
             }
+            else if (userControl is AddCaseControl addCaseControl)
+            {
+                // Back event trigger
+                addCaseControl.OnSaveCompleted = donorId =>
+                {
+                    var caseView = new CaseView { donorId = donorId };
+                    LoadControl(caseView);
+                };
+
+                HideFooterBtns();
+            }
             else
             {
                 ShowFooterBtns();
@@ -141,7 +153,7 @@ namespace HoloRepository.AddCase
                 // and add functions to upsert the organ
 
                 // Set the button back to 'save'
-                nextBtn.Text = "Save";
+                HideFooterBtns();
 
                 // Go back to the previous page (replace the donorId below)
                 //LoadControl(new CaseOrganFramework(destination, caseOrganPage.donorId));
@@ -177,7 +189,8 @@ namespace HoloRepository.AddCase
                             int originalId = donorInfoPage.originalId;
                             LoadControl(new CasePage(destination, originalId));
                         }
-                    } else if (addCaseContainer.Controls[0] is CasePage casePage)
+                    }
+                    else if (addCaseContainer.Controls[0] is CasePage casePage)
                     {
                         // Remove all the records related to the donor
                         var dbConnection = new DatabaseConnection();
@@ -193,7 +206,8 @@ namespace HoloRepository.AddCase
                         {
                             mainForm.LoadControl(new ViewCasesControl());
                         }
-                    } else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
+                    }
+                    else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
                     {
 
                     }

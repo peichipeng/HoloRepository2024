@@ -42,6 +42,7 @@
             // 
             btnClose.Anchor = AnchorStyles.Top;
             btnClose.BackColor = Color.Transparent;
+            btnClose.Cursor = Cursors.Hand;
             btnClose.Image = (Image)resources.GetObject("btnClose.Image");
             btnClose.Location = new Point(1075, 30);
             btnClose.Margin = new Padding(5);
@@ -56,13 +57,14 @@
             // 
             ConstructButton.BackColor = Color.FromArgb(51, 129, 202);
             ConstructButton.BorderRadius = 10;
+            ConstructButton.Cursor = Cursors.Hand;
             ConstructButton.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ConstructButton.ForeColor = Color.White;
             ConstructButton.Location = new Point(964, 519);
             ConstructButton.Name = "ConstructButton";
             ConstructButton.Size = new Size(136, 49);
             ConstructButton.TabIndex = 78;
-            ConstructButton.Text = "Construct";
+            ConstructButton.Text = "&Construct";
             ConstructButton.UseVisualStyleBackColor = false;
             ConstructButton.Click += ConstructButton_Click;
             // 

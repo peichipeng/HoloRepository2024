@@ -93,6 +93,13 @@ namespace HoloRepository.AddCase
                 await conn.OpenAsync();
 
                 string sql;
+                var parameters = new Dictionary<string, object>
+                {
+                    { "@donorId", donorId },
+                    { "@age", age },
+                    { "@dod", dod },
+                    { "@causeOfDeath", causeOfDeath }
+                };
                 if (originalId == donorId)
                 {
                     sql = "UPDATE donor SET age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath, timestamp = @time WHERE donor_id = @donorId";

@@ -47,6 +47,7 @@
             // 
             sliceImages.BackColor = Color.Transparent;
             sliceImages.BorderStyle = BorderStyle.FixedSingle;
+            sliceImages.Cursor = Cursors.Hand;
             sliceImages.Location = new Point(26, 19);
             sliceImages.Margin = new Padding(5);
             sliceImages.Name = "sliceImages";
@@ -54,6 +55,7 @@
             sliceImages.SizeMode = PictureBoxSizeMode.Zoom;
             sliceImages.TabIndex = 0;
             sliceImages.TabStop = false;
+            sliceImages.Click += sliceImages_Click;
             // 
             // organNameLabel
             // 
@@ -97,6 +99,7 @@
             updateToolStripMenuItem.Name = "updateToolStripMenuItem";
             updateToolStripMenuItem.Size = new Size(152, 32);
             updateToolStripMenuItem.Text = "Update";
+            updateToolStripMenuItem.Click += UpdateToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Npgsql;
 using System.Windows.Forms;
+using FellowOakDicom.Imaging;
 
 namespace HoloRepository
 {
@@ -17,6 +18,8 @@ namespace HoloRepository
         private int donorId;
 
         private int organId;
+
+        private string organSide;
 
         private string organName;
 
@@ -59,13 +62,14 @@ namespace HoloRepository
 
                     // Load organ data
                     string organQuery = @"
-                        SELECT o.organ_name_id, oname.organ_name, COUNT(s.slice_id) AS slice_count, d.date_of_death, d.age, d.cause_of_death
+                        SELECT o.organ_name_id, oname.organ_name, o.organ_side, COUNT(s.slice_id) AS slice_count, 
+                               d.date_of_death, d.age, d.cause_of_death
                         FROM organ o
                         LEFT JOIN organname oname ON o.organ_name_id = oname.organ_name_id
                         LEFT JOIN sliceimage s ON o.organ_id = s.organ_id
                         LEFT JOIN donor d ON o.donor_id = d.donor_id
                         WHERE o.donor_id = @donorId AND o.organ_id = @organId
-                        GROUP BY o.organ_name_id, oname.organ_name, d.date_of_death, d.age, d.cause_of_death";
+                        GROUP BY o.organ_name_id, oname.organ_name, o.organ_side, d.date_of_death, d.age, d.cause_of_death";
 
                     using (var command = new NpgsqlCommand(organQuery, connection))
                     {
@@ -77,6 +81,7 @@ namespace HoloRepository
                             if (reader.Read())
                             {
                                 organName = reader.GetString(reader.GetOrdinal("organ_name"));
+                                organSide = reader.IsDBNull(reader.GetOrdinal("organ_side")) ? null : reader.GetString(reader.GetOrdinal("organ_side"));
                                 int numberOfSlices = reader.GetInt32(reader.GetOrdinal("slice_count"));
                                 DateTime? dateOfDeath = reader.IsDBNull(reader.GetOrdinal("date_of_death"))
                                     ? (DateTime?)null
@@ -86,8 +91,11 @@ namespace HoloRepository
                                     ? null
                                     : reader.GetString(reader.GetOrdinal("cause_of_death"));
 
+                                // Construct organ name with side if applicable
+                                string organNameWithSide = string.IsNullOrEmpty(organSide) ? organName : $"{organName}-{organSide}";
+
                                 // Update labels
-                                OrganName.Text = $"{organName}";
+                                OrganName.Text = $"{organNameWithSide}";
                                 DonorId.Text = $"Donor ID: {donorId}";
                                 numOfSlices.Text = $"Number of Slices: {numberOfSlices}";
                                 DateDeath.Text = $"Date of Death: {dateOfDeath?.ToString("yyyy-MM-dd") ?? "N/A"}";
@@ -130,7 +138,7 @@ namespace HoloRepository
 
         public string GetOrganName()
         {
-            return organName.ToString();
+            return OrganName.Text;
         }
 
         public string GetNumOrgans()
@@ -151,6 +159,114 @@ namespace HoloRepository
         public string GetCauseOD()
         {
             return CauseOD.Text;
+        }
+
+        private void EditButton_Click(object sender, EventArgs e)
+        {
+            AddCaseControl addCaseControl = new AddCaseControl(donorId, organId);
+
+            MainForm mainForm = GetMainForm(this);
+
+            if (mainForm != null)
+            {
+                mainForm.LoadControl(addCaseControl);
+
+                addCaseControl.OnSaveCompleted = (id) =>
+                {
+                    mainForm.LoadControl(new OrganArchiveControl());
+                };
+
+                addCaseControl.Dock = DockStyle.Fill;
+            }
+        }
+
+        private void clickPanel_Click(object sender, EventArgs e)
+        {
+            MainInterFaceControl mainInterfaceControl = new MainInterFaceControl(this, donorId, organId);
+
+            MainForm mainForm = GetMainForm(this);
+
+            if (mainForm != null)
+            {
+                mainForm.Controls.Clear();
+                mainForm.Controls.Add(mainInterfaceControl);
+
+                mainInterfaceControl.Dock = DockStyle.Fill;
+            }
+        }
+
+        private MainForm GetMainForm(Control control)
+        {
+            Control current = control;
+            while (current != null)
+            {
+                if (current is MainForm)
+                {
+                    return (MainForm)current;
+                }
+                current = current.Parent;
+            }
+            return null;
+        }
+
+        private void BinButton_Click(object sender, EventArgs e)
+        {
+            using (var popup = new PopupWindow("Are you sure you want to delete this organ?", this.ParentForm))
+            {
+                var result = popup.ShowDialog(this.ParentForm);
+
+                if (result == DialogResult.Yes)
+                {
+                    this.Parent.Controls.Remove(this);
+                    DisposeImages();
+
+                    try
+                    {
+                        using (var connection = dbConnection.GetConnection())
+                        {
+                            using (var transaction = connection.BeginTransaction())
+                            {
+                                string deleteQuery = @"
+                                    DELETE FROM dicomfile WHERE organ_id = @organId;
+                                    DELETE FROM model3d WHERE organ_id = @organId;
+                                    DELETE FROM sliceimage WHERE organ_id = @organId;
+                                    DELETE FROM organtag WHERE organ_id = @organId;
+                                    DELETE FROM organ WHERE organ_id = @organId;";
+
+                                using (var command = new NpgsqlCommand(deleteQuery, connection, transaction))
+                                {
+                                    command.Parameters.AddWithValue("@organId", organId);
+                                    command.ExecuteNonQuery();
+                                }
+
+                                transaction.Commit();
+                            }
+                        }
+                        string organNameWithSide = string.IsNullOrEmpty(organSide) ? organName : $"{organName}({organSide})";
+                        string folderPath = Path.Combine("data", donorId.ToString(), organNameWithSide);
+                        if (Directory.Exists(folderPath))
+                        {
+                            Directory.Delete(folderPath, true);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error deleting organ: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void DisposeImages()
+        {
+            foreach (Control control in OrganSlicesImagePanel.Controls)
+            {
+                if (control is OrganPanel organPanel)
+                {
+                    organPanel.DisposeSliceImages();
+                }
+            }
         }
 
     }

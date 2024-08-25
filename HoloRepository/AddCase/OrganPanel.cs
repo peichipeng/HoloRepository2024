@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Data.Common;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -21,11 +22,13 @@ namespace HoloRepository.AddCase
         private List<string> organSlices;
         private string organModel;
         private int imageShown;
+        private DatabaseConnection dbConnection;
         public int BorderRadius { get; set; } = 20;
         public Color BorderColor { get; set; } = Color.LightGray;
         public int BorderThickness { get; set; } = 1;
         public OrganPanel(int organId, string name, List<string> organSlices)
         {
+            dbConnection = new DatabaseConnection();
             InitializeComponent();
 
             this.organId = organId;
@@ -123,7 +126,7 @@ namespace HoloRepository.AddCase
         {
             var dataSource = DataRetrieval.CreateDataSource();
 
-            string queryModel = $"SELECT color_model_id, color_model_path FROM colormodel3d WHERE organ_id = {this.organId}";
+            string queryModel = $"SELECT model_id, model_path FROM model3d WHERE organ_id = {this.organId}";
 
             await using (var modelReader = await DataRetrieval.ExecuteQuery(queryModel, dataSource))
             {
@@ -248,10 +251,36 @@ namespace HoloRepository.AddCase
         {
             if (this.Parent.Parent.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
             {
-                caseFramework.nextBtn.Text = "Update";
+                try
+                {
+                    string query = "SELECT donor_Id FROM organ WHERE organ_Id = @organId";
+                    var parameters = new Dictionary<string, object>
+                    {
+                        { "@organId", organId }
+                    };
+                    using (var reader = dbConnection.ExecuteReader(query, parameters))
+                    {
+                        if (reader.Read())
+                        {
+                            int donorId = reader.GetInt32(0);
 
-                // The organ ID is available as a field in this class
-                caseFramework.LoadControl(new AddCaseControl(12));
+                            // Use the donorId as needed, for example:
+                            caseFramework.nextBtn.Text = "Update";
+
+                            // Pass the donorId to the AddCaseControl if needed
+                            var addCaseControl = new AddCaseControl(donorId, organId); // Assuming AddCaseControl can accept donorId
+                            caseFramework.LoadControl(addCaseControl);
+                        }
+                        else
+                        {
+                            MessageBox.Show("No donor found for the given organ ID.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred while retrieving donor ID: {ex.Message}");
+                }
             }
         }
 
@@ -272,6 +301,15 @@ namespace HoloRepository.AddCase
                     string deleteQuery = $"DELETE FROM organ WHERE organ_id = {organId}";
                     dbConnection.ExecuteNonQuery(deleteQuery);
                 }
+            }
+        }
+
+        public void DisposeSliceImages()
+        {
+            if (sliceImages.Image != null)
+            {
+                sliceImages.Image.Dispose();
+                sliceImages.Image = null;
             }
         }
     }

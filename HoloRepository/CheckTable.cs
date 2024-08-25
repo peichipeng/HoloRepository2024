@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FellowOakDicom.Imaging;
+using FellowOakDicom;
 using Npgsql;
+using SixLabors.ImageSharp;
 
 namespace HoloRepository
 {
@@ -16,11 +20,13 @@ namespace HoloRepository
         private List<CheckTableContent> checkTableContents;
         private DatabaseConnection dbConnection;
         private int? organId;
+        private List<OrganSlicePanel> organSlicePanels;
         private bool internalCheckChange = false;
 
-        public CheckTable(int? organId)
+        public CheckTable(int? organId, List<OrganSlicePanel> organSlicePanels)
         {
             this.organId = organId;
+            this.organSlicePanels = organSlicePanels;
             InitializeComponent();
             InitializeCustomComponents();
             LoadCheckTableContents();
@@ -49,42 +55,68 @@ namespace HoloRepository
 
             if (organId.HasValue)
             {
-                string query = "SELECT dicom_id, image_path, additional_info FROM sliceimage WHERE organ_id = @organId";
-                var parameters = new Dictionary<string, object>
-                {
-                    { "@organId", organId.Value }
-                };
-
-                try
-                {
-                    using (var reader = dbConnection.ExecuteReader(query, parameters))
-                    {
-                        while (reader.Read())
-                        {
-                            int dicomId = reader.GetInt32(0);
-                            string imagePath = reader.GetString(1);
-                            string additionalInfo = reader.GetString(2);
-
-                            // Load images (assuming imagePath points to a valid image file)
-                            Image organSlice = Image.FromFile(imagePath);
-                            Image dicomImage = LoadDicomImage(dicomId); // Implement this method to load DICOM image
-
-                            var checkTableContent = new CheckTableContent();
-                            checkTableContent.SetImageInfo(organSlice, dicomImage, additionalInfo);
-                            checkTableContents.Add(checkTableContent);
-                            flowLayoutPanel1.Controls.Add(checkTableContent);
-
-                            // Subscribe to the CheckedChanged event of each CheckBox
-                            checkTableContent.SelectBox.CheckedChanged += CheckTableContent_SelectBox_CheckedChanged;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error loading data: " + ex.Message);
-                }
+                LoadFromDatabase();
+            }
+            else
+            {
+                LoadFromPanels();
             }
         }
+
+        private async Task LoadFromDatabase()
+        {
+            string query = "SELECT dicom_id, image_path, additional_info FROM sliceimage WHERE organ_id = @organId";
+            var parameters = new Dictionary<string, object> { { "@organId", organId.Value } };
+
+            try
+            {
+                using (var reader = dbConnection.ExecuteReader(query, parameters))
+                {
+                    while (reader.Read())
+                    {
+                        int dicomId = reader.GetInt32(0);
+                        string imagePath = reader.GetString(1);
+                        string additionalInfo = reader.GetString(2);
+
+                        System.Drawing.Image organSlice = System.Drawing.Image.FromFile(imagePath);
+                        System.Drawing.Image dicomImage = await LoadDicomImage(dicomId);
+
+                        var checkTableContent = new CheckTableContent();
+                        checkTableContent.SetImageInfo(organSlice, dicomImage, additionalInfo);
+                        checkTableContent.SetTitle(Path.GetFileName(imagePath));
+
+                        checkTableContents.Add(checkTableContent);
+                        flowLayoutPanel1.Controls.Add(checkTableContent);
+
+                        checkTableContent.SelectBox.CheckedChanged += CheckTableContent_SelectBox_CheckedChanged;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading data from database: " + ex.Message);
+            }
+        }
+
+        private void LoadFromPanels()
+        {
+            foreach (var panel in organSlicePanels)
+            {
+                System.Drawing.Image organSlice = panel.OrganSliceImage;
+                System.Drawing.Image dicomImage = panel.DicomImage;
+                string additionalInfo = panel.Description;
+
+                var checkTableContent = new CheckTableContent();
+                checkTableContent.SetImageInfo(organSlice, dicomImage, additionalInfo);
+                checkTableContent.SetTitle(Path.GetFileName(panel.OrganSlicePath));
+
+                checkTableContents.Add(checkTableContent);
+                flowLayoutPanel1.Controls.Add(checkTableContent);
+
+                checkTableContent.SelectBox.CheckedChanged += CheckTableContent_SelectBox_CheckedChanged;
+            }
+        }
+
 
         private void CheckTableContent_SelectBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -98,9 +130,9 @@ namespace HoloRepository
             internalCheckChange = false;
         }
 
-        private Image LoadDicomImage(int dicomId)
+        private async Task<System.Drawing.Image> LoadDicomImage(int dicomId)
         {
-            Image CTImage = null;
+            System.Drawing.Image CTImage = null;
             var connection = dbConnection.GetConnection();
 
             try
@@ -114,7 +146,30 @@ namespace HoloRepository
                     if (result != null && result != DBNull.Value)
                     {
                         string dicomPath = result.ToString();
-                        CTImage = Image.FromFile(dicomPath);
+                        if (File.Exists(dicomPath))
+                        {
+                            try
+                            {
+                                var dicomFile = await DicomFile.OpenAsync(dicomPath);
+                                var dicomImage = new DicomImage(dicomFile.Dataset);
+
+                                using (var imageSharpImage = dicomImage.RenderImage().AsSharpImage())
+                                using (var memoryStream = new MemoryStream())
+                                {
+                                    imageSharpImage.SaveAsBmp(memoryStream);
+                                    memoryStream.Seek(0, SeekOrigin.Begin);
+                                    CTImage = new Bitmap(memoryStream);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Error processing DICOM file: {dicomPath}. Details: {ex.Message}");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show($"DICOM file not found: {dicomPath}");
+                        }
                     }
                 }
             }

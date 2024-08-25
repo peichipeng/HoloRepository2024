@@ -99,6 +99,7 @@ namespace HoloRepository
             tagDictionary = new Dictionary<string, int>();
 
             LoadTagData();
+            this.textBox.KeyDown += new KeyEventHandler(this.TextBox_KeyDown);
         }
 
         private void LoadTagData()
@@ -161,6 +162,57 @@ namespace HoloRepository
                 listBox.Visible = true;
             }
         }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string inputTag = textBox.Text.Trim();
+
+                // 检查输入是否为空，或是否已经存在于选择的标签中
+                if (!string.IsNullOrEmpty(inputTag) && !data.Contains(inputTag))
+                {
+                    // 添加新标签到数据库
+                    AddTagToDatabase(inputTag);
+                    // 将新标签添加到UI中
+                    AddTag(inputTag);
+
+                    // 清空输入框
+                    textBox.Clear();
+                    // 隐藏建议列表
+                    listBox.Visible = false;
+                }
+
+                // 阻止回车键的默认行为
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void AddTagToDatabase(string tagName)
+        {
+            try
+            {
+                string insertSql = "INSERT INTO tag (tag_name) VALUES (@tagName) RETURNING tag_id";
+
+                using (var connection = dbConnection.GetConnection())
+                {
+                    using (var command = new NpgsqlCommand(insertSql, connection))
+                    {
+                        command.Parameters.AddWithValue("@tagName", tagName);
+
+                        int tagId = (int)command.ExecuteScalar();
+
+                        data.Add(tagName);
+                        tagDictionary[tagName] = tagId;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error adding tag to database: " + ex.Message);
+            }
+        }
+
 
         private void ListBox_Click(object sender, EventArgs e)
         {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,16 @@ namespace HoloRepository
         public HomePageControl()
         {
             InitializeComponent();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.A))
+            {
+                addCaseBtn_Click(this, EventArgs.Empty);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         public void LoadControl(UserControl userControl)
@@ -41,7 +52,6 @@ namespace HoloRepository
         private void addCaseBtn_Click(object sender, EventArgs e)
         {
             LoadControl(new AddCaseFramework("home", "addCase"));
-            //LoadControl(new AddCaseControl());
         }
 
         private void viewCasesBtn_Click(object sender, EventArgs e)
@@ -59,20 +69,14 @@ namespace HoloRepository
             AddControl(new UserGuideHome());
         }
 
-        private void tempBtn_Click(object sender, EventArgs e)
-        {
-            LoadControl(new AddCaseFramework("home", "addCase"));
-        }
-
         private void btnUpdateOrgan_Click(object sender, EventArgs e)
         {
-            LoadControl(new AddCaseControl(12, 33));
+            LoadControl(new AddCaseControl(12, 51));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            _3DModelFormWindow modelFormWindow = new _3DModelFormWindow(33);
-            modelFormWindow.Show();
+            LoadControl(new MainInterFaceControl(this, 12345, 32));
         }
     }
 }

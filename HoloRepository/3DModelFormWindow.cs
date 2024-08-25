@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -14,19 +15,20 @@ namespace HoloRepository
     {
         public event EventHandler ConstructClicked;
         private CheckTable checkTable;
+        private int? organId;
+        private List<OrganSlicePanel> organSlicePanels;
 
-        private int organId;
-
-        public _3DModelFormWindow(int organId)
+        public _3DModelFormWindow(int? organId, List<OrganSlicePanel> organSlicePanels)
         {
             this.organId = organId;
+            this.organSlicePanels = organSlicePanels;
             InitializeComponent();
             InitializeCustomComponents();
         }
 
         private void InitializeCustomComponents()
         {
-            checkTable = new CheckTable(organId)
+            checkTable = new CheckTable(organId, organSlicePanels)
             {
                 Location = new Point(60, 106),
                 Size = new Size(1032, 358),

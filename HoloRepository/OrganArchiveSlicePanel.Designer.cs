@@ -39,6 +39,7 @@
             EditButton = new PictureBox();
             BinButton = new PictureBox();
             lineControl1 = new LineControl();
+            clickPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)EditButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)BinButton).BeginInit();
             SuspendLayout();
@@ -114,6 +115,7 @@
             // 
             EditButton.Anchor = AnchorStyles.Top;
             EditButton.BackColor = Color.Transparent;
+            EditButton.Cursor = Cursors.Hand;
             EditButton.Image = (Image)resources.GetObject("EditButton.Image");
             EditButton.Location = new Point(991, 18);
             EditButton.Margin = new Padding(5);
@@ -122,6 +124,7 @@
             EditButton.SizeMode = PictureBoxSizeMode.Zoom;
             EditButton.TabIndex = 77;
             EditButton.TabStop = false;
+            EditButton.Click += EditButton_Click;
             // 
             // BinButton
             // 
@@ -135,6 +138,7 @@
             BinButton.SizeMode = PictureBoxSizeMode.Zoom;
             BinButton.TabIndex = 78;
             BinButton.TabStop = false;
+            BinButton.Click += BinButton_Click;
             // 
             // lineControl1
             // 
@@ -145,6 +149,15 @@
             lineControl1.Size = new Size(1104, 10);
             lineControl1.TabIndex = 79;
             lineControl1.Text = "lineControl1";
+            // 
+            // clickPanel
+            // 
+            clickPanel.BackColor = Color.Transparent;
+            clickPanel.Location = new Point(0, 0);
+            clickPanel.Name = "clickPanel";
+            clickPanel.Size = new Size(1104, 390);
+            clickPanel.TabIndex = 81;
+            clickPanel.Click += clickPanel_Click;
             // 
             // OrganArchiveSlicePanel
             // 
@@ -160,6 +173,7 @@
             Controls.Add(numOfSlices);
             Controls.Add(OrganName);
             Controls.Add(OrganSlicesImagePanel);
+            Controls.Add(clickPanel);
             Name = "OrganArchiveSlicePanel";
             Size = new Size(1104, 390);
             ((System.ComponentModel.ISupportInitialize)EditButton).EndInit();
@@ -180,5 +194,6 @@
         private PictureBox EditButton;
         private PictureBox BinButton;
         private LineControl lineControl1;
+        private Panel clickPanel;
     }
 }

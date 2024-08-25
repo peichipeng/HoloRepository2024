@@ -46,7 +46,7 @@
             // 
             DICOMFilePicture.BorderStyle = BorderStyle.FixedSingle;
             DICOMFilePicture.Location = new Point(30, 45);
-            DICOMFilePicture.Margin = new Padding(2, 2, 2, 2);
+            DICOMFilePicture.Margin = new Padding(2);
             DICOMFilePicture.Name = "DICOMFilePicture";
             DICOMFilePicture.Size = new Size(422, 312);
             DICOMFilePicture.SizeMode = PictureBoxSizeMode.Zoom;
@@ -56,7 +56,7 @@
             // sliderControl1
             // 
             sliderControl1.Location = new Point(30, 14);
-            sliderControl1.Margin = new Padding(2, 2, 2, 2);
+            sliderControl1.Margin = new Padding(2);
             sliderControl1.Name = "sliderControl1";
             sliderControl1.NumberOfImages = 0;
             sliderControl1.Size = new Size(423, 27);
@@ -88,7 +88,7 @@
             Add.Name = "Add";
             Add.Size = new Size(130, 53);
             Add.TabIndex = 6;
-            Add.Text = "Add";
+            Add.Text = "&Add";
             Add.UseVisualStyleBackColor = false;
             Add.Click += Add_Click;
             // 
@@ -146,8 +146,8 @@
             // 
             // AddOrganSlice
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(144F, 144F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
             ClientSize = new Size(1078, 738);
             Controls.Add(DescriptionBox);

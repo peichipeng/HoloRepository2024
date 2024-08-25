@@ -136,6 +136,7 @@ namespace HoloRepository
             caseTable.AllowUserToDeleteRows = false;
             caseTable.AllowUserToResizeColumns = false;
             caseTable.AllowUserToResizeRows = false;
+            caseTable.Anchor = AnchorStyles.Top;
             caseTable.AutoGenerateColumns = false;
             caseTable.BackgroundColor = Color.White;
             caseTable.BorderStyle = BorderStyle.None;

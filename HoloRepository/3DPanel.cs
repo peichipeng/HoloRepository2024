@@ -1,4 +1,5 @@
-﻿using HoloRepository.ContextMenu;
+﻿using HoloRepository.AddCase;
+using HoloRepository.ContextMenu;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -142,6 +143,33 @@ namespace HoloRepository
             return path;
         }
 
+        private void UpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var mainForm = GetMainForm(this);
+
+                if (mainForm != null)
+                {
+                    var addCaseControl = new AddCaseControl(donorId, organId);
+
+                    mainForm.LoadControl(addCaseControl);
+
+                    addCaseControl.OnSaveCompleted = (id) =>
+                    {
+                        mainForm.LoadControl(new OrganArchiveControl());
+                    };
+
+                    addCaseControl.Dock = DockStyle.Fill;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error occurs when clicking update：{ex.Message}");
+            }
+        }
+
+
         private void leftArrow_Click(object sender, EventArgs e)
         {
             if (organSlices.Count > 1)
@@ -200,16 +228,83 @@ namespace HoloRepository
                     // Code for deleting the organ
                     var dbConnection = new DatabaseConnection();
 
-                    string deleteQuery = $"DELETE FROM organ WHERE organ_id = {organId}";
-                    dbConnection.ExecuteNonQuery(deleteQuery);
+                    try
+                    {
+                        // 查询 organ_side 信息
+                        string organSideQuery = "SELECT organ_side FROM organ WHERE organ_id = @organId";
+                        string organSide = string.Empty;
+
+                        using (var connection = dbConnection.GetConnection())
+                        using (var command = new NpgsqlCommand(organSideQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@organId", organId);
+                            var resultSide = command.ExecuteScalar();
+                            organSide = resultSide != null ? resultSide.ToString() : null;
+                        }
+
+                        string deleteQuery = @"
+                            DELETE FROM dicomfile WHERE organ_id = @organId;
+                            DELETE FROM model3d WHERE organ_id = @organId;
+                            DELETE FROM sliceimage WHERE organ_id = @organId;
+                            DELETE FROM organtag WHERE organ_id = @organId;
+                            DELETE FROM organ WHERE organ_id = @organId;";
+
+                        using (var connection = dbConnection.GetConnection())
+                        using (var command = new NpgsqlCommand(deleteQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@organId", organId);
+                            command.ExecuteNonQuery();
+                        }
+
+                        string organNameWithSide = string.IsNullOrEmpty(organSide) ? organName : $"{organName}({organSide})";
+                        string folderPath = Path.Combine("data", donorId.ToString(), organNameWithSide);
+                        if (Directory.Exists(folderPath))
+                        {
+                            Directory.Delete(folderPath, true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error deleting organ: " + ex.Message);
+                    }
                 }
             }
         }
+
+        private MainForm GetMainForm(Control control)
+        {
+            Control current = control;
+            while (current != null)
+            {
+                if (current is MainForm)
+                {
+                    return (MainForm)current;
+                }
+                current = current.Parent;
+            }
+            return null;
+        }
+
 
         public string GetDonorId()
         {
             string DonorID = donorId.ToString();
             return DonorID;
+        }
+
+        private void sliceImages_Click(object sender, EventArgs e)
+        {
+            MainInterFaceControl mainInterfaceControl = new MainInterFaceControl(this, donorId, organId);
+
+            MainForm mainForm = GetMainForm(this);
+
+            if (mainForm != null)
+            {
+                mainForm.Controls.Clear();
+                mainForm.Controls.Add(mainInterfaceControl);
+
+                mainInterfaceControl.Dock = DockStyle.Fill;
+            }
         }
     }
 }

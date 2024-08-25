@@ -34,7 +34,8 @@
             addCaseBtn = new RoundedButton();
             Title = new Label();
             btnUpdateOrgan = new Button();
-            button1 = new Button();
+            button2 = new Button();
+            voiceControl1 = new VoiceControl();
             SuspendLayout();
             // 
             // userGuideBtn
@@ -44,12 +45,12 @@
             userGuideBtn.BorderRadius = 15;
             userGuideBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             userGuideBtn.ForeColor = Color.Black;
-            userGuideBtn.Location = new Point(323, 321);
+            userGuideBtn.Location = new Point(323, 331);
             userGuideBtn.Margin = new Padding(2, 2, 14, 2);
             userGuideBtn.Name = "userGuideBtn";
             userGuideBtn.Size = new Size(201, 36);
             userGuideBtn.TabIndex = 82;
-            userGuideBtn.Text = "User Guide";
+            userGuideBtn.Text = "&User Guide";
             userGuideBtn.UseVisualStyleBackColor = false;
             userGuideBtn.Click += userGuideBtn_Click;
             // 
@@ -60,12 +61,12 @@
             organArchiveBtn.BorderRadius = 15;
             organArchiveBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             organArchiveBtn.ForeColor = Color.White;
-            organArchiveBtn.Location = new Point(323, 273);
+            organArchiveBtn.Location = new Point(323, 283);
             organArchiveBtn.Margin = new Padding(2, 2, 14, 2);
             organArchiveBtn.Name = "organArchiveBtn";
             organArchiveBtn.Size = new Size(201, 36);
             organArchiveBtn.TabIndex = 81;
-            organArchiveBtn.Text = "Organ Archive";
+            organArchiveBtn.Text = "&Organ Archive";
             organArchiveBtn.UseVisualStyleBackColor = false;
             organArchiveBtn.Click += organArchiveBtn_Click;
             // 
@@ -76,12 +77,12 @@
             viewCasesBtn.BorderRadius = 15;
             viewCasesBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             viewCasesBtn.ForeColor = Color.White;
-            viewCasesBtn.Location = new Point(323, 225);
+            viewCasesBtn.Location = new Point(323, 235);
             viewCasesBtn.Margin = new Padding(2, 2, 14, 2);
             viewCasesBtn.Name = "viewCasesBtn";
             viewCasesBtn.Size = new Size(201, 36);
             viewCasesBtn.TabIndex = 80;
-            viewCasesBtn.Text = "View Cases";
+            viewCasesBtn.Text = "&View Cases";
             viewCasesBtn.UseVisualStyleBackColor = false;
             viewCasesBtn.Click += viewCasesBtn_Click;
             // 
@@ -92,12 +93,12 @@
             addCaseBtn.BorderRadius = 15;
             addCaseBtn.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             addCaseBtn.ForeColor = Color.White;
-            addCaseBtn.Location = new Point(323, 177);
+            addCaseBtn.Location = new Point(323, 187);
             addCaseBtn.Margin = new Padding(2, 2, 14, 2);
             addCaseBtn.Name = "addCaseBtn";
             addCaseBtn.Size = new Size(201, 36);
             addCaseBtn.TabIndex = 79;
-            addCaseBtn.Text = " Add a Case";
+            addCaseBtn.Text = "&Add a Case";
             addCaseBtn.UseVisualStyleBackColor = false;
             addCaseBtn.Click += addCaseBtn_Click;
             // 
@@ -106,7 +107,7 @@
             Title.Anchor = AnchorStyles.None;
             Title.AutoSize = true;
             Title.Font = new Font("Tahoma", 42F, FontStyle.Bold, GraphicsUnit.Point);
-            Title.Location = new Point(192, 58);
+            Title.Location = new Point(192, 68);
             Title.Margin = new Padding(5, 0, 5, 0);
             Title.Name = "Title";
             Title.Size = new Size(463, 68);
@@ -115,33 +116,46 @@
             // 
             // btnUpdateOrgan
             // 
-            btnUpdateOrgan.Anchor = AnchorStyles.Top;
+            btnUpdateOrgan.Anchor = AnchorStyles.None;
             btnUpdateOrgan.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnUpdateOrgan.Location = new Point(113, 249);
+            btnUpdateOrgan.Location = new Point(100, 279);
             btnUpdateOrgan.Margin = new Padding(2);
             btnUpdateOrgan.Name = "btnUpdateOrgan";
-            btnUpdateOrgan.Size = new Size(88, 40);
+            btnUpdateOrgan.Size = new Size(80, 27);
             btnUpdateOrgan.TabIndex = 83;
             btnUpdateOrgan.Text = "Update";
             btnUpdateOrgan.UseVisualStyleBackColor = true;
             btnUpdateOrgan.Click += btnUpdateOrgan_Click;
             // 
-            // button1
+            // button2
             // 
-            button1.Location = new Point(117, 318);
-            button1.Margin = new Padding(2);
-            button1.Name = "button1";
-            button1.Size = new Size(78, 31);
-            button1.TabIndex = 84;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            button2.Anchor = AnchorStyles.None;
+            button2.Location = new Point(88, 235);
+            button2.Margin = new Padding(2);
+            button2.Name = "button2";
+            button2.Size = new Size(81, 23);
+            button2.TabIndex = 85;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // voiceControl1
+            // 
+            voiceControl1.Anchor = AnchorStyles.None;
+            voiceControl1.BackColor = Color.Transparent;
+            voiceControl1.Location = new Point(625, 180);
+            voiceControl1.Margin = new Padding(1);
+            voiceControl1.Name = "voiceControl1";
+            voiceControl1.Size = new Size(93, 43);
+            voiceControl1.TabIndex = 86;
             // 
             // HomePageControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(button1);
+            BackColor = Color.White;
+            Controls.Add(voiceControl1);
+            Controls.Add(button2);
             Controls.Add(btnUpdateOrgan);
             Controls.Add(userGuideBtn);
             Controls.Add(organArchiveBtn);
@@ -149,7 +163,7 @@
             Controls.Add(addCaseBtn);
             Controls.Add(Title);
             Name = "HomePageControl";
-            Size = new Size(846, 415);
+            Size = new Size(846, 435);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -160,8 +174,10 @@
         private RoundedButton organArchiveBtn;
         private RoundedButton viewCasesBtn;
         private RoundedButton addCaseBtn;
+        private Button tempBtn;
         private Label Title;
         private Button btnUpdateOrgan;
-        private Button button1;
+        private Button button2;
+        private VoiceControl voiceControl1;
     }
 }

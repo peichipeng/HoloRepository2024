@@ -52,7 +52,7 @@
             updateBtn.BackColor = Color.Transparent;
             updateBtn.Image = (Image)resources.GetObject("updateBtn.Image");
             updateBtn.Location = new Point(536, 3);
-            updateBtn.Margin = new Padding(5, 5, 5, 5);
+            updateBtn.Margin = new Padding(5);
             updateBtn.Name = "updateBtn";
             updateBtn.Size = new Size(38, 46);
             updateBtn.SizeMode = PictureBoxSizeMode.Zoom;
@@ -96,7 +96,7 @@
             addOrganBtn.Name = "addOrganBtn";
             addOrganBtn.Size = new Size(225, 40);
             addOrganBtn.TabIndex = 72;
-            addOrganBtn.Text = "+ Add an Organ";
+            addOrganBtn.Text = "+ &Add an Organ";
             addOrganBtn.UseVisualStyleBackColor = false;
             addOrganBtn.Click += addOrganBtn_Click;
             // 
@@ -234,7 +234,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label6);
-            Margin = new Padding(5, 5, 5, 5);
+            Margin = new Padding(5);
             Name = "CaseView";
             Size = new Size(1257, 754);
             ((System.ComponentModel.ISupportInitialize)updateBtn).EndInit();
