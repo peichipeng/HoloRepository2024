@@ -35,8 +35,6 @@ namespace HoloRepository
             }
         }
 
-
-
         private void LoadOrganAndDonorInfo(int donorId, int organId)
         {
             try
@@ -96,7 +94,7 @@ namespace HoloRepository
 
             if (tags.Count == 1)
             {
-                tagLabel.Text = tags[0]; // 如果只有一个标签，设置 tagLabel 的文本
+                tagLabel.Text = tags[0];
                 AdjustTextBoxSize(tagLabel);
             }
             else if (tags.Count > 1)
@@ -123,7 +121,6 @@ namespace HoloRepository
 
             foreach (Control ctrl in tagPanel.Controls)
             {
-                // 如果当前行放不下控件，开始新行
                 if (currentWidth + ctrl.Width > tagPanel.ClientSize.Width)
                 {
                     totalHeight += rowHeight; // 累加上一行的高度
@@ -138,10 +135,8 @@ namespace HoloRepository
                 }
             }
 
-            // 加上最后一行的高度
             totalHeight += rowHeight;
 
-            // 设置 tagPanel 的高度
             tagPanel.Height = totalHeight + 15;
         }
 
@@ -203,9 +198,8 @@ namespace HoloRepository
 
         private void AdjustTextBoxSize(KryptonTextBox textBox)
         {
-            // 根据文本内容计算宽度
             Size textSize = TextRenderer.MeasureText(textBox.Text, textBox.Font);
-            textBox.Size = new Size(textSize.Width + 10, textBox.Height); // 加上一些额外的宽度
+            textBox.Size = new Size(textSize.Width + 10, textBox.Height);
         }
 
         private List<string> LoadTags(int donorId, int organId)
@@ -244,22 +238,55 @@ namespace HoloRepository
 
         private void btnResize_Click(object sender, EventArgs e)
         {
-            if (ifDisplay)
+            ifDisplay = !ifDisplay;
+
+            displayPanel.Visible = ifDisplay;
+
+            if (descriptionLabel.Text != "No description yet")
             {
-                displayPanel.Visible = false;
-                int newHeight = this.Height - displayPanel.Height;
-                this.Height = newHeight;
-                ifDisplay = false;
+                descriptionPanel.Visible = ifDisplay;
+
+                if (!ifDisplay)
+                {
+                    this.Height -= displayPanel.Height + descriptionPanel.Height;
+                }
             }
             else
             {
-                displayPanel.Visible = true;
-                ifDisplay = true;
+                descriptionPanel.Visible = false;
+
+                if (!ifDisplay)
+                {
+                    this.Height -= displayPanel.Height;
+                }
             }
+
             this.OnSizeChanged(EventArgs.Empty);
+
 
             btnResize.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
             btnResize.Refresh();
+        }
+
+        public void CollapsePanels()
+        {
+            if (ifDisplay == true)
+            {
+                ifDisplay = false;
+
+                displayPanel.Visible = false;
+                descriptionPanel.Visible = false;
+
+                this.Height -= (displayPanel.Height + descriptionPanel.Height);
+                btnResize.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            }
+            this.OnSizeChanged(EventArgs.Empty);
+        }
+
+
+        public void SetDescription(string description)
+        {
+            descriptionLabel.Text = description;
         }
     }
 }

@@ -40,9 +40,10 @@
             panel1.Controls.Add(nextBtn);
             panel1.Controls.Add(cancelBtn);
             panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(0, 283);
+            panel1.Location = new Point(0, 453);
+            panel1.Margin = new Padding(5, 5, 5, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(800, 90);
+            panel1.Size = new Size(1257, 144);
             panel1.TabIndex = 0;
             // 
             // nextBtn
@@ -52,12 +53,12 @@
             nextBtn.BorderRadius = 15;
             nextBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             nextBtn.ForeColor = Color.White;
-            nextBtn.Location = new Point(646, 23);
-            nextBtn.Margin = new Padding(2, 2, 14, 2);
+            nextBtn.Location = new Point(1015, 37);
+            nextBtn.Margin = new Padding(3, 3, 22, 3);
             nextBtn.Name = "nextBtn";
-            nextBtn.Size = new Size(81, 31);
+            nextBtn.Size = new Size(127, 50);
             nextBtn.TabIndex = 7;
-            nextBtn.Text = "Next";
+            nextBtn.Text = "&Next";
             nextBtn.UseVisualStyleBackColor = false;
             nextBtn.Click += nextBtn_Click;
             // 
@@ -68,12 +69,12 @@
             cancelBtn.BorderRadius = 15;
             cancelBtn.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.Point);
             cancelBtn.ForeColor = Color.White;
-            cancelBtn.Location = new Point(73, 23);
-            cancelBtn.Margin = new Padding(14, 2, 2, 2);
+            cancelBtn.Location = new Point(115, 37);
+            cancelBtn.Margin = new Padding(22, 3, 3, 3);
             cancelBtn.Name = "cancelBtn";
-            cancelBtn.Size = new Size(81, 31);
+            cancelBtn.Size = new Size(127, 50);
             cancelBtn.TabIndex = 6;
-            cancelBtn.Text = "Cancel";
+            cancelBtn.Text = "&Cancel";
             cancelBtn.UseVisualStyleBackColor = false;
             cancelBtn.Click += cancelBtn_Click;
             // 
@@ -81,18 +82,20 @@
             // 
             addCaseContainer.Dock = DockStyle.Fill;
             addCaseContainer.Location = new Point(0, 0);
+            addCaseContainer.Margin = new Padding(5, 5, 5, 5);
             addCaseContainer.Name = "addCaseContainer";
-            addCaseContainer.Size = new Size(800, 283);
+            addCaseContainer.Size = new Size(1257, 453);
             addCaseContainer.TabIndex = 1;
             // 
             // AddCaseFramework
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(addCaseContainer);
             Controls.Add(panel1);
+            Margin = new Padding(5, 5, 5, 5);
             Name = "AddCaseFramework";
-            Size = new Size(800, 373);
+            Size = new Size(1257, 597);
             panel1.ResumeLayout(false);
             ResumeLayout(false);
         }

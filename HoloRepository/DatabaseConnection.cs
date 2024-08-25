@@ -62,4 +62,9 @@ public class DatabaseConnection
 
         return command.ExecuteReader(CommandBehavior.CloseConnection);
     }
+
+    public string ConnectionString
+    {
+        get {return connectionString;}
+    }
 }

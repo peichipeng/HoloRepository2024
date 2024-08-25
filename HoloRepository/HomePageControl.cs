@@ -11,6 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 namespace HoloRepository
 {
     public partial class HomePageControl : UserControl
@@ -53,6 +56,16 @@ namespace HoloRepository
             }
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.A))
+            {
+                addCaseBtn_Click(this, EventArgs.Empty);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         public void LoadControl(UserControl userControl)
         {
             if (this.Parent?.Parent is MainForm mainForm)
@@ -89,11 +102,6 @@ namespace HoloRepository
             AddControl(new UserGuideHome());
         }
 
-        private void tempBtn_Click(object sender, EventArgs e)
-        {
-            LoadControl(new AddCaseFramework("home", "addCase"));
-        }
-
         private void btnUpdateOrgan_Click(object sender, EventArgs e)
         {
             LoadControl(new AddCaseControl(12, 51));
@@ -101,12 +109,7 @@ namespace HoloRepository
 
         private void button2_Click(object sender, EventArgs e)
         {
-            LoadControl(new MainInterFaceControl(this, 123456, 18));
-        }
-
-        private void HomePageControl_Load(object sender, EventArgs e)
-        {
-
+            LoadControl(new MainInterFaceControl(this, 12345, 32));
         }
 
         public void ProcessVoiceCommand(string transcription)

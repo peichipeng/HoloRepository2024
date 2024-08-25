@@ -1,4 +1,6 @@
-﻿using Dicom.Imaging;
+﻿using FellowOakDicom.Imaging;
+using FellowOakDicom;
+using SixLabors.ImageSharp;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace HoloRepository
 {
     public partial class MainInterFaceControl : UserControl
     {
-        private List<Image> dicomImages;
+        private List<System.Drawing.Image> dicomImages;
         private DatabaseConnection dbConnection;
         private bool modelExists = false;
         private int donorId;
@@ -111,9 +113,10 @@ namespace HoloRepository
             donorInfoPanel.Refresh();
         }
 
-        private void SlicePanel_PictureBoxClicked(Image selectedImage)
+        private void SlicePanel_PictureBoxClicked(System.Drawing.Image selectedImage, string additionalInfo)
         {
             slicePicture.Image = selectedImage;
+            donorInfoPanel.Controls.OfType<InfoPanel>().FirstOrDefault().SetDescription(additionalInfo);
             notFoundLabel.Visible = false;
             btnConstruct.Visible = false;
             btnBack3D.Visible = true;
@@ -126,9 +129,9 @@ namespace HoloRepository
             LoadDICOMFiles(organId);
         }
 
-        private void LoadDICOMFiles(int organId)
+        private async void LoadDICOMFiles(int organId)
         {
-            dicomImages = new List<Image>();
+            dicomImages = new List<System.Drawing.Image>();
 
             try
             {
@@ -151,8 +154,26 @@ namespace HoloRepository
 
                             if (System.IO.File.Exists(dicomPath))
                             {
-                                Image dicomImage = Image.FromFile(dicomPath);
-                                dicomImages.Add(dicomImage);
+                                try
+                                {
+                                    var dicomFile = await DicomFile.OpenAsync(dicomPath);
+                                    var dicomImage = new DicomImage(dicomFile.Dataset);
+                                    Bitmap dicomBitmap;
+
+                                    using (var imageSharpImage = dicomImage.RenderImage().AsSharpImage())
+                                    using (var memoryStream = new MemoryStream())
+                                    {
+                                        imageSharpImage.SaveAsBmp(memoryStream);
+                                        memoryStream.Seek(0, SeekOrigin.Begin);
+                                        dicomBitmap = new Bitmap(memoryStream);
+                                    }
+
+                                    dicomImages.Add(dicomBitmap);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Error processing DICOM file: {dicomPath}. Details: {ex.Message}");
+                                }
                             }
                             else
                             {
@@ -349,6 +370,11 @@ namespace HoloRepository
 
         private void btnBack3D_Click(object sender, EventArgs e)
         {
+            var infoPanel = donorInfoPanel.Controls.OfType<InfoPanel>().FirstOrDefault();
+            if (infoPanel != null)
+            {
+                infoPanel.CollapsePanels();
+            }
             if (modelExists)
             {
                 slicePicture.Image = null;
@@ -357,6 +383,7 @@ namespace HoloRepository
             {
                 slicePicture.Image = null;
             }
+            donorInfoPanel.Controls.OfType<InfoPanel>().FirstOrDefault().SetDescription("No description yet");
             notFoundLabel.Visible = !modelExists;
             btnConstruct.Visible = !modelExists;
             btnBack3D.Visible = false;

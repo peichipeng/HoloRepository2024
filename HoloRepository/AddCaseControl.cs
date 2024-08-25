@@ -1,5 +1,7 @@
 ﻿using Dicom;
 using Newtonsoft.Json;
+using FellowOakDicom.Imaging;
+using FellowOakDicom;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -13,12 +15,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ScrollBar;
+using SixLabors.ImageSharp;
 
 namespace HoloRepository
 {
     public partial class AddCaseControl : UserControl
     {
-        private List<string> imagePaths = new List<string>();
+        private List<string> DICOMPaths = new List<string>();
         public List<OrganSlicePanel> organSlicePanels = new List<OrganSlicePanel>();
         private int selectedIndex;
 
@@ -26,6 +29,8 @@ namespace HoloRepository
         private Dictionary<string, int> organNameDictionary = new Dictionary<string, int>();
         private Dictionary<string, bool> organHasSideDictionary = new Dictionary<string, bool>();
         private DatabaseConnection dbConnection;
+        // Back event trigger
+        public Action<int> OnSaveCompleted;
 
         private int donorId;
 
@@ -89,7 +94,7 @@ namespace HoloRepository
             using (Graphics g = label.CreateGraphics())
             {
                 // Measure the text width
-                SizeF textSize = g.MeasureString(text, label.Font);
+                System.Drawing.SizeF textSize = g.MeasureString(text, label.Font);
 
                 // Calculate the new width based on the fixed right edge
                 int newWidth = rightAlignX - label.Location.X;
@@ -109,23 +114,23 @@ namespace HoloRepository
             // Subscribe to the ImageDeleted event
             if (fileListBox is RoundedListBox roundedListBox)
             {
-                roundedListBox.ImageDeleted += RoundedListBox_ImageDeleted;
+                roundedListBox.ImageDeleted += RoundedListBox_DICOMDeleted;
             }
         }
 
-        public List<string> GetImagePaths()
+        public List<string> GetDICOMPaths()
         {
-            return imagePaths;
+            return DICOMPaths;
         }
 
-        private void RoundedListBox_ImageDeleted(object sender, string deletedFileName)
+        private void RoundedListBox_DICOMDeleted(object sender, string deletedFileName)
         {
             // Find the full path corresponding to the deleted file name
-            string deletedImagePath = imagePaths.FirstOrDefault(path => path.EndsWith(deletedFileName, StringComparison.InvariantCultureIgnoreCase));
+            string deletedImagePath = DICOMPaths.FirstOrDefault(path => path.EndsWith(deletedFileName, StringComparison.InvariantCultureIgnoreCase));
 
             if (deletedImagePath != null)
             {
-                imagePaths.Remove(deletedImagePath);
+                DICOMPaths.Remove(deletedImagePath);
                 Debug.WriteLine($"Deleted image path: {deletedImagePath}");
             }
             else
@@ -149,7 +154,7 @@ namespace HoloRepository
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
+                openFileDialog.Filter = "DICOM files (*.dcm)|*.dcm|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Multiselect = true;
@@ -164,7 +169,7 @@ namespace HoloRepository
                         fileListBox.Items.Add(fileName);
 
                         // Add file path to list
-                        imagePaths.Add(filePath);
+                        DICOMPaths.Add(filePath);
                     }
                 }
             }
@@ -190,11 +195,11 @@ namespace HoloRepository
             if (result == DialogResult.Yes)
             {
                 fileListBox.Items.Clear();
-                imagePaths.Clear();
+                DICOMPaths.Clear();
             }
         }
 
-        private void AddOrganSlicesButton_Click(object sender, EventArgs e)
+        private async void AddOrganSlicesButton_Click(object sender, EventArgs e)
         {
             if (!IsSideBoxValid())
             {
@@ -216,18 +221,36 @@ namespace HoloRepository
             {
                 addOrganSlice.StartPosition = FormStartPosition.CenterParent;
 
-                List<Image> images = new();
-                foreach (string path in imagePaths)
+                List<System.Drawing.Image> images = new();
+                foreach (string path in DICOMPaths)
                 {
-                    images.Add(new Bitmap(path));
+                    try
+                    {
+                        var file = await DicomFile.OpenAsync(path);
+                        var dicomImage = new DicomImage(file.Dataset);
+                        using (var image = dicomImage.RenderImage().AsSharpImage())
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                image.SaveAsBmp(memoryStream);
+                                memoryStream.Seek(0, SeekOrigin.Begin);
+                                var bitmap = new Bitmap(memoryStream);
+                                images.Add(bitmap);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Cannot handle the DICOM file: {ex.Message}");
+                    }
                 }
                 addOrganSlice.SetImageList(images, 0);
 
                 if (addOrganSlice.ShowDialog() == DialogResult.OK)
                 {
                     // Selected Image and Description
-                    Image OrganSlice = addOrganSlice.OrganSliceImage;
-                    Image selectedImage = addOrganSlice.SelectedImage;
+                    System.Drawing.Image OrganSlice = addOrganSlice.OrganSliceImage;
+                    System.Drawing.Image selectedImage = addOrganSlice.SelectedImage;
                     string description = addOrganSlice.Description;
                     string organSlicePath = addOrganSlice.OrganSliceImagePath;
                     selectedIndex = addOrganSlice.SelectedIndex;
@@ -239,7 +262,7 @@ namespace HoloRepository
         }
 
 
-        private void DisplayNewOrganSlice(string imagePath, Image image, Image OrganSliceImage, string description)
+        private void DisplayNewOrganSlice(string imagePath, System.Drawing.Image image, System.Drawing.Image OrganSliceImage, string description)
         {
             int currentIndex = organSlicePanels.Count + 1;
             string organName = organNameTextBox.Text;
@@ -416,7 +439,7 @@ namespace HoloRepository
                 return;
             }
 
-            var DICOMPath = imagePaths;
+            var DICOMPath = DICOMPaths;
             if (DICOMPath == null || DICOMPath.Count == 0)
             {
                 MessageBox.Show("No DICOM file selected.");
@@ -430,6 +453,8 @@ namespace HoloRepository
                     SaveDataToDatabase(newOrganId, organNameId, organSide, selectedTags, DICOMPath);
                     InsertIntoModel3DTable(newOrganId);
                     MessageBox.Show("Model constructed successfully.");
+                    // Back event trigger
+                    OnSaveCompleted?.Invoke(donorId);
                 });
             }
             else
@@ -437,6 +462,8 @@ namespace HoloRepository
                 int newOrganId = GetOrInsertOrganId(organNameId, organSide);
                 SaveDataToDatabase(newOrganId, organNameId, organSide, selectedTags, DICOMPath);
                 MessageBox.Show("Data saved successfully.");
+                // Back event trigger
+                OnSaveCompleted?.Invoke(donorId);
             }
         }
 
@@ -678,7 +705,7 @@ namespace HoloRepository
             string insertSliceImageQuery = "INSERT INTO sliceimage (organ_id, dicom_id, additional_info, image_path) VALUES (@organId, @dicomId, @Description, @slicePath)";
             foreach (var panel in organSlicePanels)
             {
-                if (dicomIdMap.TryGetValue(imagePaths[panel.SelectedIndex], out int dicomId))
+                if (dicomIdMap.TryGetValue(DICOMPaths[panel.SelectedIndex], out int dicomId))
                 {
                     using (var command = new NpgsqlCommand(insertSliceImageQuery, connection))
                     {
@@ -692,7 +719,7 @@ namespace HoloRepository
             }
         }
 
-        private void LoadOrganData()
+        private async void LoadOrganData()
         {
             try
             {
@@ -741,7 +768,7 @@ namespace HoloRepository
                                         int dicomId = dicomReader.GetInt32(0);
                                         string dicomPath = dicomReader.GetString(1);
                                         dicomIdToPathMap[dicomId] = dicomPath;
-                                        imagePaths.Add(dicomPath);
+                                        DICOMPaths.Add(dicomPath);
                                         fileListBox.Items.Add(Path.GetFileName(dicomPath));
                                         Debug.WriteLine($"Load DICOM path: {dicomPath}");
                                     }
@@ -766,13 +793,25 @@ namespace HoloRepository
                                         {
                                             try
                                             {
-                                                // Load DICOM and slice images
-                                                Image dicomImage = Image.FromFile(dicomPath);
-                                                Image sliceImage = Image.FromFile(sliceImagePath);
+                                                // Load and render the DICOM image
+                                                var dicomFile = await DicomFile.OpenAsync(dicomPath);
+                                                var dicomImage = new DicomImage(dicomFile.Dataset);
+                                                Bitmap dicomBitmap;
 
-                                                selectedIndex = imagePaths.IndexOf(dicomPath);
+                                                using (var imageSharpImage = dicomImage.RenderImage().AsSharpImage())
+                                                using (var memoryStream = new MemoryStream())
+                                                {
+                                                    imageSharpImage.SaveAsBmp(memoryStream);
+                                                    memoryStream.Seek(0, SeekOrigin.Begin);
+                                                    dicomBitmap = new Bitmap(memoryStream);
+                                                }
 
-                                                DisplayNewOrganSlice(sliceImagePath, dicomImage, sliceImage, additionalInfo);
+                                                // Load the slice image
+                                                System.Drawing.Image sliceImage = System.Drawing.Image.FromFile(sliceImagePath);
+
+                                                selectedIndex = DICOMPaths.IndexOf(dicomPath);
+
+                                                DisplayNewOrganSlice(sliceImagePath, dicomBitmap, sliceImage, additionalInfo);
                                             }
                                             catch (Exception ex)
                                             {
@@ -820,7 +859,6 @@ namespace HoloRepository
                             }
 
                             AddOrganTitle.Text = "Update an Organ";
-                            btnSave.Text = "Save";
                         }
                         else
                         {

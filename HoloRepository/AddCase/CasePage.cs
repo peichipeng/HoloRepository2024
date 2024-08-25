@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace HoloRepository.AddCase
@@ -29,12 +31,30 @@ namespace HoloRepository.AddCase
         {
             if (this.pageName == "caseOverview")
             {
+                UpdateCaseAccessTime();
+
                 if (Parent.Parent is AddCaseFramework framework)
                 {
                     framework.HideFooterBtns();
                 }
             }
             LoadControls();
+        }
+
+        private async void UpdateCaseAccessTime()
+        {
+            var dbConnection = new DatabaseConnection();
+            var connectionString = dbConnection.ConnectionString;
+
+            await using var conn = new NpgsqlConnection(connectionString);
+            await conn.OpenAsync();
+
+            string updateQuery = $"UPDATE donor SET timestamp = @time WHERE donor_id = {donorId}";
+
+            await using var cmd = new NpgsqlCommand(updateQuery, conn);
+            cmd.Parameters.AddWithValue("@time", DateTime.Now);
+
+            await cmd.ExecuteNonQueryAsync();
         }
 
         public void LoadControls()

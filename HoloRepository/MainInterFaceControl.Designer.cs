@@ -230,7 +230,7 @@
             btnConstruct.Name = "btnConstruct";
             btnConstruct.Size = new Size(300, 45);
             btnConstruct.TabIndex = 83;
-            btnConstruct.Text = "+ Construct 3D Model";
+            btnConstruct.Text = "+ &Construct 3D Model";
             btnConstruct.UseVisualStyleBackColor = false;
             btnConstruct.Click += btn3D_Click;
             // 

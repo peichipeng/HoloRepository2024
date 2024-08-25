@@ -23,7 +23,11 @@ namespace HoloRepository
     public partial class ViewCasesControl : UserControl
     {
         private List<CaseData> cases = new List<CaseData>();
-        private List<CaseData> filteredCases = new List<CaseData>();
+        private List<CaseData> filteredCasesAll = new List<CaseData>();
+        private List<CaseData> filteredCasesByTime = new List<CaseData>();
+
+        private List<ComboBoxItems> comboBoxItems = new List<ComboBoxItems>();
+
         private int totalPages;
         private int selectedPage = 1;
         private int pageSize = 10;
@@ -35,23 +39,31 @@ namespace HoloRepository
         {
             InitializeComponent();
 
-            dbConnection = new DatabaseConnection();
-
             DataGridViewTextBoxColumn options = new DataGridViewTextBoxColumn();
             options.Name = "options";
             options.HeaderText = "";
             options.Width = 50;
             caseTable.Columns.Add(options);
 
-            tablePanel.Location = new Point((panel.Width - tablePanel.Width) / 2, 130);
+            //tablePanel.Location = new Point((panel.Width - tablePanel.Width) / 2, tablePanel.Location.Y);
+
+            int secondRowXPosition = tablePanel.Location.X;
+            int secondRowYPosition = 78;
+            int secondRowHeight = addCaseBtn.Height;
+            int space = 10;
 
             searchBox.AutoSize = false;
-            searchBox.Location = new Point(tablePanel.Location.X, 78);
-            searchBox.Size = new Size(540, addCaseBtn.Height);
+            searchBox.Size = new Size(searchBox.Width, addCaseBtn.Height);
+            //searchBox.Location = new Point(secondRowXPosition + timeIntervalCmb.Width + space, secondRowYPosition);
+            //searchBox.Size = new Size(tablePanel.Width - timeIntervalCmb.Width - addCaseBtn.Width - space * 2, secondRowHeight);
 
-            addCaseBtn.Location = new Point(tablePanel.Location.X + tablePanel.Width - addCaseBtn.Width, searchBox.Location.Y);
+            //timeIntervalCmb.Location = new Point(secondRowXPosition, secondRowYPosition);
 
-            searchIcon.Location = new Point(searchBox.Location.X + 8, searchBox.Location.Y + 8);
+            //addCaseBtn.Location = new Point(tablePanel.Location.X + tablePanel.Width - addCaseBtn.Width, secondRowYPosition);
+
+            //searchIcon.Location = new Point(searchBox.Location.X + 8, searchBox.Location.Y + 8);
+
+            LoadComboBox();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -105,33 +117,46 @@ namespace HoloRepository
             LoadCaseData();
         }
 
+        private void LoadComboBox()
+        {
+            timeIntervalCmb.Items.Clear();
+
+            // Initialize data
+            comboBoxItems.Add(new ComboBoxItems() { ID = "01", TimeInterval = "All", Action = ShowAllData });
+            comboBoxItems.Add(new ComboBoxItems() { ID = "02", TimeInterval = "Last 7 days", Action = ShowLast7DaysData });
+            comboBoxItems.Add(new ComboBoxItems() { ID = "03", TimeInterval = "Last 30 days", Action = ShowLast30DaysData });
+
+            timeIntervalCmb.DataSource = comboBoxItems;
+            timeIntervalCmb.ValueMember = "ID";
+            timeIntervalCmb.DisplayMember = "TimeInterval";
+
+            timeIntervalCmb.SelectedValue = "02"; // Select the time range whose ID is 02
+        }
+
         private async void LoadCaseData()
         {
-            var db = new DatabaseConnection(); // Create an instance of the DatabaseConnection class
+            var dataSource = DataRetrieval.CreateDataSource();
 
-            string queryCases = "SELECT * FROM donor";
+            string queryCases = "SELECT * FROM donor ORDER BY timestamp DESC";
 
-            try
+            await using (var caseReader = await DataRetrieval.ExecuteQuery(queryCases, dataSource))
             {
-                // Execute the query to retrieve donors
-                using (var caseReader = db.ExecuteReader(queryCases))
-                {
                 while (await caseReader.ReadAsync())
                 {
+                    // Data retrieved from donor table
                     int donorId = caseReader.GetInt32(0);
                     int age = caseReader.GetInt32(1);
                     DateTime DOD = caseReader.GetDateTime(2);
                     string causeOfDeath = caseReader.GetString(3);
+                    DateTime accessTime = caseReader.GetDateTime(4);
+
                     string organs = "";
 
-                        // Query to retrieve organs for the current donor
-                        string queryOrgans = "SELECT organ_id, organ_name_id FROM organ WHERE donor_id = @donorId ORDER BY organ_id DESC";
-                        var organParams = new Dictionary<string, object> { { "@donorId", donorId } };
+                    string queryOrgans = $"SELECT organ_id, organ_name_id FROM organ WHERE donor_id = {donorId} ORDER BY organ_id DESC";
 
                     List<string> organList = new List<string>();
 
-                        // Execute the query to retrieve organs
-                        using (var organReader = db.ExecuteReader(queryOrgans, organParams))
+                    await using (var organReader = await DataRetrieval.ExecuteQuery(queryOrgans, dataSource))
                     {
                         while (await organReader.ReadAsync())
                         {
@@ -140,16 +165,15 @@ namespace HoloRepository
                             int organNameId;
                             string organName = "";
 
-                                // Check if the organNameId is not null
+                            // Check if the organNameId is null
                             if (!organReader.IsDBNull(1))
                             {
                                 organNameId = organReader.GetFieldValue<int>(1);
 
                                 // Retrieve the organ name
-                                    string queryOrganName = "SELECT organ_name FROM organname WHERE organ_name_id = @organNameId";
-                                    var organNameParams = new Dictionary<string, object> { { "@organNameId", organNameId } };
+                                string queryOrganName = $"SELECT organ_name FROM organname WHERE organ_name_id = {organNameId}";
 
-                                    using (var nameReader = db.ExecuteReader(queryOrganName, organNameParams))
+                                await using (var nameReader = await DataRetrieval.ExecuteQuery(queryOrganName, dataSource))
                                 {
                                     while (await nameReader.ReadAsync())
                                     {
@@ -160,8 +184,6 @@ namespace HoloRepository
                             }
                         }
                     }
-
-                        // Construct the organ names string
                     for (int i = 0; i < organList.Count; i++)
                     {
                         if (i != organList.Count - 1)
@@ -174,7 +196,6 @@ namespace HoloRepository
                         }
                     }
 
-                        // Add the case data to the list
                     cases.Add(new CaseData
                     {
                         DonorId = donorId,
@@ -182,21 +203,14 @@ namespace HoloRepository
                         Age = age,
                         CauseOfDeath = causeOfDeath,
                         Organs = organs,
+                        AccessTime = accessTime,
                     });
                 }
             }
 
-                cases.Reverse(); // Show the most recently added case as the first row
-            filteredCases = cases;
-            LoadPagination();
-            LoadCaseTable();
+            filteredCasesAll = cases;
+            ShowLast7DaysData();
         }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while loading case data: {ex.Message}");
-            }
-        }
-
 
         private void LoadCaseTable()
         {
@@ -205,7 +219,7 @@ namespace HoloRepository
             int endIndex;
             if (totalPages == selectedPage)
             {
-                endIndex = filteredCases.Count;
+                endIndex = filteredCasesByTime.Count;
             }
             else
             {
@@ -216,14 +230,14 @@ namespace HoloRepository
             {
                 for (int i = (selectedPage - 1) * 10; i < endIndex; i++)
                 {
-                    caseDataBindingSource.Add(filteredCases[i]);
+                    caseDataBindingSource.Add(filteredCasesByTime[i]);
                 }
             }
         }
 
         private void LoadPagination()
         {
-            totalPages = (int)Math.Ceiling((double)filteredCases.Count / pageSize);
+            totalPages = (int)Math.Ceiling((double)filteredCasesByTime.Count / pageSize);
 
             paginationPanel.Controls.Clear();
 
@@ -252,7 +266,6 @@ namespace HoloRepository
             ResetNavigationArrows();
 
             int newPaginationXPosition = (panel2.Width - paginationPanel.Width) / 2;
-            //MessageBox.Show(newPaginationXPosition.ToString());
 
             paginationPanel.Location = new Point(newPaginationXPosition, 10);
         }
@@ -459,7 +472,9 @@ namespace HoloRepository
                     if (result == DialogResult.Yes)
                     {
                         cases.Remove(caseData);
-                        filteredCases.Remove(caseData);
+                        filteredCasesAll.Remove(caseData);
+                        filteredCasesByTime.Remove(caseData);
+
                         LoadCaseTable();
                         // Code for deleting the case
                         var dbConnection = new DatabaseConnection();
@@ -526,7 +541,7 @@ namespace HoloRepository
 
             if (string.IsNullOrEmpty(keyword) || searchBox.StateCommon.Content.Color1 == Color.Gray)
             {
-                filteredCases = cases;
+                filteredCasesAll = cases;
             }
             else
             {
@@ -535,7 +550,7 @@ namespace HoloRepository
                                     .Select(g => g.Trim())
                                     .Where(g => !string.IsNullOrEmpty(g));
 
-                filteredCases = cases.Where(c =>
+                filteredCasesAll = cases.Where(c =>
                     // For each group, split further by spaces, removing any empty or whitespace-only terms
                     groups.All(group =>
                     {
@@ -555,8 +570,7 @@ namespace HoloRepository
 
                 selectedPage = 1;
             }
-            LoadPagination();
-            LoadCaseTable();
+            HandleComboBoxSelectionChange();
         }
 
         private void caseTable_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -611,6 +625,48 @@ namespace HoloRepository
             selectedPage -= 1;
             LoadCaseTable();
             ChangePaginationLayout();
+        }
+
+        private void ShowAllData()
+        {
+            filteredCasesByTime = filteredCasesAll;
+            LoadPagination();
+            LoadCaseTable();
+        }
+
+        private void ShowLast7DaysData()
+        {
+            FilterCasesByDateRange(DateTime.Now.AddDays(-7));
+            LoadPagination();
+            LoadCaseTable();
+        }
+
+        private void ShowLast30DaysData()
+        {
+            FilterCasesByDateRange(DateTime.Now.AddDays(-30));
+            LoadPagination();
+            LoadCaseTable();
+        }
+
+        private void FilterCasesByDateRange(DateTime startDate)
+        {
+            DateTime now = DateTime.Now;
+            filteredCasesByTime = filteredCasesAll.Where(c => c.AccessTime >= startDate && c.AccessTime <= now).ToList();
+        }
+
+        private void timeIntervalCmb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HandleComboBoxSelectionChange();
+        }
+
+        private void HandleComboBoxSelectionChange()
+        {
+            ComboBoxItems obj = timeIntervalCmb.SelectedItem as ComboBoxItems;
+
+            if (obj != null)
+            {
+                obj.Action.Invoke();
+            }
         }
     }
 }

@@ -88,7 +88,7 @@
             Add.Name = "Add";
             Add.Size = new Size(130, 53);
             Add.TabIndex = 6;
-            Add.Text = "Add";
+            Add.Text = "&Add";
             Add.UseVisualStyleBackColor = false;
             Add.Click += Add_Click;
             // 
@@ -146,8 +146,8 @@
             // 
             // AddOrganSlice
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(144F, 144F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
             ClientSize = new Size(1078, 738);
             Controls.Add(DescriptionBox);

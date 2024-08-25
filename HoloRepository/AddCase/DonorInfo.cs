@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using HoloRepository.ViewCases;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -25,10 +26,8 @@ namespace HoloRepository.AddCase
         private bool deleting = false;
         private string requiredFieldMsg = "Required field.";
 
-        private DatabaseConnection dbConnection;
         public DonorInfo()
         {
-            dbConnection = new DatabaseConnection();
             InitializeComponent();
         }
 
@@ -44,22 +43,29 @@ namespace HoloRepository.AddCase
             dodTxt.Text = donorInfo["dod"];
             causeOfDeathTxt.Text = donorInfo["causeOfDeath"];
             dodTxt.StateCommon.Content.Color1 = Color.Black;
+            donorIdTxt.Enabled = false;
         }
 
         public async void AddDonorInfo()
         {
-            // needs to be modified to meet the database connection class
-            // need to check if the donorid exists
             try
             {
-                string insertQuery = "INSERT INTO donor (donor_id, age, date_of_death, cause_of_death) VALUES (@donorId, @age, @dod, @causeOfDeath)";
-                dbConnection.ExecuteNonQuery(insertQuery, new Dictionary<string, object>
+                var dbConnection = new DatabaseConnection();
+                await using var conn = new NpgsqlConnection(dbConnection.ConnectionString);
+                await conn.OpenAsync();
+
+                await using var cmd = new NpgsqlCommand("INSERT INTO donor (donor_id, age, date_of_death, cause_of_death) VALUES ($1, $2, $3, $4)", conn)
+                {
+                    Parameters =
                     {
-                        { "@donorId", donorId },
-                        { "@age", age },
-                        { "@dod", dod },
-                        { "@causeOfDeath", causeOfDeath }
-                    });
+                        new() { Value = donorId },
+                        new() { Value = age },
+                        new() { Value = dod },
+                        new() { Value = causeOfDeath }
+                    }
+                };
+                await cmd.ExecuteNonQueryAsync();
+
                 if (Parent.Parent is AddCaseFramework framework)
                 {
                     framework.LoadControl(new CasePage("addCase", donorId));
@@ -71,8 +77,12 @@ namespace HoloRepository.AddCase
                 {
                     // need to add error handling for existing donor id
                     MessageBox.Show("duplicate primary key");
+                    
                 }
-                MessageBox.Show($"Error: {e.Message}");
+                else
+                {
+                    MessageBox.Show($"Error: {e.Message}");
+                }
             }
         }
 
@@ -80,6 +90,10 @@ namespace HoloRepository.AddCase
         {
             try
             {
+                var dbConnection = new DatabaseConnection();
+                await using var conn = new NpgsqlConnection(dbConnection.ConnectionString);
+                await conn.OpenAsync();
+
                 string sql;
                 var parameters = new Dictionary<string, object>
                 {
@@ -94,11 +108,22 @@ namespace HoloRepository.AddCase
                 }
                 else
                 {
-                    sql = "UPDATE donor SET donor_id = @donorId, age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath WHERE donor_id = @originalId";
-                    parameters.Add("@originalId", originalId);
+                    sql = "UPDATE donor SET donor_id = @donorId, age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath, timestamp = @time WHERE donor_id = @originalId";
                 }
-                await Task.Run(() => dbConnection.ExecuteNonQuery(sql, parameters));
-                
+                await using var cmd = new NpgsqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@donorId", donorId);
+                cmd.Parameters.AddWithValue("@age", age);
+                cmd.Parameters.AddWithValue("@dod", dod);
+                cmd.Parameters.AddWithValue("@causeOfDeath", causeOfDeath);
+                cmd.Parameters.AddWithValue("@time", DateTime.Now);
+
+                if (originalId != donorId)
+                {
+                    cmd.Parameters.AddWithValue("@originalId", originalId);
+                }
+
+                await cmd.ExecuteNonQueryAsync();
+
                 if (Parent.Parent is AddCaseFramework framework)
                 {
                     if (framework.destination == "addCase")
@@ -129,7 +154,6 @@ namespace HoloRepository.AddCase
             bool checkCause = IsCauseValid();
 
             //string formattedDate = dod.ToString("yyyy-MM-dd");
-            //MessageBox.Show(formattedDate);
 
             return checkId && checkDod && checkAge && checkCause;
         }
@@ -150,7 +174,23 @@ namespace HoloRepository.AddCase
                 return false;
             }
 
-            SetLabelText(idErrorLabel, "");
+            if (originalId == 0)
+            {
+                if (RecordExists())
+                {
+                    idErrorLabel.Text = "A donor with the provided ID already exists in the system.";
+                    return false;
+                }
+            } else if (originalId != donorId)
+            {
+                if (RecordExists())
+                {
+                    idErrorLabel.Text = "The updated donor ID already exists in the system.";
+                    return false;
+                }
+            }
+
+            idErrorLabel.Text = "";
             return true;
         }
 
@@ -167,6 +207,12 @@ namespace HoloRepository.AddCase
             if (!int.TryParse(inputAge, out age))
             {
                 SetLabelText(ageErrorLabel, "Invalid age. Please enter a valid number.");
+                return false;
+            }
+
+            if (age < 0)
+            {
+                ageErrorLabel.Text = "Age cannot be negative.";
                 return false;
             }
 
@@ -195,6 +241,7 @@ namespace HoloRepository.AddCase
 
             string formatErrorMsg = "Invalid format. Please enter the date in the format DD/MM/YYYY.";
             string invalidDateMsg = "Invalid date of death. Please enter a valid date.";
+            string futureDateMsg = "The date of death cannot be in the future.";
 
             if (string.IsNullOrEmpty(dateString) || dateString == "DD/MM/YYYY")
             {
@@ -215,6 +262,12 @@ namespace HoloRepository.AddCase
             {
                 SetLabelText(dodErrorLabel, invalidDateMsg);
                 return false; // Date is not valid
+            }
+
+            if (dod > DateTime.Now)
+            {
+                dodErrorLabel.Text = futureDateMsg;
+                return false; // Date is in the future
             }
 
             // Clear error message if the date is valid
@@ -249,6 +302,8 @@ namespace HoloRepository.AddCase
             {
                 dodTxt.StateCommon.Content.Color1 = Color.Gray;
                 dodTxt.Text = "DD/MM/YYYY";
+
+                dodErrorLabel.Text = "";
             }
             else
             {
@@ -294,6 +349,9 @@ namespace HoloRepository.AddCase
             if (!string.IsNullOrEmpty(donorIdTxt.Text))
             {
                 IsIdValid();
+            } else
+            {
+                idErrorLabel.Text = "";
             }
         }
 
@@ -302,6 +360,36 @@ namespace HoloRepository.AddCase
             if (!string.IsNullOrEmpty(ageTxt.Text))
             {
                 IsAgeValid();
+            } else
+            {
+                ageErrorLabel.Text = "";
+            }
+        }
+
+        private void causeOfDeathTxt_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(causeOfDeathTxt.Text))
+            {
+                IsCauseValid();
+            } else
+            {
+                causeErrorLabel.Text = "";
+            }
+        }
+
+        private bool RecordExists()
+        {
+            var dbConnection = new DatabaseConnection();
+            string query = $"SELECT COUNT(*) FROM donor WHERE donor_id = {donorId}";
+
+            using (var conn = new NpgsqlConnection(dbConnection.ConnectionString))
+                using (var cmd = new NpgsqlCommand(query, conn))
+            {
+                conn.Open();
+
+                long count = (long)cmd.ExecuteScalar();
+
+                return count > 0;
             }
         }
 

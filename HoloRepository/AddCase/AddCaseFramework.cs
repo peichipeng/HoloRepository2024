@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Web;
 using System.Windows.Forms;
+using static HoloRepository.AddCaseControl;
 
 namespace HoloRepository.AddCase
 {
@@ -67,9 +68,16 @@ namespace HoloRepository.AddCase
                     ShowFooterBtns();
                 }
             }
-            else if (userControl is AddCaseControl)
+            else if (userControl is AddCaseControl addCaseControl)
             {
-                panel1.Visible = false;
+                // Back event trigger
+                addCaseControl.OnSaveCompleted = donorId =>
+                {
+                    var caseView = new CaseView { donorId = donorId };
+                    LoadControl(caseView);
+                };
+
+                HideFooterBtns();
             }
             else
             {

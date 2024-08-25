@@ -43,6 +43,9 @@
             DoDLabel = new Label();
             donorIdPanel = new Panel();
             donorIdLabel = new Label();
+            descriptionPanel = new Panel();
+            descriptionLabel = new Label();
+            lineControl1 = new LineControl();
             resizePanel = new Panel();
             btnResize = new PictureBox();
             overallPanel.SuspendLayout();
@@ -53,6 +56,7 @@
             agePanel.SuspendLayout();
             DoDPanel.SuspendLayout();
             donorIdPanel.SuspendLayout();
+            descriptionPanel.SuspendLayout();
             resizePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)btnResize).BeginInit();
             SuspendLayout();
@@ -115,12 +119,13 @@
             overallPanel.Controls.Add(organNamePanel);
             overallPanel.Controls.Add(tagPanel);
             overallPanel.Controls.Add(displayPanel);
+            overallPanel.Controls.Add(descriptionPanel);
             overallPanel.Controls.Add(resizePanel);
             overallPanel.Dock = DockStyle.Fill;
             overallPanel.FlowDirection = FlowDirection.TopDown;
             overallPanel.Location = new Point(0, 0);
             overallPanel.Name = "overallPanel";
-            overallPanel.Size = new Size(288, 315);
+            overallPanel.Size = new Size(291, 352);
             overallPanel.TabIndex = 2;
             // 
             // organNamePanel
@@ -169,6 +174,7 @@
             CoDLabel.AutoSize = true;
             CoDLabel.Font = new Font("Poppins", 9F, FontStyle.Regular, GraphicsUnit.Point);
             CoDLabel.Location = new Point(4, 6);
+            CoDLabel.MaximumSize = new Size(285, 0);
             CoDLabel.Name = "CoDLabel";
             CoDLabel.Size = new Size(159, 31);
             CoDLabel.TabIndex = 0;
@@ -228,10 +234,43 @@
             donorIdLabel.TabIndex = 0;
             donorIdLabel.Text = "Donor ID:";
             // 
+            // descriptionPanel
+            // 
+            descriptionPanel.AutoSize = true;
+            descriptionPanel.Controls.Add(descriptionLabel);
+            descriptionPanel.Controls.Add(lineControl1);
+            descriptionPanel.Location = new Point(0, 272);
+            descriptionPanel.Margin = new Padding(0);
+            descriptionPanel.Name = "descriptionPanel";
+            descriptionPanel.Size = new Size(288, 41);
+            descriptionPanel.TabIndex = 7;
+            descriptionPanel.Visible = false;
+            // 
+            // descriptionLabel
+            // 
+            descriptionLabel.AutoSize = true;
+            descriptionLabel.Font = new Font("Poppins", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            descriptionLabel.Location = new Point(3, 10);
+            descriptionLabel.MaximumSize = new Size(285, 0);
+            descriptionLabel.Name = "descriptionLabel";
+            descriptionLabel.Size = new Size(178, 31);
+            descriptionLabel.TabIndex = 0;
+            descriptionLabel.Text = "No description yet";
+            // 
+            // lineControl1
+            // 
+            lineControl1.LineColor = Color.DimGray;
+            lineControl1.LineWidth = 1;
+            lineControl1.Location = new Point(4, 0);
+            lineControl1.Name = "lineControl1";
+            lineControl1.Size = new Size(281, 10);
+            lineControl1.TabIndex = 1;
+            lineControl1.Text = "lineControl1";
+            // 
             // resizePanel
             // 
             resizePanel.Controls.Add(btnResize);
-            resizePanel.Location = new Point(0, 272);
+            resizePanel.Location = new Point(0, 313);
             resizePanel.Margin = new Padding(0);
             resizePanel.Name = "resizePanel";
             resizePanel.Size = new Size(285, 35);
@@ -260,7 +299,7 @@
             BackColor = Color.White;
             Controls.Add(overallPanel);
             Name = "InfoPanel";
-            Size = new Size(288, 315);
+            Size = new Size(291, 352);
             overallPanel.ResumeLayout(false);
             overallPanel.PerformLayout();
             organNamePanel.ResumeLayout(false);
@@ -277,6 +316,8 @@
             DoDPanel.PerformLayout();
             donorIdPanel.ResumeLayout(false);
             donorIdPanel.PerformLayout();
+            descriptionPanel.ResumeLayout(false);
+            descriptionPanel.PerformLayout();
             resizePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)btnResize).EndInit();
             ResumeLayout(false);
@@ -301,5 +342,8 @@
         private Panel resizePanel;
         private PictureBox btnResize;
         private FlowLayoutPanel tagPanel;
+        private Panel descriptionPanel;
+        private Label descriptionLabel;
+        private LineControl lineControl1;
     }
 }

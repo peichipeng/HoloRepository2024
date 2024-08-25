@@ -10,11 +10,10 @@ namespace HoloRepository.ViewCases
 {
     public class DataRetrieval
     {
-        private static string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
-
         public static NpgsqlDataSource CreateDataSource()
         {
-            return NpgsqlDataSource.Create(connectionString);
+            var dbConnection = new DatabaseConnection();
+            return NpgsqlDataSource.Create(dbConnection.ConnectionString);
         }
 
         public static async Task<NpgsqlDataReader> ExecuteQuery (string query, NpgsqlDataSource dataSource)

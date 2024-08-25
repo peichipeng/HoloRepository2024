@@ -308,7 +308,7 @@ namespace HoloRepository
             {
                 changeOrganSlice.StartPosition = FormStartPosition.CenterParent;
 
-                List<string> imagePaths = addCaseControl.GetImagePaths();
+                List<string> imagePaths = addCaseControl.GetDICOMPaths();
                 List<Image> images = new();
                 foreach (string path in imagePaths)
                 {

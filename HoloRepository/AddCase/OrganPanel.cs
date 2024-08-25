@@ -1,8 +1,10 @@
 ﻿using HoloRepository.ContextMenu;
+using HoloRepository.ViewCases;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Data.Common;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -18,6 +20,7 @@ namespace HoloRepository.AddCase
         private int organId;
         private string organName;
         private List<string> organSlices;
+        private string organModel;
         private int imageShown;
         private DatabaseConnection dbConnection;
         public int BorderRadius { get; set; } = 20;
@@ -31,13 +34,10 @@ namespace HoloRepository.AddCase
             this.organId = organId;
 
             if (name == "")
-            {
                 this.organName = "Unknown";
-            }
             else
-            {
                 this.organName = name;
-            }
+
             this.organSlices = organSlices;
 
             sliceImages.Controls.Add(leftArrow);
@@ -52,15 +52,31 @@ namespace HoloRepository.AddCase
             setOrganPanel();
         }
 
-        private void setOrganPanel()
+        private async void setOrganPanel()
         {
             organNameLabel.Text = organName;
-            organNameLabel.Location = new Point(this.Width / 2 - organNameLabel.Width / 2, 210);
-            downArrow.Location = new Point(organNameLabel.Location.X + organNameLabel.Width - 2, 210);
+
+            int organNameLabelYPos = organNameLabel.Location.Y;
+            organNameLabel.Location = new Point(this.Width / 2 - organNameLabel.Width / 2, organNameLabelYPos);
+            downArrow.Location = new Point(organNameLabel.Location.X + organNameLabel.Width - 2, organNameLabelYPos);
+
+            await retrieve3dOrgan();
 
             try
             {
-                if (organSlices.Count > 0) // need to add some text if there are no images available
+                if (organModel != null)
+                {
+                    setOrganModel();
+
+                    modelPanel.Visible = true;
+                    sliceImages.Visible = false;
+                } else
+                {
+                    modelPanel.Visible = false;
+                    sliceImages.Visible = true;
+                }
+
+                if (organSlices.Count > 0)
                 {
                     placeholderLabel.Visible = false;
                     // Load the image from file path
@@ -80,7 +96,47 @@ namespace HoloRepository.AddCase
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading image: {ex.Message}");
-                // Optionally handle the exception here
+            }
+        }
+
+        private void setOrganModel()
+        {
+            // The file path of the Unity app for displaying the organ
+            string relativePath = "3d_viewer\\HoloRepositoryPortable2021.exe";
+            string fullPath = Path.Combine(Application.StartupPath, relativePath);
+
+            if (!File.Exists(fullPath))
+            {
+                // Should add some error handling here
+                return;
+            }
+
+            IntPtr panelHWND = modelPanel.Handle;
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = fullPath,
+                Arguments = $"-parentHWND {panelHWND.ToInt64()} delayed #{organModel}",
+                WindowStyle = ProcessWindowStyle.Hidden,
+            };
+            Process.Start(startInfo);
+        }
+
+        private async Task retrieve3dOrgan()
+        {
+            var dataSource = DataRetrieval.CreateDataSource();
+
+            string queryModel = $"SELECT model_id, model_path FROM model3d WHERE organ_id = {this.organId}";
+
+            await using (var modelReader = await DataRetrieval.ExecuteQuery(queryModel, dataSource))
+            {
+                while (await modelReader.ReadAsync())
+                {
+                    string relativePath = modelReader.GetFieldValue<string>(1);
+                    string fullPath = Path.Combine(Application.StartupPath, relativePath);
+
+                    this.organModel = fullPath;
+                }
             }
         }
 
@@ -245,6 +301,15 @@ namespace HoloRepository.AddCase
                     string deleteQuery = $"DELETE FROM organ WHERE organ_id = {organId}";
                     dbConnection.ExecuteNonQuery(deleteQuery);
                 }
+            }
+        }
+
+        public void DisposeSliceImages()
+        {
+            if (sliceImages.Image != null)
+            {
+                sliceImages.Image.Dispose();
+                sliceImages.Image = null;
             }
         }
     }

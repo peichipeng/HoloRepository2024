@@ -64,7 +64,7 @@
             ConstructButton.Name = "ConstructButton";
             ConstructButton.Size = new Size(136, 49);
             ConstructButton.TabIndex = 78;
-            ConstructButton.Text = "Construct";
+            ConstructButton.Text = "&Construct";
             ConstructButton.UseVisualStyleBackColor = false;
             ConstructButton.Click += ConstructButton_Click;
             // 
