@@ -285,7 +285,7 @@ namespace HoloRepository
         private void OrganSlicePicture_Click(object sender, EventArgs e)
         {
             // Define the directory path and date format
-            string directoryPath = @"C:\Users\10927\Desktop\Pictures";
+            string directoryPath = @"C:\Users\linqing.zhao\Desktop\Pictures";
             string datePrefix = DateTime.Now.ToString("yyyy_MM_dd"); // Use current date
             string filePattern = $"{datePrefix}_*.jpg";
 

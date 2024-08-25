@@ -132,9 +132,11 @@ namespace HoloRepository.AddCase
             {
                 while (await modelReader.ReadAsync())
                 {
+                    if (modelReader.IsDBNull(1))
+                        return;
+
                     string relativePath = modelReader.GetFieldValue<string>(1);
                     string fullPath = Path.Combine(Application.StartupPath, relativePath);
-
                     this.organModel = fullPath;
                 }
             }

@@ -1,5 +1,4 @@
-﻿using Dicom;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using FellowOakDicom.Imaging;
 using FellowOakDicom;
 using Npgsql;
