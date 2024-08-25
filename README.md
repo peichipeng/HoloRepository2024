@@ -4,7 +4,7 @@ Here provides a setup for speech inference using a predefined Conda environment.
 
 ## Prerequisites
 
-- **Anaconda/Miniconda**: Make sure you have Anaconda or Miniconda installed on your system.
+- **Anaconda/Miniconda**: Make sure you have Anaconda or Miniconda installed on your system. If not, you can download and install it from the official website: [Anaconda Download](https://www.anaconda.com/download/success).
 
 ## Environment Setup
 
