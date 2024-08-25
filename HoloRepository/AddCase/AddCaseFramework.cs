@@ -255,7 +255,7 @@ namespace HoloRepository.AddCase
                 HandleCancelBtn_Click();
                 return;
             }
-            if (nextBtn.Text.Equals("Save", StringComparison.OrdinalIgnoreCase))
+            if (nextBtn.Text.Equals("&Save", StringComparison.OrdinalIgnoreCase))
             {
                 if (transcription.Contains("save"))
                 {
@@ -265,7 +265,7 @@ namespace HoloRepository.AddCase
                     return;
                 }
             }
-            else if (nextBtn.Text.Equals("Next", StringComparison.OrdinalIgnoreCase))
+            else if (nextBtn.Text.Equals("&Next", StringComparison.OrdinalIgnoreCase))
             {
                 if (transcription.Contains("next"))
                 {

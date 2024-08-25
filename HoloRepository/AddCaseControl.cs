@@ -901,7 +901,7 @@ namespace HoloRepository
         {
             if (transcription.ToLower().Contains("add an organ slice"))
             {
-
+                AddOrganSlicesButton_Click(this, EventArgs.Empty);
             }
         }
     }
