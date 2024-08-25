@@ -76,7 +76,8 @@ namespace HoloRepository.AddCase
                 }
 
                 // Specify which side of the organ it is
-                organName += " - " + organSide;
+                if (organSide != "")
+                    organName += " - " + organSide;
 
                 // Retrieve the corresponding organ slices
                 string queryOrganSlices = $"SELECT image_path FROM sliceimage WHERE organ_id = {organId}";

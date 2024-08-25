@@ -1,4 +1,5 @@
 ﻿using HoloRepository.ContextMenu;
+using HoloRepository.ViewCases;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,8 +19,7 @@ namespace HoloRepository.AddCase
         private int organId;
         private string organName;
         private List<string> organSlices;
-        private string organModel = "C:\\Users\\pei-chi.peng\\Downloads\\kidney_test_0000.glb";
-        //private string organModel;
+        private string organModel;
         private int imageShown;
         public int BorderRadius { get; set; } = 20;
         public Color BorderColor { get; set; } = Color.LightGray;
@@ -31,13 +31,10 @@ namespace HoloRepository.AddCase
             this.organId = organId;
 
             if (name == "")
-            {
                 this.organName = "Unknown";
-            }
             else
-            {
                 this.organName = name;
-            }
+
             this.organSlices = organSlices;
 
             sliceImages.Controls.Add(leftArrow);
@@ -52,13 +49,15 @@ namespace HoloRepository.AddCase
             setOrganPanel();
         }
 
-        private void setOrganPanel()
+        private async void setOrganPanel()
         {
             organNameLabel.Text = organName;
 
             int organNameLabelYPos = organNameLabel.Location.Y;
             organNameLabel.Location = new Point(this.Width / 2 - organNameLabel.Width / 2, organNameLabelYPos);
             downArrow.Location = new Point(organNameLabel.Location.X + organNameLabel.Width - 2, organNameLabelYPos);
+
+            await retrieve3dOrgan();
 
             try
             {
@@ -68,6 +67,10 @@ namespace HoloRepository.AddCase
 
                     modelPanel.Visible = true;
                     sliceImages.Visible = false;
+                } else
+                {
+                    modelPanel.Visible = false;
+                    sliceImages.Visible = true;
                 }
 
                 if (organSlices.Count > 0)
@@ -99,8 +102,13 @@ namespace HoloRepository.AddCase
             string relativePath = "3d_viewer\\HoloRepositoryPortable2021.exe";
             string fullPath = Path.Combine(Application.StartupPath, relativePath);
 
+            if (!File.Exists(fullPath))
+            {
+                // Should add some error handling here
+                return;
+            }
+
             IntPtr panelHWND = modelPanel.Handle;
-            //string customArgument = "C:\\Users\\pei-chi.peng\\Downloads\\kidney_test_0000.glb";
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -109,6 +117,24 @@ namespace HoloRepository.AddCase
                 WindowStyle = ProcessWindowStyle.Hidden,
             };
             Process.Start(startInfo);
+        }
+
+        private async Task retrieve3dOrgan()
+        {
+            var dataSource = DataRetrieval.CreateDataSource();
+
+            string queryModel = $"SELECT color_model_id, color_model_path FROM colormodel3d WHERE organ_id = {this.organId}";
+
+            await using (var modelReader = await DataRetrieval.ExecuteQuery(queryModel, dataSource))
+            {
+                while (await modelReader.ReadAsync())
+                {
+                    string relativePath = modelReader.GetFieldValue<string>(1);
+                    string fullPath = Path.Combine(Application.StartupPath, relativePath);
+
+                    this.organModel = fullPath;
+                }
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)

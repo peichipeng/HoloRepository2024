@@ -35,7 +35,6 @@
             Title = new Label();
             btnUpdateOrgan = new Button();
             button1 = new Button();
-            panel1 = new Panel();
             SuspendLayout();
             // 
             // userGuideBtn
@@ -138,18 +137,10 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // panel1
-            // 
-            panel1.Location = new Point(561, 161);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(143, 159);
-            panel1.TabIndex = 85;
-            // 
             // HomePageControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(panel1);
             Controls.Add(button1);
             Controls.Add(btnUpdateOrgan);
             Controls.Add(userGuideBtn);
@@ -172,6 +163,5 @@
         private Label Title;
         private Button btnUpdateOrgan;
         private Button button1;
-        private Panel panel1;
     }
 }

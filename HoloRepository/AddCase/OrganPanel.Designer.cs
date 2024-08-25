@@ -30,7 +30,6 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OrganPanel));
-            sliceImages = new PictureBox();
             leftArrow = new PictureBox();
             rightArrow = new PictureBox();
             organNameLabel = new Label();
@@ -40,23 +39,16 @@
             toolStripSeparator1 = new ToolStripSeparator();
             deleteToolStripMenuItem = new ToolStripMenuItem();
             downArrow = new PictureBox();
+            sliceImages = new PictureBox();
             modelPanel = new Panel();
-            ((System.ComponentModel.ISupportInitialize)sliceImages).BeginInit();
             ((System.ComponentModel.ISupportInitialize)leftArrow).BeginInit();
             ((System.ComponentModel.ISupportInitialize)rightArrow).BeginInit();
             contextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)downArrow).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)sliceImages).BeginInit();
+            sliceImages.SuspendLayout();
+            modelPanel.SuspendLayout();
             SuspendLayout();
-            // 
-            // sliceImages
-            // 
-            sliceImages.BackColor = Color.Transparent;
-            sliceImages.Location = new Point(15, 12);
-            sliceImages.Name = "sliceImages";
-            sliceImages.Size = new Size(278, 196);
-            sliceImages.SizeMode = PictureBoxSizeMode.Zoom;
-            sliceImages.TabIndex = 0;
-            sliceImages.TabStop = false;
             // 
             // leftArrow
             // 
@@ -108,7 +100,7 @@
             placeholderLabel.Anchor = AnchorStyles.Top;
             placeholderLabel.AutoSize = true;
             placeholderLabel.Font = new Font("Segoe UI", 12.75F, FontStyle.Regular, GraphicsUnit.Point);
-            placeholderLabel.Location = new Point(47, 100);
+            placeholderLabel.Location = new Point(37, 88);
             placeholderLabel.Name = "placeholderLabel";
             placeholderLabel.Size = new Size(209, 23);
             placeholderLabel.TabIndex = 65;
@@ -116,32 +108,31 @@
             // 
             // contextMenu
             // 
-            contextMenu.ImageScalingSize = new Size(24, 24);
             contextMenu.Items.AddRange(new ToolStripItem[] { updateToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
             contextMenu.Name = "contextMenuStrip1";
             contextMenu.RenderMode = ToolStripRenderMode.Professional;
-            contextMenu.Size = new Size(121, 70);
+            contextMenu.Size = new Size(113, 54);
             // 
             // updateToolStripMenuItem
             // 
             updateToolStripMenuItem.ForeColor = Color.FromArgb(51, 129, 202);
             updateToolStripMenuItem.Image = (Image)resources.GetObject("updateToolStripMenuItem.Image");
             updateToolStripMenuItem.Name = "updateToolStripMenuItem";
-            updateToolStripMenuItem.Size = new Size(120, 30);
+            updateToolStripMenuItem.Size = new Size(112, 22);
             updateToolStripMenuItem.Text = "Update";
             updateToolStripMenuItem.Click += updateToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(117, 6);
+            toolStripSeparator1.Size = new Size(109, 6);
             // 
             // deleteToolStripMenuItem
             // 
             deleteToolStripMenuItem.ForeColor = Color.FromArgb(207, 73, 73);
             deleteToolStripMenuItem.Image = (Image)resources.GetObject("deleteToolStripMenuItem.Image");
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(120, 30);
+            deleteToolStripMenuItem.Size = new Size(112, 22);
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
@@ -158,12 +149,26 @@
             downArrow.TabStop = false;
             downArrow.MouseDown += downArrow_MouseDown;
             // 
+            // sliceImages
+            // 
+            sliceImages.Anchor = AnchorStyles.Top;
+            sliceImages.BackColor = Color.Transparent;
+            sliceImages.Controls.Add(placeholderLabel);
+            sliceImages.Location = new Point(0, 0);
+            sliceImages.Name = "sliceImages";
+            sliceImages.Size = new Size(278, 196);
+            sliceImages.SizeMode = PictureBoxSizeMode.Zoom;
+            sliceImages.TabIndex = 0;
+            sliceImages.TabStop = false;
+            // 
             // modelPanel
             // 
-            modelPanel.Location = new Point(15, 12);
+            modelPanel.BackColor = Color.Transparent;
+            modelPanel.Location = new Point(15, 9);
             modelPanel.Name = "modelPanel";
             modelPanel.Size = new Size(278, 196);
-            modelPanel.TabIndex = 67;
+            modelPanel.TabIndex = 69;
+            sliceImages.Location = modelPanel.Location;
             // 
             // OrganPanel
             // 
@@ -171,27 +176,25 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(downArrow);
-            Controls.Add(placeholderLabel);
             Controls.Add(organNameLabel);
-            Controls.Add(rightArrow);
-            Controls.Add(leftArrow);
-            Controls.Add(sliceImages);
             Controls.Add(modelPanel);
+            Controls.Add(sliceImages);
             Margin = new Padding(15, 7, 15, 7);
             Name = "OrganPanel";
             Size = new Size(308, 240);
-            ((System.ComponentModel.ISupportInitialize)sliceImages).EndInit();
             ((System.ComponentModel.ISupportInitialize)leftArrow).EndInit();
             ((System.ComponentModel.ISupportInitialize)rightArrow).EndInit();
             contextMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)downArrow).EndInit();
+            ((System.ComponentModel.ISupportInitialize)sliceImages).EndInit();
+            sliceImages.ResumeLayout(false);
+            sliceImages.PerformLayout();
+            modelPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private PictureBox sliceImages;
         private PictureBox leftArrow;
         private PictureBox rightArrow;
         public Label organNameLabel;
@@ -201,6 +204,7 @@
         private ToolStripMenuItem deleteToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         public PictureBox downArrow;
+        private PictureBox sliceImages;
         private Panel modelPanel;
     }
 }

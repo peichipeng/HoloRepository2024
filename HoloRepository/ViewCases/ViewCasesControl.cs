@@ -226,7 +226,6 @@ namespace HoloRepository
             ResetNavigationArrows();
 
             int newPaginationXPosition = (panel2.Width - paginationPanel.Width) / 2;
-            //MessageBox.Show(newPaginationXPosition.ToString());
 
             paginationPanel.Location = new Point(newPaginationXPosition, 10);
         }
