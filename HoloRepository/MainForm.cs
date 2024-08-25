@@ -1,4 +1,4 @@
-
+﻿
 using HoloRepository.AddCase;
 using HoloRepository.UserGuide;
 using System.Data.Common;
@@ -18,13 +18,30 @@ namespace HoloRepository
         private Thread? _outputThread;
         public event Action<string>? OnTranscriptionReceived;
 
+        private VoiceControl voiceControl;
+
         public MainForm()
         {
-            InitializeComponent();
-            LoadControl(new HomePageControl());
+            InitializeComponent(); 
             InitializePythonProcess();
+            voiceControl1.OnModeChanged += VoiceControl_OnModeChanged;
+
+            LoadControl(new HomePageControl());
         }
 
+        private void VoiceControl_OnModeChanged(bool isKeyboardMode)
+        {
+            isSpeechMode = !isKeyboardMode;
+            if (isSpeechMode)
+            {
+                StartTranscription();
+            }
+            else
+            {
+                StopTranscription();
+                StopNER();
+            }
+        }
         private void InitializePythonProcess()
         {
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -159,7 +176,7 @@ namespace HoloRepository
                         caseFramework.addCaseContainer.Controls[0] is CasePage casePage &&
                         casePage.pageName == "caseOverview")
                     {
-                        modeSwitch.Visible = false;
+                        voiceControl1.Visible = false;
 
                         breadcrumbPanel.Visible = true;
                         if (control != mainContainer.Controls[0])
@@ -167,50 +184,34 @@ namespace HoloRepository
                     }
                     else
                     {
-                        modeSwitch.Visible = true;
+                        voiceControl1.Visible = true;
                         breadcrumbPanel.Visible = false;
                     }
                 }
                 else if (control is ViewCasesControl)
                 {
-                    modeSwitch.Visible = true;
+                    voiceControl1.Visible = true;
 
                     breadcrumbPanel.Visible = true;
                     LoadBreadcrumb();
                 }
                 else if (control is OrganArchiveControl)
                 {
-                    modeSwitch.Visible = false;
+                    voiceControl1.Visible = false;
 
                     breadcrumbPanel.Visible = true;
                     LoadBreadcrumb();
                 }
                 else if (control is HomePageControl)
                 {
-                    modeSwitch.Visible = true;
+                    voiceControl1.Visible = true;
                     breadcrumbPanel.Visible = false;
                 }
                 else
                 {
-                    modeSwitch.Visible = false;
+                    voiceControl1.Visible = false;
                     breadcrumbPanel.Visible = false;
                 }
-            }
-        }
-
-        private void modeSwitch_Click(object sender, EventArgs e)
-        {
-            isSpeechMode = !isSpeechMode;
-            if (isSpeechMode)
-            {
-                modeSwitch.BackColor = Color.IndianRed;
-                StartTranscription();
-            }
-            else
-            {
-                modeSwitch.BackColor = SystemColors.Control;
-                StopTranscription();
-                StopNER();
             }
         }
 

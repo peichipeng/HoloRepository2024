@@ -30,13 +30,13 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             header = new Panel();
+            voiceControl1 = new VoiceControl();
             blackHomeBtn = new PictureBox();
             previousPageBtn = new PictureBox();
             breadcrumbPanel = new FlowLayoutPanel();
             homeBtn = new PictureBox();
             arrow = new PictureBox();
             page1 = new Button();
-            modeSwitch = new Button();
             mainContainer = new Panel();
             header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)blackHomeBtn).BeginInit();
@@ -48,25 +48,33 @@
             // 
             // header
             // 
+            header.Controls.Add(voiceControl1);
             header.Controls.Add(blackHomeBtn);
             header.Controls.Add(previousPageBtn);
             header.Controls.Add(breadcrumbPanel);
-            header.Controls.Add(modeSwitch);
             header.Dock = DockStyle.Top;
             header.Location = new Point(0, 0);
-            header.Margin = new Padding(5);
             header.Name = "header";
-            header.Size = new Size(1329, 48);
+            header.Size = new Size(846, 47);
             header.TabIndex = 0;
+            // 
+            // voiceControl1
+            // 
+            voiceControl1.Anchor = AnchorStyles.None;
+            voiceControl1.BackColor = Color.Transparent;
+            voiceControl1.Location = new Point(692, 3);
+            voiceControl1.Margin = new Padding(1);
+            voiceControl1.Name = "voiceControl1";
+            voiceControl1.Size = new Size(93, 43);
+            voiceControl1.TabIndex = 87;
             // 
             // blackHomeBtn
             // 
             blackHomeBtn.Anchor = AnchorStyles.Top;
             blackHomeBtn.Image = (Image)resources.GetObject("blackHomeBtn.Image");
-            blackHomeBtn.Location = new Point(1240, 6);
-            blackHomeBtn.Margin = new Padding(5);
+            blackHomeBtn.Location = new Point(789, 4);
             blackHomeBtn.Name = "blackHomeBtn";
-            blackHomeBtn.Size = new Size(39, 40);
+            blackHomeBtn.Size = new Size(25, 25);
             blackHomeBtn.SizeMode = PictureBoxSizeMode.Zoom;
             blackHomeBtn.TabIndex = 18;
             blackHomeBtn.TabStop = false;
@@ -76,10 +84,9 @@
             // 
             previousPageBtn.Anchor = AnchorStyles.Top;
             previousPageBtn.Image = (Image)resources.GetObject("previousPageBtn.Image");
-            previousPageBtn.Location = new Point(655, 0);
-            previousPageBtn.Margin = new Padding(5);
+            previousPageBtn.Location = new Point(417, 0);
             previousPageBtn.Name = "previousPageBtn";
-            previousPageBtn.Size = new Size(39, 40);
+            previousPageBtn.Size = new Size(25, 25);
             previousPageBtn.SizeMode = PictureBoxSizeMode.Zoom;
             previousPageBtn.TabIndex = 0;
             previousPageBtn.TabStop = false;
@@ -93,10 +100,9 @@
             breadcrumbPanel.Controls.Add(homeBtn);
             breadcrumbPanel.Controls.Add(arrow);
             breadcrumbPanel.Controls.Add(page1);
-            breadcrumbPanel.Location = new Point(49, 0);
-            breadcrumbPanel.Margin = new Padding(5);
+            breadcrumbPanel.Location = new Point(31, 0);
             breadcrumbPanel.Name = "breadcrumbPanel";
-            breadcrumbPanel.Size = new Size(597, 63);
+            breadcrumbPanel.Size = new Size(380, 39);
             breadcrumbPanel.TabIndex = 17;
             breadcrumbPanel.Visible = false;
             // 
@@ -104,10 +110,10 @@
             // 
             homeBtn.Anchor = AnchorStyles.None;
             homeBtn.Image = (Image)resources.GetObject("homeBtn.Image");
-            homeBtn.Location = new Point(5, 19);
-            homeBtn.Margin = new Padding(5, 6, 8, 5);
+            homeBtn.Location = new Point(3, 12);
+            homeBtn.Margin = new Padding(3, 4, 5, 3);
             homeBtn.Name = "homeBtn";
-            homeBtn.Size = new Size(25, 26);
+            homeBtn.Size = new Size(16, 16);
             homeBtn.SizeMode = PictureBoxSizeMode.Zoom;
             homeBtn.TabIndex = 0;
             homeBtn.TabStop = false;
@@ -116,10 +122,10 @@
             // arrow
             // 
             arrow.Image = (Image)resources.GetObject("arrow.Image");
-            arrow.Location = new Point(38, 10);
-            arrow.Margin = new Padding(0, 10, 0, 5);
+            arrow.Location = new Point(24, 6);
+            arrow.Margin = new Padding(0, 6, 0, 3);
             arrow.Name = "arrow";
-            arrow.Size = new Size(25, 26);
+            arrow.Size = new Size(16, 16);
             arrow.SizeMode = PictureBoxSizeMode.Zoom;
             arrow.TabIndex = 0;
             arrow.TabStop = false;
@@ -130,47 +136,34 @@
             page1.FlatAppearance.BorderSize = 0;
             page1.FlatStyle = FlatStyle.Flat;
             page1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
-            page1.Location = new Point(63, 2);
-            page1.Margin = new Padding(0, 2, 0, 0);
+            page1.Location = new Point(40, 1);
+            page1.Margin = new Padding(0, 1, 0, 0);
             page1.Name = "page1";
-            page1.Size = new Size(121, 61);
+            page1.Size = new Size(77, 38);
             page1.TabIndex = 0;
             page1.Text = "page1";
             page1.UseVisualStyleBackColor = false;
             // 
-            // modeSwitch
-            // 
-            modeSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            modeSwitch.Font = new Font("Century Gothic", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            modeSwitch.Location = new Point(933, 0);
-            modeSwitch.Margin = new Padding(5);
-            modeSwitch.Name = "modeSwitch";
-            modeSwitch.Size = new Size(176, 43);
-            modeSwitch.TabIndex = 16;
-            modeSwitch.Text = "Microphone";
-            modeSwitch.UseVisualStyleBackColor = true;
-            modeSwitch.Click += modeSwitch_Click;
-            // 
             // mainContainer
             // 
             mainContainer.Dock = DockStyle.Fill;
-            mainContainer.Location = new Point(0, 48);
-            mainContainer.Margin = new Padding(2, 13, 5, 5);
+            mainContainer.Location = new Point(0, 47);
+            mainContainer.Margin = new Padding(1, 8, 3, 3);
             mainContainer.Name = "mainContainer";
-            mainContainer.Size = new Size(1329, 696);
+            mainContainer.Size = new Size(846, 418);
             mainContainer.TabIndex = 1;
             mainContainer.ControlAdded += mainContainer_ControlAdded;
             mainContainer.ControlRemoved += mainContainer_ControlRemoved;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1329, 744);
+            ClientSize = new Size(846, 465);
             Controls.Add(mainContainer);
             Controls.Add(header);
-            Margin = new Padding(6, 3, 6, 3);
+            Margin = new Padding(4, 2, 4, 2);
             Name = "MainForm";
             Text = "HoloRepository";
             header.ResumeLayout(false);
@@ -195,5 +188,6 @@
         private Button page1;
         private PictureBox previousPageBtn;
         private PictureBox blackHomeBtn;
+        private VoiceControl voiceControl1;
     }
 }

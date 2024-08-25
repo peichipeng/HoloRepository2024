@@ -35,7 +35,6 @@
             Title = new Label();
             btnUpdateOrgan = new Button();
             button2 = new Button();
-            voiceControl1 = new VoiceControl();
             SuspendLayout();
             // 
             // userGuideBtn
@@ -139,22 +138,11 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // voiceControl1
-            // 
-            voiceControl1.Anchor = AnchorStyles.None;
-            voiceControl1.BackColor = Color.Transparent;
-            voiceControl1.Location = new Point(625, 180);
-            voiceControl1.Margin = new Padding(1);
-            voiceControl1.Name = "voiceControl1";
-            voiceControl1.Size = new Size(93, 43);
-            voiceControl1.TabIndex = 86;
-            // 
             // HomePageControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            Controls.Add(voiceControl1);
             Controls.Add(button2);
             Controls.Add(btnUpdateOrgan);
             Controls.Add(userGuideBtn);
@@ -178,6 +166,5 @@
         private Label Title;
         private Button btnUpdateOrgan;
         private Button button2;
-        private VoiceControl voiceControl1;
     }
 }
