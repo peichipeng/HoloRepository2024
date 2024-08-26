@@ -16,6 +16,7 @@ namespace HoloRepository
     {
         private DatabaseConnection dbConnection;
         private bool ifDisplay = false;
+        public string organName = "a";
 
         public InfoPanel(int donorId, int organId)
         {
@@ -66,6 +67,8 @@ namespace HoloRepository
                     if (reader.Read())
                     {
                         string organName = reader.GetString(0);
+                        this.organName = organName;
+
                         DateTime dateOfDeath = reader.GetDateTime(1);
                         int age = reader.GetInt32(2);
                         string causeOfDeath = reader.GetString(3);

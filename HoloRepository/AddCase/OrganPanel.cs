@@ -70,7 +70,8 @@ namespace HoloRepository.AddCase
 
                     modelPanel.Visible = true;
                     sliceImages.Visible = false;
-                } else
+                }
+                else
                 {
                     modelPanel.Visible = false;
                     sliceImages.Visible = true;
@@ -238,11 +239,6 @@ namespace HoloRepository.AddCase
             }
         }
 
-        private void organNameLabel_MouseDown(object sender, MouseEventArgs e)
-        {
-            contextMenu.Show(organNameLabel, e.Location);
-        }
-
         private void downArrow_MouseDown(object sender, MouseEventArgs e)
         {
             contextMenu.Show(downArrow, e.Location);
@@ -267,7 +263,7 @@ namespace HoloRepository.AddCase
                             int donorId = reader.GetInt32(0);
 
                             // Use the donorId as needed, for example:
-                            caseFramework.nextBtn.Text = "Update";
+                            //caseFramework.nextBtn.Text = "Update";
 
                             // Pass the donorId to the AddCaseControl if needed
                             var addCaseControl = new AddCaseControl(donorId, organId); // Assuming AddCaseControl can accept donorId
@@ -313,6 +309,62 @@ namespace HoloRepository.AddCase
                 sliceImages.Image.Dispose();
                 sliceImages.Image = null;
             }
+        }
+
+        private void organNameLabel_MouseEnter(object sender, EventArgs e)
+        {
+            //MessageBox.Show(Parent.Parent.ToString());
+            organNameLabel.ForeColor = Color.FromArgb(51, 129, 202);
+        }
+
+        private void organNameLabel_MouseLeave(object sender, EventArgs e)
+        {
+            organNameLabel.ForeColor = Color.Black;
+        }
+
+        private void organNameLabel_Click(object sender, EventArgs e)
+        {
+            var caseFramework = findAddCaseFramework();
+
+            Control parent = Parent;
+
+            while (parent is not CasePage)
+            {
+                parent = parent.Parent;
+            }
+
+            if (parent is CasePage casePage)
+            {
+                string pageName = casePage.pageName;
+                int donorId = casePage.donorId;
+
+                if (pageName == "caseOverview")
+                {
+                    if (this.FindForm() is MainForm mainForm)
+                    {
+                        mainForm.AddControl(new MainInterFaceControl(this, donorId, organId));
+                    }
+                }
+                else
+                {
+                    var addCaseControl = new AddCaseControl(donorId, organId);
+
+                    if (caseFramework is AddCaseFramework framework)
+                        framework.LoadControl(addCaseControl);
+                }
+            }
+        }
+
+        private Control findAddCaseFramework()
+        {
+            Control parent = Parent;
+
+            while (parent is not AddCaseFramework)
+            {
+                parent = parent.Parent;
+            }
+
+            return parent;
         }
     }
 }

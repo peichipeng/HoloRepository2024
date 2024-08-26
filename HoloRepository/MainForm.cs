@@ -94,6 +94,13 @@ namespace HoloRepository
                     breadcrumbPanel.Visible = true;
                     LoadBreadcrumb();
                 }
+                else if (control is MainInterFaceControl)
+                {
+                    modeSwitch.Visible = false;
+
+                    breadcrumbPanel.Visible = true;
+                    LoadBreadcrumb();
+                }
                 else if (control is HomePageControl)
                 {
                     modeSwitch.Visible = true;
@@ -136,6 +143,10 @@ namespace HoloRepository
             } else if (control is OrganArchiveControl)
             {
                 pageBtnName = "Organ Archive";
+            } else if (control is MainInterFaceControl mainInterface)
+            {
+                var inforPanel = mainInterface.donorInfoPanel.Controls.OfType<InfoPanel>().FirstOrDefault();
+                pageBtnName = inforPanel.organName;
             }
 
             return pageBtnName;

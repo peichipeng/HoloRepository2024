@@ -188,10 +188,11 @@ namespace HoloRepository
 
             if (mainForm != null)
             {
-                mainForm.Controls.Clear();
-                mainForm.Controls.Add(mainInterfaceControl);
+                //mainForm.Controls.Clear();
+                //mainForm.Controls.Add(mainInterfaceControl);
 
-                mainInterfaceControl.Dock = DockStyle.Fill;
+                //mainInterfaceControl.Dock = DockStyle.Fill;
+                mainForm.AddControl(mainInterfaceControl);
             }
         }
 
