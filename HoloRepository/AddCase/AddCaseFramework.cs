@@ -76,10 +76,6 @@ namespace HoloRepository.AddCase
             addCaseContainer.Controls.Clear();
             userControl.Dock = DockStyle.Fill;
             addCaseContainer.Controls.Add(userControl);
-            /*
-            userControl.Dock = DockStyle.Fill;
-            addCaseContainer.Controls.Add(userControl);
-            userControl.BringToFront();*/
 
             if (userControl is CasePage casePage)
             {
@@ -97,8 +93,17 @@ namespace HoloRepository.AddCase
                 // Back event trigger
                 addCaseControl.OnSaveCompleted = donorId =>
                 {
-                    var caseView = new CaseView { donorId = donorId };
-                    LoadControl(caseView);
+                    //var caseView = new CaseView { donorId = donorId };
+                    //LoadControl(caseView);
+
+                    if (this.destination == "addCase")
+                    {
+                        LoadControl(new CasePage("addCase", donorId));
+                    }
+                    else
+                    {
+                        LoadControl(new CasePage("caseOverview", donorId));
+                    }
                 };
 
                 HideFooterBtns();

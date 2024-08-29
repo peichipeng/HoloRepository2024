@@ -91,7 +91,6 @@ namespace HoloRepository.AddCase
                 {
                     sliceImages.Image = null;
                     placeholderLabel.Visible = true;
-                    placeholderLabel.Location = new Point(this.Width / 2 - placeholderLabel.Width / 2, 100);
                 }
             }
             catch (Exception ex)
