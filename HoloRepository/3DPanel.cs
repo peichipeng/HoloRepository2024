@@ -48,7 +48,7 @@ namespace HoloRepository
 
             try
             {
-                if (organSlices.Count > 0) // need to add some text if there are no images available
+                if (organSlices.Count > 0)
                 {
                     placeholderLabel.Visible = false;
                     // Load the image from file path
