@@ -27,8 +27,7 @@ namespace HoloRepository.AddCase
             donorInfoPage = new DonorInfo();
             LoadControl(donorInfoPage);
 
-            mainForm = (MainForm)Application.OpenForms[0];
-            mainForm.OnTranscriptionReceived += OnTranscriptionReceived;
+            GlobalEventManager.OnGlobalTranscriptionReceived += OnTranscriptionReceived;
         }
 
         public AddCaseFramework(string route, string destination, int data)
@@ -165,7 +164,7 @@ namespace HoloRepository.AddCase
             {
                 _currentPopup = new PopupWindow("Are you sure you want to cancel?", parentForm);
                 _currentPopup.FormClosed += Popup_FormClosed;
-                mainForm.OnTranscriptionReceived += _currentPopup.OnTranscriptionReceived;
+                GlobalEventManager.OnGlobalTranscriptionReceived += _currentPopup.OnTranscriptionReceived;
                 _currentPopup.Show(parentForm);
             }
         }
@@ -186,7 +185,7 @@ namespace HoloRepository.AddCase
                 }
 
                 MainForm mainForm = (MainForm)Application.OpenForms[0];
-                mainForm.OnTranscriptionReceived -= _currentPopup.OnTranscriptionReceived;
+                GlobalEventManager.OnGlobalTranscriptionReceived -= _currentPopup.OnTranscriptionReceived;
                 _currentPopup = null;
             }
         }
@@ -198,7 +197,7 @@ namespace HoloRepository.AddCase
                 Invoke(new Action(HandleCancelYes));
                 return;
             }
-            mainForm.OnTranscriptionReceived -= OnTranscriptionReceived;
+            GlobalEventManager.OnGlobalTranscriptionReceived -= OnTranscriptionReceived;
             if (addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
             {
                 if (donorInfoPage.title.Text == "Add Donor's Basic")

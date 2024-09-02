@@ -16,7 +16,6 @@ namespace HoloRepository
         private StreamWriter? _pythonInput;
         private StreamReader? _pythonOutput;
         private Thread? _outputThread;
-        public event Action<string>? OnTranscriptionReceived;
 
         private VoiceControl voiceControl;
 
@@ -24,12 +23,15 @@ namespace HoloRepository
         {
             InitializeComponent(); 
             InitializePythonProcess();
-            voiceControl1.OnModeChanged += VoiceControl_OnModeChanged;
+            GlobalStateManager.Instance.OnModeChanged += OnModeChanged;
+
+            voiceControl1.UpdateUI(GlobalStateManager.Instance.IsKeyboard);
+
 
             LoadControl(new HomePageControl());
         }
 
-        private void VoiceControl_OnModeChanged(bool isKeyboardMode)
+        public void OnModeChanged(bool isKeyboardMode)
         {
             isSpeechMode = !isKeyboardMode;
             if (isSpeechMode)
@@ -83,7 +85,7 @@ namespace HoloRepository
                         var output = _pythonOutput.ReadLine();
                         if (!string.IsNullOrEmpty(output))
                         {
-                            OnTranscriptionReceived?.Invoke(output);
+                            GlobalEventManager.RaiseTranscriptionEvent(output);
                         }
                     }
                 });
@@ -178,7 +180,7 @@ namespace HoloRepository
                     {
                         mainContainer.Controls[0].Controls.Clear();
 
-                        modeSwitch.Visible = false;
+                        voiceControl1.Visible = false;
 
                         breadcrumbPanel.Visible = true;
                         if (control != mainContainer.Controls[0])
@@ -206,7 +208,7 @@ namespace HoloRepository
                 }
                 else if (control is MainInterFaceControl)
                 {
-                    modeSwitch.Visible = false;
+                    voiceControl1.Visible = false;
 
                     breadcrumbPanel.Visible = true;
                     LoadBreadcrumb();

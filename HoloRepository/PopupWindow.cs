@@ -51,7 +51,7 @@ public class PopupWindow : Form
         mainForm = (MainForm)Application.OpenForms[0];
         if (!isSubscribed)
         {
-            mainForm.OnTranscriptionReceived += OnTranscriptionReceived;
+            GlobalEventManager.OnGlobalTranscriptionReceived += OnTranscriptionReceived;
             isSubscribed = true;
         }
     }
@@ -60,7 +60,7 @@ public class PopupWindow : Form
     {
         if (mainForm != null && isSubscribed)
         {
-            mainForm.OnTranscriptionReceived -= OnTranscriptionReceived;
+            GlobalEventManager.OnGlobalTranscriptionReceived -= OnTranscriptionReceived;
             isSubscribed = false;
         }
         overlay?.Dispose();

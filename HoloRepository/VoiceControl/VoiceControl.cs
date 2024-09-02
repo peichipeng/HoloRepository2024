@@ -6,11 +6,12 @@ namespace HoloRepository
 {
     public partial class VoiceControl : UserControl
     {
-        private bool isKeyboard = true;
-        public event Action<bool>? OnModeChanged;
         public VoiceControl()
         {
             InitializeComponent();
+
+            GlobalStateManager.Instance.OnModeChanged += UpdateUI;
+            UpdateUI(GlobalStateManager.Instance.IsKeyboard);
         }
 
         private void keyboardPicture_Click(object sender, EventArgs e)
@@ -25,8 +26,11 @@ namespace HoloRepository
 
         private void ToggleMode()
         {
-            isKeyboard = !isKeyboard;
+            GlobalStateManager.Instance.IsKeyboard = !GlobalStateManager.Instance.IsKeyboard;
+        }
 
+        public void UpdateUI(bool isKeyboard)
+        {
             if (isKeyboard)
             {
                 keyboardPicture.Image = Properties.Resources.keyboard_blue;
@@ -37,8 +41,6 @@ namespace HoloRepository
                 keyboardPicture.Image = Properties.Resources.keyboard_gray;
                 voicePicture.Image = Properties.Resources.microphone_red;
             }
-
-            OnModeChanged?.Invoke(isKeyboard);
         }
     }
 }

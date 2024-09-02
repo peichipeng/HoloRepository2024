@@ -60,7 +60,7 @@ namespace HoloRepository
             if (this.Parent?.Parent is MainForm mainForm)
             {
                 this.mainForm = mainForm;
-                mainForm.OnTranscriptionReceived += OnTranscriptionReceived;
+                GlobalEventManager.OnGlobalTranscriptionReceived += OnTranscriptionReceived;
             }
         }
 
@@ -68,7 +68,7 @@ namespace HoloRepository
         {
             if (mainForm != null)
             {
-                mainForm.OnTranscriptionReceived -= OnTranscriptionReceived;
+                GlobalEventManager.OnGlobalTranscriptionReceived -= OnTranscriptionReceived;
             }
             base.OnHandleDestroyed(e);
         }
