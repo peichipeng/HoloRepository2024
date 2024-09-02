@@ -1,4 +1,5 @@
 ﻿using HoloRepository.AddCase;
+using HoloRepository.ContextMenu;
 using HoloRepository.ViewCases;
 using Microsoft.VisualBasic.Devices;
 using Npgsql;
@@ -45,23 +46,10 @@ namespace HoloRepository
             options.Width = 50;
             caseTable.Columns.Add(options);
 
-            //tablePanel.Location = new Point((panel.Width - tablePanel.Width) / 2, tablePanel.Location.Y);
-
-            int secondRowXPosition = tablePanel.Location.X;
-            int secondRowYPosition = 78;
-            int secondRowHeight = addCaseBtn.Height;
-            int space = 10;
-
             searchBox.AutoSize = false;
             searchBox.Size = new Size(searchBox.Width, addCaseBtn.Height);
-            //searchBox.Location = new Point(secondRowXPosition + timeIntervalCmb.Width + space, secondRowYPosition);
-            //searchBox.Size = new Size(tablePanel.Width - timeIntervalCmb.Width - addCaseBtn.Width - space * 2, secondRowHeight);
 
-            //timeIntervalCmb.Location = new Point(secondRowXPosition, secondRowYPosition);
-
-            //addCaseBtn.Location = new Point(tablePanel.Location.X + tablePanel.Width - addCaseBtn.Width, secondRowYPosition);
-
-            //searchIcon.Location = new Point(searchBox.Location.X + 8, searchBox.Location.Y + 8);
+            contextMenu.Renderer = new MenuRenderer();
 
             LoadComboBox();
         }

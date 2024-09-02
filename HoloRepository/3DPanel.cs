@@ -48,7 +48,7 @@ namespace HoloRepository
 
             try
             {
-                if (organSlices.Count > 0) // need to add some text if there are no images available
+                if (organSlices.Count > 0)
                 {
                     placeholderLabel.Visible = false;
                     // Load the image from file path
@@ -300,10 +300,11 @@ namespace HoloRepository
 
             if (mainForm != null)
             {
-                mainForm.Controls.Clear();
-                mainForm.Controls.Add(mainInterfaceControl);
+                //mainForm.Controls.Clear();
+                //mainForm.Controls.Add(mainInterfaceControl);
 
-                mainInterfaceControl.Dock = DockStyle.Fill;
+                //mainInterfaceControl.Dock = DockStyle.Fill;
+                mainForm.AddControl(mainInterfaceControl);
             }
         }
     }

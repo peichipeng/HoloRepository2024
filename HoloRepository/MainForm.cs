@@ -176,7 +176,9 @@ namespace HoloRepository
                         caseFramework.addCaseContainer.Controls[0] is CasePage casePage &&
                         casePage.pageName == "caseOverview")
                     {
-                        voiceControl1.Visible = false;
+                        mainContainer.Controls[0].Controls.Clear();
+
+                        modeSwitch.Visible = false;
 
                         breadcrumbPanel.Visible = true;
                         if (control != mainContainer.Controls[0])
@@ -198,6 +200,13 @@ namespace HoloRepository
                 else if (control is OrganArchiveControl)
                 {
                     voiceControl1.Visible = false;
+
+                    breadcrumbPanel.Visible = true;
+                    LoadBreadcrumb();
+                }
+                else if (control is MainInterFaceControl)
+                {
+                    modeSwitch.Visible = false;
 
                     breadcrumbPanel.Visible = true;
                     LoadBreadcrumb();
@@ -271,6 +280,10 @@ namespace HoloRepository
             else if (control is OrganArchiveControl)
             {
                 pageBtnName = "Organ Archive";
+            } else if (control is MainInterFaceControl mainInterface)
+            {
+                var inforPanel = mainInterface.donorInfoPanel.Controls.OfType<InfoPanel>().FirstOrDefault();
+                pageBtnName = inforPanel.organName;
             }
 
             return pageBtnName;

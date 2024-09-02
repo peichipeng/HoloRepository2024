@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HoloRepository.UserGuide;
 
 namespace HoloRepository
 {
@@ -387,6 +388,16 @@ namespace HoloRepository
             notFoundLabel.Visible = !modelExists;
             btnConstruct.Visible = !modelExists;
             btnBack3D.Visible = false;
+        }
+
+        private void userGuideBtn_Click(object sender, EventArgs e)
+        {
+            var parentForm = this.FindForm();
+
+            if (parentForm is MainForm mainForm)
+            {
+                mainForm.AddControl(new UserGuideHome());
+            }
         }
     }
 }

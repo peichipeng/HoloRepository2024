@@ -73,8 +73,17 @@ namespace HoloRepository.AddCase
                 // Back event trigger
                 addCaseControl.OnSaveCompleted = donorId =>
                 {
-                    var caseView = new CaseView { donorId = donorId };
-                    LoadControl(caseView);
+                    //var caseView = new CaseView { donorId = donorId };
+                    //LoadControl(caseView);
+
+                    if (this.destination == "addCase")
+                    {
+                        LoadControl(new CasePage("addCase", donorId));
+                    }
+                    else
+                    {
+                        LoadControl(new CasePage("caseOverview", donorId));
+                    }
                 };
 
                 HideFooterBtns();
