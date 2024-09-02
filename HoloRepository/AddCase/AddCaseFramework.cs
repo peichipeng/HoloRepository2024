@@ -255,6 +255,19 @@ namespace HoloRepository.AddCase
                 HandleCancelBtn_Click();
                 return;
             }
+
+            foreach (Control control in addCaseContainer.Controls)
+            {
+                if (control is AddCaseControl addCaseControl)
+                {
+                    if (transcription.Contains("save"))
+                    {
+                        addCaseControl.ProcessVoiceCommand(transcription);
+                        return;
+                    }
+                }
+            }
+
             if (nextBtn.Text.Equals("&Save", StringComparison.OrdinalIgnoreCase))
             {
                 if (transcription.Contains("save"))

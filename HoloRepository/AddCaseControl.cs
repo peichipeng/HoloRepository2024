@@ -903,6 +903,10 @@ namespace HoloRepository
             {
                 AddOrganSlicesButton_Click(this, EventArgs.Empty);
             }
+            if (transcription.ToLower().Contains("save"))
+            {
+                btnSave_Click(this, EventArgs.Empty);
+            }
         }
     }
 }
