@@ -6,18 +6,26 @@ using System.Threading.Tasks;
 
 namespace HoloRepository
 {
-    public partial class PopupWindow : Form
+    public class PopupWindow : Form
     {
         private OverlayForm overlay;
-        public PopupWindow()
+        public PopupWindow(Form parentForm)
         {
             // For cancellation
             InitializeComponent();
+
+            SetComponents(parentForm);
         }
         public PopupWindow(string text, Form parentForm)
         {
             InitializeComponent();
 
+            PopupTitle.Text = text;
+            SetComponents(parentForm);
+        }
+
+        private void SetComponents(Form parentForm)
+        {
             overlay = new OverlayForm
             {
                 Location = parentForm.Location,
@@ -25,11 +33,11 @@ namespace HoloRepository
             };
             overlay.Show(parentForm);
 
-            PopupTitle.Text = text;
             PopupTitle.Location = new Point(Width / 2 - PopupTitle.Width / 2, 100);
             this.Location = new Point(parentForm.Left + (parentForm.Width - this.Width) / 2, parentForm.Top + (parentForm.Height - this.Height) / 2);
             this.TopMost = true;
         }
+
         private void InitializeComponent()
         {
             PopupTitle = new Label();
@@ -44,7 +52,7 @@ namespace HoloRepository
             PopupTitle.Font = new Font("Poppins", 20F, FontStyle.Bold, GraphicsUnit.Point);
             PopupTitle.Location = new Point(87, 140);
             PopupTitle.Name = "PopupTitle";
-            PopupTitle.Size = new Size(701, 70);
+            PopupTitle.Size = new Size(376, 32);
             PopupTitle.TabIndex = 0;
             PopupTitle.Text = "Are you sure you want to cancel?";
             // 
@@ -77,8 +85,8 @@ namespace HoloRepository
             // 
             // PopupWindow
             // 
-            BackColor = SystemColors.Control;
-            ClientSize = new Size(866, 465);
+            BackColor = Color.White;
+            ClientSize = new Size(500, 300);
             ControlBox = false;
             Controls.Add(PopupNoButton);
             Controls.Add(PopupYesButton);
@@ -92,25 +100,35 @@ namespace HoloRepository
 
         private RoundedButton PopupYesButton;
         private RoundedButton PopupNoButton;
-        private Label PopupTitle;
+        public Label PopupTitle;
 
         private void PopupYesButton_Click(object sender, EventArgs e)
+        {
+            HandleYesButtonClick();
+        }
+
+        private void PopupNoButton_Click(object sender, EventArgs e)
+        {
+            HandleNoButtonClick();
+        }
+
+        private void WindowClosed()
+        {
+            overlay.Dispose();
+        }
+
+        public virtual void HandleYesButtonClick()
         {
             DialogResult = DialogResult.Yes;
             Close();
             WindowClosed();
         }
 
-        private void PopupNoButton_Click(object sender, EventArgs e)
+        public virtual void HandleNoButtonClick()
         {
             DialogResult = DialogResult.No;
             Close();
             WindowClosed();
-        }
-
-        private void WindowClosed()
-        {
-            overlay.Dispose();
         }
     }
 }

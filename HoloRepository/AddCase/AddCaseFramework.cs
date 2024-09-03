@@ -18,6 +18,7 @@ namespace HoloRepository.AddCase
         private string accessedFrom; // This variable is for the cancel button
         public string destination;
 
+        private System.Windows.Forms.Timer timer;
 
         // This constructor is for adding a case
         public AddCaseFramework(string route, string destination)
@@ -27,6 +28,7 @@ namespace HoloRepository.AddCase
             InitializeComponent();
             donorInfoPage = new DonorInfo();
             LoadControl(donorInfoPage);
+            //InitializeTimer();
         }
 
         public AddCaseFramework(string route, string destination, int data)
@@ -36,6 +38,25 @@ namespace HoloRepository.AddCase
             InitializeComponent();
             LoadControl(new CasePage(destination, data));
         }
+
+        /*
+        private void InitializeTimer()
+        {
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 10000; // 10 seconds in milliseconds
+            timer.Tick += new EventHandler(OnTimerTick);
+            timer.Start();
+        }
+
+        private void OnTimerTick(object sender, EventArgs e)
+        {
+            // This function will be called every 10 seconds
+            var popupWindow = Application.OpenForms.OfType<PopupWindow>().FirstOrDefault();
+            if (popupWindow != null)
+            {
+                popupWindow.HandleYesButtonClick();
+            }
+        }*/
 
         public void ShowFooterBtns()
         {
@@ -55,6 +76,10 @@ namespace HoloRepository.AddCase
             addCaseContainer.Controls.Clear();
             userControl.Dock = DockStyle.Fill;
             addCaseContainer.Controls.Add(userControl);
+            /*
+            userControl.Dock = DockStyle.Fill;
+            addCaseContainer.Controls.Add(userControl);
+            userControl.BringToFront();*/
 
             if (userControl is CasePage casePage)
             {
@@ -87,7 +112,7 @@ namespace HoloRepository.AddCase
 
             if (mainForm != null)
             {
-                mainForm.OnContentChanged(); // This is for deciding if the microphone should appear
+                mainForm.OnContentChanged("case"); // This is for deciding if the microphone should appear
             }
         }
 
@@ -141,7 +166,6 @@ namespace HoloRepository.AddCase
 
             using (var popup = new PopupWindow("Are you sure you want to cancel?", this.ParentForm))
             {
-
                 var result = popup.ShowDialog(this.ParentForm);
 
                 if (result == DialogResult.Yes)
@@ -190,6 +214,7 @@ namespace HoloRepository.AddCase
                 }
             }
         }
+
         private MainForm FindMainForm(Control control)
         {
             while (control != null && !(control is MainForm))

@@ -49,6 +49,7 @@ namespace HoloRepository
             panel2 = new Panel();
             paginationPanel = new FlowLayoutPanel();
             panel = new Panel();
+            timeIntervalCmb = new ComboBox();
             greyRightArrow = new PictureBox();
             blackRightArrow = new PictureBox();
             greyLeftArrow = new PictureBox();
@@ -250,6 +251,7 @@ namespace HoloRepository
             // panel
             // 
             panel.AutoScroll = true;
+            panel.Controls.Add(timeIntervalCmb);
             panel.Controls.Add(greyRightArrow);
             panel.Controls.Add(blackRightArrow);
             panel.Controls.Add(greyLeftArrow);
@@ -265,6 +267,23 @@ namespace HoloRepository
             panel.Name = "panel";
             panel.Size = new Size(1329, 664);
             panel.TabIndex = 78;
+            // 
+            // timeIntervalCmb
+            // 
+            timeIntervalCmb.Anchor = AnchorStyles.Top;
+            timeIntervalCmb.BackColor = Color.White;
+            timeIntervalCmb.DropDownHeight = 120;
+            timeIntervalCmb.DropDownStyle = ComboBoxStyle.DropDownList;
+            timeIntervalCmb.FlatStyle = FlatStyle.System;
+            timeIntervalCmb.Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            timeIntervalCmb.FormattingEnabled = true;
+            timeIntervalCmb.IntegralHeight = false;
+            timeIntervalCmb.ItemHeight = 19;
+            timeIntervalCmb.Location = new Point(82, 39);
+            timeIntervalCmb.Name = "timeIntervalCmb";
+            timeIntervalCmb.Size = new Size(100, 27);
+            timeIntervalCmb.TabIndex = 87;
+            timeIntervalCmb.SelectedIndexChanged += timeIntervalCmb_SelectedIndexChanged;
             // 
             // greyRightArrow
             // 
@@ -294,8 +313,8 @@ namespace HoloRepository
             // greyLeftArrow
             // 
             greyLeftArrow.Image = (Image)resources.GetObject("greyLeftArrow.Image");
-            greyLeftArrow.Location = new Point(36, 478);
-            greyLeftArrow.Margin = new Padding(5, 16, 0, 5);
+            greyLeftArrow.Location = new Point(23, 299);
+            greyLeftArrow.Margin = new Padding(3, 9, 0, 3);
             greyLeftArrow.Name = "greyLeftArrow";
             greyLeftArrow.Size = new Size(25, 26);
             greyLeftArrow.SizeMode = PictureBoxSizeMode.Zoom;
@@ -410,5 +429,6 @@ namespace HoloRepository
         private PictureBox blackRightArrow;
         private PictureBox greyRightArrow;
         private Panel panel2;
+        private ComboBox timeIntervalCmb;
     }
 }

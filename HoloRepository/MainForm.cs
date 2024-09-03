@@ -1,6 +1,7 @@
 
 using HoloRepository.AddCase;
 using HoloRepository.UserGuide;
+using System.Data.Common;
 using System.Runtime.InteropServices;
 
 namespace HoloRepository
@@ -29,14 +30,13 @@ namespace HoloRepository
 
         private void mainContainer_ControlAdded(object sender, ControlEventArgs e)
         {
-            OnContentChanged();
+            OnContentChanged("main");
         }
 
-        public void OnContentChanged()
+        public void OnContentChanged(string source)
         {
             int controlsCount = mainContainer.Controls.Count;
 
-            // Please don't remove the following code snippet when changing the control.
             if (mainContainer.Controls.OfType<UserGuideHome>().Any())
             {
                 modeSwitch.Visible = false;
@@ -50,7 +50,17 @@ namespace HoloRepository
             {
                 previousPageBtn.Visible = false;
                 blackHomeBtn.Visible = false;
-                var control = mainContainer.Controls[controlsCount - 1];
+
+                Control control = null;
+
+                if (source == "main")
+                {
+                    control = mainContainer.Controls[controlsCount - 1];
+                }
+                else
+                {
+                    control = mainContainer.Controls[0];
+                }
 
                 if (control is AddCaseFramework caseFramework)
                 {
@@ -61,7 +71,8 @@ namespace HoloRepository
                         modeSwitch.Visible = false;
 
                         breadcrumbPanel.Visible = true;
-                        LoadBreadcrumb();
+                        if (control != mainContainer.Controls[0])
+                            LoadBreadcrumb();
                     }
                     else
                     {
@@ -72,6 +83,13 @@ namespace HoloRepository
                 else if (control is ViewCasesControl)
                 {
                     modeSwitch.Visible = true;
+
+                    breadcrumbPanel.Visible = true;
+                    LoadBreadcrumb();
+                }
+                else if (control is OrganArchiveControl)
+                {
+                    modeSwitch.Visible = false;
 
                     breadcrumbPanel.Visible = true;
                     LoadBreadcrumb();
@@ -109,13 +127,15 @@ namespace HoloRepository
             if (control is ViewCasesControl)
             {
                 pageBtnName = "View Cases";
-            }
-            else if (control is AddCaseFramework framework)
+            } else if (control is AddCaseFramework framework)
             {
                 if (framework.addCaseContainer.Controls[0] is CasePage casePage)
                 {
                     pageBtnName = $"Case {casePage.donorId}";
                 }
+            } else if (control is OrganArchiveControl)
+            {
+                pageBtnName = "Organ Archive";
             }
 
             return pageBtnName;
@@ -196,6 +216,10 @@ namespace HoloRepository
             if (buttonText == "View Cases")
             {
                 AddControl(new ViewCasesControl());
+            } 
+            else if (buttonText == "Organ Archive")
+            {
+                AddControl(new OrganArchiveControl());
             }
             else
             {
@@ -218,7 +242,7 @@ namespace HoloRepository
 
         private void mainContainer_ControlRemoved(object sender, ControlEventArgs e)
         {
-            OnContentChanged();
+            OnContentChanged("main");
         }
 
         private void blackHomeBtn_Click(object sender, EventArgs e)
