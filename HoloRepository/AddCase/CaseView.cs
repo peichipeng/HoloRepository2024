@@ -44,7 +44,7 @@ namespace HoloRepository.AddCase
                 dodLabel.Text = reader.GetFieldValue<DateTime>(1).ToString("dd/MM/yyyy");
             }
 
-            string queryOrgans = $"SELECT organ_id, organ_name_id FROM organ WHERE donor_id = {donorId} ORDER BY organ_id DESC";
+            string queryOrgans = $"SELECT organ_id, organ_name_id, organ_side FROM organ WHERE donor_id = {donorId} ORDER BY organ_id DESC";
             reader = dbConnection.ExecuteReader(queryOrgans);
 
             // Iterate through all the organs from the donor
@@ -52,9 +52,14 @@ namespace HoloRepository.AddCase
             {
                 int organId = reader.GetFieldValue<int>(0);
 
+                string organSide = "";
+                if (!reader.IsDBNull(2))
+                {
+                    organSide = reader.GetFieldValue<string>(2);
+                }
+
                 int organNameId;
                 string organName = "";
-
                 // Check if the organNameId is null
                 if (!reader.IsDBNull(1))
                 {
@@ -69,6 +74,10 @@ namespace HoloRepository.AddCase
                         organName = readerName.GetFieldValue<string>(0);
                     }
                 }
+
+                // Specify which side of the organ it is
+                if (organSide != "")
+                    organName += " - " + organSide;
 
                 // Retrieve the corresponding organ slices
                 string queryOrganSlices = $"SELECT image_path FROM sliceimage WHERE organ_id = {organId}";
@@ -115,7 +124,6 @@ namespace HoloRepository.AddCase
         {
             if (this.Parent.Parent.Parent.Parent is AddCaseFramework caseFramework)
             {
-                caseFramework.nextBtn.Text = "Add";
                 var addCaseControl = new AddOrganControl(donorId);
 
                 caseFramework.LoadControl(addCaseControl);

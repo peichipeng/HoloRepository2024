@@ -23,6 +23,7 @@ namespace HoloRepository.AddCase
 
         private bool deleting = false;
         private string requiredFieldMsg = "Required field.";
+
         public DonorInfo()
         {
             InitializeComponent();
@@ -40,25 +41,26 @@ namespace HoloRepository.AddCase
             dodTxt.Text = donorInfo["dod"];
             causeOfDeathTxt.Text = donorInfo["causeOfDeath"];
             dodTxt.StateCommon.Content.Color1 = Color.Black;
+            donorIdTxt.Enabled = false;
         }
 
         public async void AddDonorInfo()
         {
-            // need to check if the donorid exists
             try
             {
                 var dbConnection = new DatabaseConnection();
                 await using var conn = new NpgsqlConnection(dbConnection.ConnectionString);
                 await conn.OpenAsync();
 
-                await using var cmd = new NpgsqlCommand("INSERT INTO donor (donor_id, age, date_of_death, cause_of_death) VALUES ($1, $2, $3, $4)", conn)
+                await using var cmd = new NpgsqlCommand("INSERT INTO donor (donor_id, age, date_of_death, cause_of_death, timestamp) VALUES ($1, $2, $3, $4, $5)", conn)
                 {
                     Parameters =
                     {
                         new() { Value = donorId },
                         new() { Value = age },
                         new() { Value = dod },
-                        new() { Value = causeOfDeath }
+                        new() { Value = causeOfDeath },
+                        new() { Value = DateTime.Now }
                     }
                 };
                 await cmd.ExecuteNonQueryAsync();

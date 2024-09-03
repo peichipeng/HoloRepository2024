@@ -11,6 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 namespace HoloRepository
 {
     public partial class HomePageControl : UserControl
@@ -49,7 +52,6 @@ namespace HoloRepository
         private void addCaseBtn_Click(object sender, EventArgs e)
         {
             LoadControl(new AddCaseFramework("home", "addCase"));
-            //LoadControl(new AddCaseControl());
         }
 
         private void viewCasesBtn_Click(object sender, EventArgs e)
@@ -65,6 +67,21 @@ namespace HoloRepository
         private void userGuideBtn_Click(object sender, EventArgs e)
         {
             AddControl(new UserGuideHome());
+        }
+
+        private void tempBtn_Click(object sender, EventArgs e)
+        {
+            LoadControl(new AddCaseFramework("home", "addCase"));
+        }
+
+        private void btnUpdateOrgan_Click(object sender, EventArgs e)
+        {
+            LoadControl(new AddOrganControl(12, 51));
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            LoadControl(new MainInterFaceControl(this, 12345, 32));
         }
 
         private void HomePageControl_Load(object sender, EventArgs e)

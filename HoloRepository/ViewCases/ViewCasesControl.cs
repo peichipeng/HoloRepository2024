@@ -1,4 +1,5 @@
 ﻿using HoloRepository.AddCase;
+using HoloRepository.ContextMenu;
 using HoloRepository.ViewCases;
 using Microsoft.VisualBasic.Devices;
 using Npgsql;
@@ -43,22 +44,10 @@ namespace HoloRepository
             options.Width = 50;
             caseTable.Columns.Add(options);
 
-            tablePanel.Location = new Point((panel.Width - tablePanel.Width) / 2, 130);
-
-            int secondRowXPosition = tablePanel.Location.X;
-            int secondRowYPosition = 78;
-            int secondRowHeight = addCaseBtn.Height;
-            int space = 10;
-
             searchBox.AutoSize = false;
-            searchBox.Location = new Point(secondRowXPosition + timeIntervalCmb.Width + space, secondRowYPosition);
-            searchBox.Size = new Size(tablePanel.Width - timeIntervalCmb.Width - addCaseBtn.Width - space * 2, secondRowHeight);
+            searchBox.Size = new Size(searchBox.Width, addCaseBtn.Height);
 
-            timeIntervalCmb.Location = new Point(secondRowXPosition, secondRowYPosition);
-
-            addCaseBtn.Location = new Point(tablePanel.Location.X + tablePanel.Width - addCaseBtn.Width, secondRowYPosition);
-
-            searchIcon.Location = new Point(searchBox.Location.X + 8, searchBox.Location.Y + 8);
+            contextMenu.Renderer = new MenuRenderer();
 
             LoadComboBox();
         }
@@ -225,7 +214,6 @@ namespace HoloRepository
             ResetNavigationArrows();
 
             int newPaginationXPosition = (panel2.Width - paginationPanel.Width) / 2;
-            //MessageBox.Show(newPaginationXPosition.ToString());
 
             paginationPanel.Location = new Point(newPaginationXPosition, 10);
         }

@@ -36,6 +36,7 @@
             OrganSliceDescription = new CustomLabel();
             OrganSlicePicture = new PictureBox();
             DescriptionBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            voiceControl1 = new VoiceControl();
             ((System.ComponentModel.ISupportInitialize)DICOMFilePicture).BeginInit();
             OrganSlicePanel.SuspendLayout();
             roundedPanel1.SuspendLayout();
@@ -45,21 +46,21 @@
             // DICOMFilePicture
             // 
             DICOMFilePicture.BorderStyle = BorderStyle.FixedSingle;
-            DICOMFilePicture.Location = new Point(30, 45);
-            DICOMFilePicture.Margin = new Padding(2);
+            DICOMFilePicture.Location = new Point(20, 30);
+            DICOMFilePicture.Margin = new Padding(1, 1, 1, 1);
             DICOMFilePicture.Name = "DICOMFilePicture";
-            DICOMFilePicture.Size = new Size(422, 312);
+            DICOMFilePicture.Size = new Size(282, 209);
             DICOMFilePicture.SizeMode = PictureBoxSizeMode.Zoom;
             DICOMFilePicture.TabIndex = 1;
             DICOMFilePicture.TabStop = false;
             // 
             // sliderControl1
             // 
-            sliderControl1.Location = new Point(30, 14);
-            sliderControl1.Margin = new Padding(2);
+            sliderControl1.Location = new Point(20, 9);
+            sliderControl1.Margin = new Padding(1, 1, 1, 1);
             sliderControl1.Name = "sliderControl1";
             sliderControl1.NumberOfImages = 0;
-            sliderControl1.Size = new Size(423, 27);
+            sliderControl1.Size = new Size(282, 18);
             sliderControl1.TabIndex = 2;
             sliderControl1.Text = "sliderControl1";
             sliderControl1.ImageSelected += SliderControl1_ImageSelected;
@@ -72,9 +73,10 @@
             OrganSlicePanel.BorderWidth = 2;
             OrganSlicePanel.Controls.Add(sliderControl1);
             OrganSlicePanel.Controls.Add(DICOMFilePicture);
-            OrganSlicePanel.Location = new Point(563, 14);
+            OrganSlicePanel.Location = new Point(375, 9);
+            OrganSlicePanel.Margin = new Padding(2, 2, 2, 2);
             OrganSlicePanel.Name = "OrganSlicePanel";
-            OrganSlicePanel.Size = new Size(479, 378);
+            OrganSlicePanel.Size = new Size(319, 252);
             OrganSlicePanel.TabIndex = 3;
             // 
             // Add
@@ -84,9 +86,10 @@
             Add.BorderRadius = 10;
             Add.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             Add.ForeColor = Color.White;
-            Add.Location = new Point(911, 662);
+            Add.Location = new Point(607, 441);
+            Add.Margin = new Padding(2, 2, 2, 2);
             Add.Name = "Add";
-            Add.Size = new Size(130, 53);
+            Add.Size = new Size(87, 35);
             Add.TabIndex = 6;
             Add.Text = "&Add";
             Add.UseVisualStyleBackColor = false;
@@ -100,9 +103,10 @@
             roundedPanel1.BorderWidth = 2;
             roundedPanel1.Controls.Add(OrganSliceDescription);
             roundedPanel1.Controls.Add(OrganSlicePicture);
-            roundedPanel1.Location = new Point(36, 18);
+            roundedPanel1.Location = new Point(24, 12);
+            roundedPanel1.Margin = new Padding(2, 2, 2, 2);
             roundedPanel1.Name = "roundedPanel1";
-            roundedPanel1.Size = new Size(479, 378);
+            roundedPanel1.Size = new Size(319, 252);
             roundedPanel1.TabIndex = 7;
             // 
             // OrganSliceDescription
@@ -110,16 +114,22 @@
             OrganSliceDescription.CustomFont = new Font("Microsoft YaHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             OrganSliceDescription.CustomForeColor = Color.Gray;
             OrganSliceDescription.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganSliceDescription.Lines = new string[] { "Click on to capture the image ", "of the organ slice" };
-            OrganSliceDescription.Location = new Point(46, 222);
+            OrganSliceDescription.Lines = new string[]
+    {
+    "Click on to capture the image ",
+    "of the organ slice"
+    };
+            OrganSliceDescription.Location = new Point(31, 148);
+            OrganSliceDescription.Margin = new Padding(2, 2, 2, 2);
             OrganSliceDescription.Name = "OrganSliceDescription";
-            OrganSliceDescription.Size = new Size(388, 99);
+            OrganSliceDescription.Size = new Size(259, 66);
             OrganSliceDescription.TabIndex = 8;
             OrganSliceDescription.Text = "customLabel1";
             // 
             // OrganSlicePicture
             // 
-            OrganSlicePicture.Location = new Point(3, 3);
+            OrganSlicePicture.Location = new Point(2, 2);
+            OrganSlicePicture.Margin = new Padding(2, 2, 2, 2);
             OrganSlicePicture.Name = "OrganSlicePicture";
             OrganSlicePicture.Size = new Size(475, 371);
             OrganSlicePicture.SizeMode = PictureBoxSizeMode.Zoom;
@@ -130,11 +140,12 @@
             // DescriptionBox
             // 
             DescriptionBox.Anchor = AnchorStyles.Top;
-            DescriptionBox.Location = new Point(39, 426);
+            DescriptionBox.Location = new Point(26, 284);
+            DescriptionBox.Margin = new Padding(2, 2, 2, 2);
             DescriptionBox.Multiline = true;
             DescriptionBox.Name = "DescriptionBox";
             DescriptionBox.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            DescriptionBox.Size = new Size(1006, 206);
+            DescriptionBox.Size = new Size(671, 137);
             DescriptionBox.StateCommon.Border.Color1 = Color.FromArgb(224, 224, 224);
             DescriptionBox.StateCommon.Border.Color2 = Color.FromArgb(224, 224, 224);
             DescriptionBox.StateCommon.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
@@ -145,16 +156,28 @@
             DescriptionBox.TabIndex = 8;
             DescriptionBox.Text = "Describe additional information about the organ slice ...";
             // 
+            // voiceControl1
+            // 
+            voiceControl1.Anchor = AnchorStyles.None;
+            voiceControl1.BackColor = Color.Transparent;
+            voiceControl1.Location = new Point(313, 225);
+            voiceControl1.Margin = new Padding(1);
+            voiceControl1.Name = "voiceControl1";
+            voiceControl1.Size = new Size(93, 43);
+            voiceControl1.TabIndex = 87;
+            // 
             // AddOrganSlice
             // 
-            AutoScaleDimensions = new SizeF(144F, 144F);
+            AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(1078, 738);
+            ClientSize = new Size(719, 492);
+            Controls.Add(voiceControl1);
             Controls.Add(DescriptionBox);
             Controls.Add(roundedPanel1);
             Controls.Add(Add);
             Controls.Add(OrganSlicePanel);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "AddOrganSlice";
             Text = "Add an organ slice";
             ((System.ComponentModel.ISupportInitialize)DICOMFilePicture).EndInit();
@@ -174,5 +197,6 @@
         private PictureBox OrganSlicePicture;
         private CustomLabel OrganSliceDescription;
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox DescriptionBox;
+        private VoiceControl voiceControl1;
     }
 }

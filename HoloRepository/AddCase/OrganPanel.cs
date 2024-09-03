@@ -1,8 +1,10 @@
 ﻿using HoloRepository.ContextMenu;
+using HoloRepository.ViewCases;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Data.Common;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -18,6 +20,7 @@ namespace HoloRepository.AddCase
         private int organId;
         private string organName;
         private List<string> organSlices;
+        private string organModel;
         private int imageShown;
         private DatabaseConnection dbConnection;
         public int BorderRadius { get; set; } = 20;
@@ -31,13 +34,10 @@ namespace HoloRepository.AddCase
             this.organId = organId;
 
             if (name == "")
-            {
                 this.organName = "Unknown";
-            }
             else
-            {
                 this.organName = name;
-            }
+
             this.organSlices = organSlices;
 
             sliceImages.Controls.Add(leftArrow);
@@ -46,21 +46,39 @@ namespace HoloRepository.AddCase
             int rightArrowXPosition = sliceImages.Width - rightArrow.Width;
             leftArrow.Location = new Point(0, leftArrowYPosition);
             rightArrow.Location = new Point(rightArrowXPosition, leftArrowYPosition);
+            placeholderLabel.Location = new Point(sliceImages.Width / 2 - placeholderLabel.Width / 2, sliceImages.Height / 2 - placeholderLabel.Height / 2);
 
             contextMenu.Renderer = new MenuRenderer();
 
             setOrganPanel();
         }
 
-        private void setOrganPanel()
+        private async void setOrganPanel()
         {
             organNameLabel.Text = organName;
-            organNameLabel.Location = new Point(this.Width / 2 - organNameLabel.Width / 2, 210);
-            downArrow.Location = new Point(organNameLabel.Location.X + organNameLabel.Width - 2, 210);
+
+            int organNameLabelYPos = organNameLabel.Location.Y;
+            organNameLabel.Location = new Point(this.Width / 2 - organNameLabel.Width / 2, organNameLabelYPos);
+            downArrow.Location = new Point(organNameLabel.Location.X + organNameLabel.Width - 2, organNameLabelYPos);
+
+            await retrieve3dOrgan();
 
             try
             {
-                if (organSlices.Count > 0) // need to add some text if there are no images available
+                if (organModel != null)
+                {
+                    setOrganModel();
+
+                    modelPanel.Visible = true;
+                    sliceImages.Visible = false;
+                }
+                else
+                {
+                    modelPanel.Visible = false;
+                    sliceImages.Visible = true;
+                }
+
+                if (organSlices.Count > 0)
                 {
                     placeholderLabel.Visible = false;
 
@@ -80,13 +98,54 @@ namespace HoloRepository.AddCase
                 {
                     sliceImages.Image = null;
                     placeholderLabel.Visible = true;
-                    placeholderLabel.Location = new Point(this.Width / 2 - placeholderLabel.Width / 2, 100);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading image: {ex.Message}");
-                // Optionally handle the exception here
+            }
+        }
+
+        private void setOrganModel()
+        {
+            // The file path of the Unity app for displaying the organ
+            string relativePath = "3d_viewer\\HoloRepositoryPortable2021.exe";
+            string fullPath = Path.Combine(Application.StartupPath, relativePath);
+
+            if (!File.Exists(fullPath))
+            {
+                // Should add some error handling here
+                return;
+            }
+
+            IntPtr panelHWND = modelPanel.Handle;
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = fullPath,
+                Arguments = $"-parentHWND {panelHWND.ToInt64()} delayed #{organModel}",
+                WindowStyle = ProcessWindowStyle.Hidden,
+            };
+            Process.Start(startInfo);
+        }
+
+        private async Task retrieve3dOrgan()
+        {
+            var dataSource = DataRetrieval.CreateDataSource();
+
+            string queryModel = $"SELECT model_id, model_path FROM model3d WHERE organ_id = {this.organId}";
+
+            await using (var modelReader = await DataRetrieval.ExecuteQuery(queryModel, dataSource))
+            {
+                while (await modelReader.ReadAsync())
+                {
+                    if (modelReader.IsDBNull(1))
+                        return;
+
+                    string relativePath = modelReader.GetFieldValue<string>(1);
+                    string fullPath = Path.Combine(Application.StartupPath, relativePath);
+                    this.organModel = fullPath;
+                }
             }
         }
 
@@ -187,11 +246,6 @@ namespace HoloRepository.AddCase
             }
         }
 
-        private void organNameLabel_MouseDown(object sender, MouseEventArgs e)
-        {
-            contextMenu.Show(organNameLabel, e.Location);
-        }
-
         private void downArrow_MouseDown(object sender, MouseEventArgs e)
         {
             contextMenu.Show(downArrow, e.Location);
@@ -216,7 +270,7 @@ namespace HoloRepository.AddCase
                             int donorId = reader.GetInt32(0);
 
                             // Use the donorId as needed, for example:
-                            caseFramework.nextBtn.Text = "Update";
+                            //caseFramework.nextBtn.Text = "Update";
 
                             // Pass the donorId to the AddCaseControl if needed
                             var addCaseControl = new AddOrganControl(donorId, organId); // Assuming AddCaseControl can accept donorId
@@ -262,6 +316,62 @@ namespace HoloRepository.AddCase
                 sliceImages.Image.Dispose();
                 sliceImages.Image = null;
             }
+        }
+
+        private void organNameLabel_MouseEnter(object sender, EventArgs e)
+        {
+            //MessageBox.Show(Parent.Parent.ToString());
+            organNameLabel.ForeColor = Color.FromArgb(51, 129, 202);
+        }
+
+        private void organNameLabel_MouseLeave(object sender, EventArgs e)
+        {
+            organNameLabel.ForeColor = Color.Black;
+        }
+
+        private void organNameLabel_Click(object sender, EventArgs e)
+        {
+            var caseFramework = findAddCaseFramework();
+
+            Control parent = Parent;
+
+            while (parent is not CasePage)
+            {
+                parent = parent.Parent;
+            }
+
+            if (parent is CasePage casePage)
+            {
+                string pageName = casePage.pageName;
+                int donorId = casePage.donorId;
+
+                if (pageName == "caseOverview")
+                {
+                    if (this.FindForm() is MainForm mainForm)
+                    {
+                        mainForm.AddControl(new MainInterFaceControl(this, donorId, organId));
+                    }
+                }
+                else
+                {
+                    var addCaseControl = new AddOrganControl(donorId, organId);
+
+                    if (caseFramework is AddCaseFramework framework)
+                        framework.LoadControl(addCaseControl);
+                }
+            }
+        }
+
+        private Control findAddCaseFramework()
+        {
+            Control parent = Parent;
+
+            while (parent is not AddCaseFramework)
+            {
+                parent = parent.Parent;
+            }
+
+            return parent;
         }
     }
 }
