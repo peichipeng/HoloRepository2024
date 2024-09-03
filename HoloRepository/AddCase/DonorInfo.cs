@@ -1,5 +1,4 @@
-﻿using HoloRepository.AddCase.PrimaryKeyErrorForm;
-using HoloRepository.ViewCases;
+﻿using HoloRepository.ViewCases;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -24,18 +23,14 @@ namespace HoloRepository.AddCase
 
         private bool deleting = false;
         private string requiredFieldMsg = "Required field.";
-
-        private DatabaseConnection dbConnection;
         public DonorInfo()
         {
-            dbConnection = new DatabaseConnection();
             InitializeComponent();
         }
 
         // Update donor's basic information page
         public DonorInfo(Dictionary<string, string> donorInfo)
         {
-            dbConnection = new DatabaseConnection();
             InitializeComponent();
             originalId = int.Parse(donorInfo["id"]);
 
@@ -79,7 +74,7 @@ namespace HoloRepository.AddCase
                 {
                     // need to add error handling for existing donor id
                     MessageBox.Show("duplicate primary key");
-                    
+
                 }
                 else
                 {
@@ -97,13 +92,6 @@ namespace HoloRepository.AddCase
                 await conn.OpenAsync();
 
                 string sql;
-                var parameters = new Dictionary<string, object>
-                {
-                    { "@donorId", donorId },
-                    { "@age", age },
-                    { "@dod", dod },
-                    { "@causeOfDeath", causeOfDeath }
-                };
                 if (originalId == donorId)
                 {
                     sql = "UPDATE donor SET age = @age, date_of_death = @dod, cause_of_death = @causeOfDeath, timestamp = @time WHERE donor_id = @donorId";
@@ -183,7 +171,8 @@ namespace HoloRepository.AddCase
                     idErrorLabel.Text = "A donor with the provided ID already exists in the system.";
                     return false;
                 }
-            } else if (originalId != donorId)
+            }
+            else if (originalId != donorId)
             {
                 if (RecordExists())
                 {
@@ -339,7 +328,8 @@ namespace HoloRepository.AddCase
             if (!string.IsNullOrEmpty(donorIdTxt.Text))
             {
                 IsIdValid();
-            } else
+            }
+            else
             {
                 idErrorLabel.Text = "";
             }
@@ -350,7 +340,8 @@ namespace HoloRepository.AddCase
             if (!string.IsNullOrEmpty(ageTxt.Text))
             {
                 IsAgeValid();
-            } else
+            }
+            else
             {
                 ageErrorLabel.Text = "";
             }
@@ -361,7 +352,8 @@ namespace HoloRepository.AddCase
             if (!string.IsNullOrEmpty(causeOfDeathTxt.Text))
             {
                 IsCauseValid();
-            } else
+            }
+            else
             {
                 causeErrorLabel.Text = "";
             }
@@ -373,7 +365,7 @@ namespace HoloRepository.AddCase
             string query = $"SELECT COUNT(*) FROM donor WHERE donor_id = {donorId}";
 
             using (var conn = new NpgsqlConnection(dbConnection.ConnectionString))
-                using (var cmd = new NpgsqlCommand(query, conn))
+            using (var cmd = new NpgsqlCommand(query, conn))
             {
                 conn.Open();
 

@@ -290,7 +290,7 @@ namespace HoloRepository
                 {
                     parentForm.Controls.Clear();
 
-                    var addCaseControl = new AddCaseControl(donorId, organId);
+                    var addCaseControl = new AddOrganControl(donorId, organId);
 
                     parentForm.Controls.Add(addCaseControl);
 

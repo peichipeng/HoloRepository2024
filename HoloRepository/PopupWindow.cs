@@ -50,9 +50,9 @@ namespace HoloRepository
             PopupTitle.Anchor = AnchorStyles.None;
             PopupTitle.AutoSize = true;
             PopupTitle.Font = new Font("Poppins", 20F, FontStyle.Bold, GraphicsUnit.Point);
-            PopupTitle.Location = new Point(87, 140);
+            PopupTitle.Location = new Point(61, 137);
             PopupTitle.Name = "PopupTitle";
-            PopupTitle.Size = new Size(376, 32);
+            PopupTitle.Size = new Size(701, 70);
             PopupTitle.TabIndex = 0;
             PopupTitle.Text = "Are you sure you want to cancel?";
             // 
@@ -61,7 +61,7 @@ namespace HoloRepository
             PopupYesButton.BackColor = Color.FromArgb(224, 224, 224);
             PopupYesButton.BorderRadius = 20;
             PopupYesButton.Font = new Font("Poppins", 18F, FontStyle.Regular, GraphicsUnit.Point);
-            PopupYesButton.Location = new Point(271, 262);
+            PopupYesButton.Location = new Point(201, 262);
             PopupYesButton.Name = "PopupYesButton";
             PopupYesButton.Size = new Size(125, 62);
             PopupYesButton.TabIndex = 1;
@@ -75,7 +75,7 @@ namespace HoloRepository
             PopupNoButton.BorderRadius = 20;
             PopupNoButton.Font = new Font("Poppins", 18F, FontStyle.Regular, GraphicsUnit.Point);
             PopupNoButton.ForeColor = Color.White;
-            PopupNoButton.Location = new Point(478, 262);
+            PopupNoButton.Location = new Point(502, 262);
             PopupNoButton.Name = "PopupNoButton";
             PopupNoButton.Size = new Size(125, 62);
             PopupNoButton.TabIndex = 2;
@@ -86,7 +86,7 @@ namespace HoloRepository
             // PopupWindow
             // 
             BackColor = Color.White;
-            ClientSize = new Size(500, 300);
+            ClientSize = new Size(800, 466);
             ControlBox = false;
             Controls.Add(PopupNoButton);
             Controls.Add(PopupYesButton);

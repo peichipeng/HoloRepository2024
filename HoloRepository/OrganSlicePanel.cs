@@ -2,6 +2,9 @@
 using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
+using FellowOakDicom.Imaging;
+using FellowOakDicom;
+using SixLabors.ImageSharp;
 
 namespace HoloRepository
 {
@@ -22,12 +25,12 @@ namespace HoloRepository
         public string OrganSlicePath { get; set; }
         public int OrderIndex { get; set; }
 
-        public Image OrganSliceImage
+        public System.Drawing.Image OrganSliceImage
         {
             get { return OrganSliceBox.Image; }
         }
 
-        public Image DicomImage
+        public System.Drawing.Image DicomImage
         {
             get { return CTBox.Image; }
         }
@@ -69,32 +72,32 @@ namespace HoloRepository
             // 
             // OrganSliceBox
             // 
-            OrganSliceBox.Location = new Point(12, 71);
+            OrganSliceBox.Location = new System.Drawing.Point(12, 71);
             OrganSliceBox.Name = "OrganSliceBox";
-            OrganSliceBox.Size = new Size(772, 476);
+            OrganSliceBox.Size = new System.Drawing.Size(772, 476);
             OrganSliceBox.SizeMode = PictureBoxSizeMode.Zoom;
             OrganSliceBox.TabIndex = 0;
             OrganSliceBox.TabStop = false;
             // 
             // lineControl1
             // 
-            lineControl1.LineColor = Color.DarkGray;
+            lineControl1.LineColor = System.Drawing.Color.DarkGray;
             lineControl1.LineWidth = 1;
-            lineControl1.Location = new Point(3, 0);
+            lineControl1.Location = new System.Drawing.Point(3, 0);
             lineControl1.Name = "lineControl1";
-            lineControl1.Size = new Size(1237, 21);
+            lineControl1.Size = new System.Drawing.Size(1237, 21);
             lineControl1.TabIndex = 2;
             lineControl1.Text = "lineControl1";
             // 
             // textBox
             // 
-            textBox.Location = new Point(813, 112);
+            textBox.Location = new System.Drawing.Point(813, 112);
             textBox.Multiline = true;
             textBox.Name = "textBox";
             textBox.ReadOnly = true;
-            textBox.Size = new Size(427, 127);
-            textBox.StateActive.Border.Color1 = Color.Silver;
-            textBox.StateActive.Border.Color2 = Color.Silver;
+            textBox.Size = new System.Drawing.Size(427, 127);
+            textBox.StateActive.Border.Color1 = System.Drawing.Color.Silver;
+            textBox.StateActive.Border.Color2 = System.Drawing.Color.Silver;
             textBox.StateActive.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right;
             textBox.StateActive.Border.GraphicsHint = ComponentFactory.Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             textBox.StateActive.Border.Rounding = 5;
@@ -105,9 +108,9 @@ namespace HoloRepository
             // 
             AdditionalInfoLabel.AutoSize = true;
             AdditionalInfoLabel.Font = new Font("Poppins SemiBold", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            AdditionalInfoLabel.Location = new Point(813, 70);
+            AdditionalInfoLabel.Location = new System.Drawing.Point(813, 70);
             AdditionalInfoLabel.Name = "AdditionalInfoLabel";
-            AdditionalInfoLabel.Size = new Size(273, 39);
+            AdditionalInfoLabel.Size = new System.Drawing.Size(273, 39);
             AdditionalInfoLabel.TabIndex = 4;
             AdditionalInfoLabel.Text = "Additional Information";
             // 
@@ -115,17 +118,17 @@ namespace HoloRepository
             // 
             MatchedSliceLabel.AutoSize = true;
             MatchedSliceLabel.Font = new Font("Poppins SemiBold", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            MatchedSliceLabel.Location = new Point(813, 247);
+            MatchedSliceLabel.Location = new System.Drawing.Point(813, 247);
             MatchedSliceLabel.Name = "MatchedSliceLabel";
-            MatchedSliceLabel.Size = new Size(153, 39);
+            MatchedSliceLabel.Size = new System.Drawing.Size(153, 39);
             MatchedSliceLabel.TabIndex = 5;
             MatchedSliceLabel.Text = "Matched CT";
             // 
             // CTBox
             // 
-            CTBox.Location = new Point(813, 290);
+            CTBox.Location = new System.Drawing.Point(813, 290);
             CTBox.Name = "CTBox";
-            CTBox.Size = new Size(427, 257);
+            CTBox.Size = new System.Drawing.Size(427, 257);
             CTBox.SizeMode = PictureBoxSizeMode.Zoom;
             CTBox.TabIndex = 6;
             CTBox.TabStop = false;
@@ -134,21 +137,21 @@ namespace HoloRepository
             // 
             OrganSliceLabel.AutoSize = true;
             OrganSliceLabel.Font = new Font("Poppins", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            OrganSliceLabel.Location = new Point(12, 23);
+            OrganSliceLabel.Location = new System.Drawing.Point(12, 23);
             OrganSliceLabel.Name = "OrganSliceLabel";
-            OrganSliceLabel.Size = new Size(440, 39);
+            OrganSliceLabel.Size = new System.Drawing.Size(440, 39);
             OrganSliceLabel.TabIndex = 7;
             OrganSliceLabel.Text = "123456789-kidney-0001-20240614.png";
             // 
             // EditButton
             // 
             EditButton.Anchor = AnchorStyles.Top;
-            EditButton.BackColor = Color.Transparent;
-            EditButton.Image = (Image)resources.GetObject("EditButton.Image");
-            EditButton.Location = new Point(1158, 23);
+            EditButton.BackColor = System.Drawing.Color.Transparent;
+            EditButton.Image = (System.Drawing.Image)resources.GetObject("EditButton.Image");
+            EditButton.Location = new System.Drawing.Point(1158, 23);
             EditButton.Margin = new Padding(5);
             EditButton.Name = "EditButton";
-            EditButton.Size = new Size(30, 30);
+            EditButton.Size = new System.Drawing.Size(30, 30);
             EditButton.SizeMode = PictureBoxSizeMode.Zoom;
             EditButton.TabIndex = 76;
             EditButton.TabStop = false;
@@ -157,12 +160,12 @@ namespace HoloRepository
             // BinButton
             // 
             BinButton.Anchor = AnchorStyles.Top;
-            BinButton.BackColor = Color.Transparent;
-            BinButton.Image = (Image)resources.GetObject("BinButton.Image");
-            BinButton.Location = new Point(1210, 23);
+            BinButton.BackColor = System.Drawing.Color.Transparent;
+            BinButton.Image = (System.Drawing.Image)resources.GetObject("BinButton.Image");
+            BinButton.Location = new System.Drawing.Point(1210, 23);
             BinButton.Margin = new Padding(5);
             BinButton.Name = "BinButton";
-            BinButton.Size = new Size(30, 30);
+            BinButton.Size = new System.Drawing.Size(30, 30);
             BinButton.SizeMode = PictureBoxSizeMode.Zoom;
             BinButton.TabIndex = 77;
             BinButton.TabStop = false;
@@ -170,7 +173,7 @@ namespace HoloRepository
             // 
             // OrganSlicePanel
             // 
-            BackColor = Color.White;
+            BackColor = System.Drawing.Color.White;
             Controls.Add(BinButton);
             Controls.Add(EditButton);
             Controls.Add(OrganSliceLabel);
@@ -181,7 +184,7 @@ namespace HoloRepository
             Controls.Add(lineControl1);
             Controls.Add(OrganSliceBox);
             Name = "OrganSlicePanel";
-            Size = new Size(1240, 560);
+            Size = new System.Drawing.Size(1240, 560);
             ((System.ComponentModel.ISupportInitialize)OrganSliceBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)CTBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)EditButton).EndInit();
@@ -196,18 +199,34 @@ namespace HoloRepository
             this.Margin = new Padding(10);
         }
 
-        public void SetOrganSlice(Image image, string imagePath)
+        public void SetOrganSlice(string imagePath)
         {
-            if (OrganSliceBox.Image != null)
+            try
             {
-                OrganSliceBox.Image.Dispose();
-            }
+                // Optionally set the path for future reference
+                OrganSlicePath = imagePath;
 
-            OrganSliceBox.Image = image;
-            OrganSlicePath = imagePath;
+                using var sliceStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using var memoryStream = new MemoryStream();
+                sliceStream.CopyTo(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                OrganSliceBox.Image = System.Drawing.Image.FromStream(memoryStream);
+            }
+            catch (ArgumentException argEx)
+            {
+                MessageBox.Show($"Argument exception while setting image: {argEx.Message}");
+            }
+            catch (IOException ioEx)
+            {
+                MessageBox.Show($"I/O exception while setting image: {ioEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while setting the image: {ex.Message}");
+            }
         }
 
-        public void SetCTImage(Image image)
+        public void SetCTImage(System.Drawing.Image image)
         {
             if (CTBox.Image != null)
             {
@@ -248,7 +267,7 @@ namespace HoloRepository
             {
                 // Set DeleteWindow to the center of parent window
                 deleteWindow.StartPosition = FormStartPosition.Manual;
-                deleteWindow.Location = new Point(
+                deleteWindow.Location = new System.Drawing.Point(
                     parentForm.Left + (parentForm.Width - deleteWindow.Width) / 2,
                     parentForm.Top + (parentForm.Height - deleteWindow.Height) / 2);
 
@@ -265,7 +284,7 @@ namespace HoloRepository
                     {
                         if (this.Parent != null)
                         {
-                            AddCaseControl addCaseControl = FindParentControlOfType<AddCaseControl>();
+                            AddOrganControl addCaseControl = FindParentControlOfType<AddOrganControl>();
                             if (addCaseControl != null)
                             {
                                 // Remove the current OrganSlicePanel
@@ -285,7 +304,7 @@ namespace HoloRepository
             }
         }
 
-        private void UpdateOrganSliceLabels(AddCaseControl addCaseControl)
+        private void UpdateOrganSliceLabels(AddOrganControl addCaseControl)
         {
             for (int i = 0; i < addCaseControl.organSlicePanels.Count; i++)
             {
@@ -296,9 +315,9 @@ namespace HoloRepository
             }
         }
 
-        private void EditButton_Click(object sender, EventArgs e)
+        private async void EditButton_Click(object sender, EventArgs e)
         {
-            AddCaseControl addCaseControl = FindParentControlOfType<AddCaseControl>();
+            AddOrganControl addCaseControl = FindParentControlOfType<AddOrganControl>();
             if (addCaseControl == null)
             {
                 return;
@@ -309,16 +328,34 @@ namespace HoloRepository
                 changeOrganSlice.StartPosition = FormStartPosition.CenterParent;
 
                 List<string> imagePaths = addCaseControl.GetDICOMPaths();
-                List<Image> images = new();
+                List<System.Drawing.Image> images = new();
                 foreach (string path in imagePaths)
                 {
-                    images.Add(new Bitmap(path));
+                    try
+                    {
+                        var file = await DicomFile.OpenAsync(path);
+                        var dicomImage = new DicomImage(file.Dataset);
+                        using (var image = dicomImage.RenderImage().AsSharpImage())
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                image.SaveAsBmp(memoryStream);
+                                memoryStream.Seek(0, SeekOrigin.Begin);
+                                var bitmap = new Bitmap(memoryStream);
+                                images.Add(bitmap);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Cannot handle the DICOM file: {ex.Message}");
+                    }
                 }
                 changeOrganSlice.SetImageList(images, SelectedIndex);
 
                 changeOrganSlice.HideOverlayPanel(1);
 
-                changeOrganSlice.SetOrganSlice(OrganSliceBox.Image, OrganSlicePath);
+                changeOrganSlice.SetOrganSlice(OrganSlicePath);
 
                 changeOrganSlice.SetDescription(textBox.Text);
 
@@ -330,7 +367,7 @@ namespace HoloRepository
                 changeOrganSlice.OrganSliceUpdated += (organSliceImage, selectedImage, description, selectedIndex) =>
                 {
                     SetCTImage(selectedImage);
-                    SetOrganSlice(organSliceImage, changeOrganSlice.OrganSliceImagePath);
+                    SetOrganSlice(changeOrganSlice.OrganSliceImagePath);
                     SetDescription(description);
                     SelectedIndex = selectedIndex;
                 };

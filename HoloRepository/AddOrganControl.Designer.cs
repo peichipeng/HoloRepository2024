@@ -1,6 +1,6 @@
 ﻿namespace HoloRepository
 {
-    partial class AddCaseControl
+    partial class AddOrganControl
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddCaseControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddOrganControl));
             AddOrganTitle = new Label();
             DICOMTitle = new Label();
             ImportDICOMButton = new RoundedButton();
@@ -426,6 +426,7 @@
             btnCancel.TabIndex = 61;
             btnCancel.Text = "&Cancel";
             btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // fileListBox
             // 
@@ -463,13 +464,13 @@
             OrganSlicesTitle.TabIndex = 7;
             OrganSlicesTitle.Text = "Organ Slice Image Files";
             // 
-            // AddCaseControl
+            // AddOrganControl
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
             Margin = new Padding(5, 4, 5, 4);
-            Name = "AddCaseControl";
+            Name = "AddOrganControl";
             Size = new Size(1425, 957);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

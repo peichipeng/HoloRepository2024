@@ -151,7 +151,7 @@ namespace HoloRepository
 
                 if (mainForm != null)
                 {
-                    var addCaseControl = new AddCaseControl(donorId, organId);
+                    var addCaseControl = new AddOrganControl(donorId, organId);
 
                     mainForm.LoadControl(addCaseControl);
 

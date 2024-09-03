@@ -32,13 +32,10 @@ namespace HoloRepository
         private int selectedPage = 1;
         private int pageSize = 10;
         private Color selectedPageButtonColor = SystemColors.MenuHighlight;
-        private DatabaseConnection dbConnection;
 
         public ViewCasesControl()
         {
             InitializeComponent();
-
-            dbConnection = new DatabaseConnection();
 
             DataGridViewTextBoxColumn options = new DataGridViewTextBoxColumn();
             options.Name = "options";
@@ -97,11 +94,11 @@ namespace HoloRepository
 
         private async void LoadCaseData()
         {
-            var db = new DatabaseConnection(); // Create an instance of the DatabaseConnection class
+            var dataSource = DataRetrieval.CreateDataSource();
 
             string queryCases = "SELECT * FROM donor ORDER BY timestamp DESC";
 
-            try
+            await using (var caseReader = await DataRetrieval.ExecuteQuery(queryCases, dataSource))
             {
                 while (await caseReader.ReadAsync())
                 {
@@ -114,55 +111,49 @@ namespace HoloRepository
 
                     string organs = "";
 
-                        // Query to retrieve organs for the current donor
-                        string queryOrgans = "SELECT organ_id, organ_name_id FROM organ WHERE donor_id = @donorId ORDER BY organ_id DESC";
-                        var organParams = new Dictionary<string, object> { { "@donorId", donorId } };
+                    string queryOrgans = $"SELECT organ_id, organ_name_id FROM organ WHERE donor_id = {donorId} ORDER BY organ_id DESC";
 
-                        List<string> organList = new List<string>();
+                    List<string> organList = new List<string>();
 
-                        // Execute the query to retrieve organs
-                        using (var organReader = db.ExecuteReader(queryOrgans, organParams))
+                    await using (var organReader = await DataRetrieval.ExecuteQuery(queryOrgans, dataSource))
+                    {
+                        while (await organReader.ReadAsync())
                         {
-                            while (await organReader.ReadAsync())
+                            int organId = organReader.GetFieldValue<int>(0);
+
+                            int organNameId;
+                            string organName = "";
+
+                            // Check if the organNameId is null
+                            if (!organReader.IsDBNull(1))
                             {
-                                int organId = organReader.GetFieldValue<int>(0);
+                                organNameId = organReader.GetFieldValue<int>(1);
 
-                                int organNameId;
-                                string organName = "";
+                                // Retrieve the organ name
+                                string queryOrganName = $"SELECT organ_name FROM organname WHERE organ_name_id = {organNameId}";
 
-                                // Check if the organNameId is not null
-                                if (!organReader.IsDBNull(1))
+                                await using (var nameReader = await DataRetrieval.ExecuteQuery(queryOrganName, dataSource))
                                 {
-                                    organNameId = organReader.GetFieldValue<int>(1);
-
-                                    // Retrieve the organ name
-                                    string queryOrganName = "SELECT organ_name FROM organname WHERE organ_name_id = @organNameId";
-                                    var organNameParams = new Dictionary<string, object> { { "@organNameId", organNameId } };
-
-                                    using (var nameReader = db.ExecuteReader(queryOrganName, organNameParams))
+                                    while (await nameReader.ReadAsync())
                                     {
-                                        while (await nameReader.ReadAsync())
-                                        {
-                                            organName = nameReader.GetFieldValue<string>(0);
-                                            organList.Add(organName);
-                                        }
+                                        organName = nameReader.GetFieldValue<string>(0);
+                                        organList.Add(organName);
                                     }
                                 }
                             }
                         }
-
-                        // Construct the organ names string
-                        for (int i = 0; i < organList.Count; i++)
+                    }
+                    for (int i = 0; i < organList.Count; i++)
+                    {
+                        if (i != organList.Count - 1)
                         {
-                            if (i != organList.Count - 1)
-                            {
-                                organs += organList[i] + " / ";
-                            }
-                            else
-                            {
-                                organs += organList[i];
-                            }
+                            organs += organList[i] + " / ";
                         }
+                        else
+                        {
+                            organs += organList[i];
+                        }
+                    }
 
                     cases.Add(new CaseData
                     {
@@ -179,7 +170,6 @@ namespace HoloRepository
             filteredCasesAll = cases;
             ShowLast7DaysData();
         }
-
 
         private void LoadCaseTable()
         {

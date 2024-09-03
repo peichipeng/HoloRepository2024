@@ -122,6 +122,7 @@
             OrganSlicePicture.Location = new Point(3, 3);
             OrganSlicePicture.Name = "OrganSlicePicture";
             OrganSlicePicture.Size = new Size(475, 371);
+            OrganSlicePicture.SizeMode = PictureBoxSizeMode.Zoom;
             OrganSlicePicture.TabIndex = 8;
             OrganSlicePicture.TabStop = false;
             OrganSlicePicture.Click += OrganSlicePicture_Click;

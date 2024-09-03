@@ -193,11 +193,22 @@ namespace HoloRepository
             }
         }
 
-        public void SetOrganSlice(Image image, string imagePath)
+        public void SetOrganSlice(string imagePath)
         {
-            OrganSlicePicture.SizeMode = PictureBoxSizeMode.Zoom;
-            OrganSlicePicture.Image = image;
-            OrganSliceImagePath = imagePath;
+            try
+            {
+                OrganSliceImagePath = imagePath;
+
+                using var sliceStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using var memoryStream = new MemoryStream();
+                sliceStream.CopyTo(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                OrganSlicePicture.Image = System.Drawing.Image.FromStream(memoryStream);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading image: {ex.Message}");
+            }
         }
 
         public void SetDescription(string description)
@@ -226,50 +237,21 @@ namespace HoloRepository
 
             try
             {
-                // Set the OrganSliceImage and other properties
                 OrganSliceImage = OrganSlicePicture.Image;
                 SelectedImage = DICOMFilePicture.Image;
                 Description = DescriptionBox.Text;
                 SelectedIndex = imageList.IndexOf(DICOMFilePicture.Image);
 
-                // Define the new directory path
                 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string dataDirectory = @"data"; // Relative path for storing images
-                string donorDirectory = Path.Combine(baseDirectory, dataDirectory, donorId.ToString());
+                string sliceImageDirectory = Path.Combine(baseDirectory, "data", "SliceImage");
+                Directory.CreateDirectory(sliceImageDirectory);
 
-                // Ensure the directories exist
-                if (!Directory.Exists(donorDirectory))
-                {
-                    Directory.CreateDirectory(donorDirectory);
-                }
-
-                string organDirectory = Path.Combine(donorDirectory, organName);
-                if (!Directory.Exists(organDirectory))
-                {
-                    Directory.CreateDirectory(organDirectory);
-                }
-
-                if (!string.IsNullOrEmpty(organSide))
-                {
-                    organDirectory = Path.Combine(organDirectory, organSide);
-                    if (!Directory.Exists(organDirectory))
-                    {
-                        Directory.CreateDirectory(organDirectory);
-                    }
-                }
-
-                // Define the new file name
                 string newFileName = $"{donorId}-{organName}-{sliceIndex:D4}-{DateTime.Now:yyyyMMdd}.jpg";
-                string destinationFilePath = Path.Combine(organDirectory, newFileName);
+                string destinationFilePath = Path.Combine(sliceImageDirectory, newFileName);
 
-                // Copy the image to the new location
-                if (!string.IsNullOrEmpty(OrganSliceImagePath))
-                {
-                    File.Copy(OrganSliceImagePath, destinationFilePath, true); // true to overwrite if exists
+                SaveImageWithTemporaryFile(OrganSliceImagePath, destinationFilePath);
 
-                    string relativePath = Path.GetRelativePath(baseDirectory, destinationFilePath);
-                    OrganSliceImagePath = relativePath; // Update to relative path
-                }
+                OrganSliceImagePath = Path.GetRelativePath(baseDirectory, destinationFilePath);
 
                 OrganSliceUpdated?.Invoke(OrganSliceImage, SelectedImage, Description, SelectedIndex);
 
@@ -279,6 +261,42 @@ namespace HoloRepository
             catch (Exception ex)
             {
                 MessageBox.Show($"Error when saving the picture: {ex.Message}");
+            }
+        }
+
+        private void SaveImageWithTemporaryFile(string sourcePath, string destinationPath)
+        {
+            // Use using statements to ensure resources are properly disposed
+            using (var bitmap = new Bitmap(sourcePath))
+            {
+                // Save the bitmap as a temporary file to release any lock
+                string tempFilePath = Path.Combine(Path.GetTempPath(), Path.GetFileName(sourcePath));
+                bitmap.Save(tempFilePath);
+
+                // Ensure temporary file is not being used by another process before copying
+                while (IsFileLocked(tempFilePath))
+                {
+                    System.Threading.Thread.Sleep(100); // Wait for 100 milliseconds before retrying
+                }
+
+                File.Copy(tempFilePath, destinationPath, true);
+                File.Delete(tempFilePath);
+            }
+        }
+
+        private bool IsFileLocked(string filePath)
+        {
+            try
+            {
+                using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                {
+                    stream.Close();
+                }
+                return false;
+            }
+            catch (IOException)
+            {
+                return true;
             }
         }
 

@@ -17,8 +17,9 @@ using SixLabors.ImageSharp;
 
 namespace HoloRepository
 {
-    public partial class AddCaseControl : UserControl
+    public partial class AddOrganControl : UserControl
     {
+        public event Action OnCancelConfirmed;
         private List<string> DICOMPaths = new List<string>();
         public List<OrganSlicePanel> organSlicePanels = new List<OrganSlicePanel>();
         private int selectedIndex;
@@ -34,7 +35,7 @@ namespace HoloRepository
 
         private int? organId;
 
-        public AddCaseControl(int donorId, int? organId = null)
+        public AddOrganControl(int donorId, int? organId = null)
         {
             InitializeComponent();
             InitializeCustomComponents();
@@ -281,7 +282,7 @@ namespace HoloRepository
             };
 
             // Set image and description
-            organSlicePanel.SetOrganSlice(OrganSliceImage, imagePath);
+            organSlicePanel.SetOrganSlice(imagePath);
             organSlicePanel.SetCTImage(image);
             organSlicePanel.SetDescription(description);
             organSlicePanel.SetOrganSliceLabel($"{donorId}-{organNameWithSide}-{currentIndex:D4}-{DateTime.Now:yyyyMMdd}");
@@ -291,15 +292,6 @@ namespace HoloRepository
             organSlicesPanel.Controls.Add(organSlicePanel);
             organSlicesPanel.Controls.SetChildIndex(organSlicePanel, organSlicesPanel.Controls.Count - fixedControlsCount - 1);
             organSlicePanels.Add(organSlicePanel);
-        }
-
-        private void CancelAddOrganButton_Click(object sender, EventArgs e)
-        {
-            Form parentForm = this.ParentForm;
-            if (parentForm != null)
-            {
-                parentForm.Close();
-            }
         }
 
         private void OrganNameTextBox_GotFocus(object sender, EventArgs e)
@@ -489,7 +481,6 @@ namespace HoloRepository
             }
         }
 
-
         private int GetOrInsertOrganId(int organNameId, string organSide)
         {
             if (!organId.HasValue)
@@ -518,8 +509,6 @@ namespace HoloRepository
             }
             return organId.Value;
         }
-
-
 
         private void Show3DModelFormWindow(Action<int> onConstruct)
         {
@@ -805,7 +794,16 @@ namespace HoloRepository
                                                 }
 
                                                 // Load the slice image
-                                                System.Drawing.Image sliceImage = System.Drawing.Image.FromFile(sliceImagePath);
+                                                System.Drawing.Image sliceImage;
+                                                using (var sliceStream = new FileStream(sliceImagePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                                                {
+                                                    using (var memoryStream = new MemoryStream())
+                                                    {
+                                                        sliceStream.CopyTo(memoryStream);
+                                                        memoryStream.Seek(0, SeekOrigin.Begin);
+                                                        sliceImage = System.Drawing.Image.FromStream(memoryStream);
+                                                    }
+                                                }
 
                                                 selectedIndex = DICOMPaths.IndexOf(dicomPath);
 
@@ -896,5 +894,15 @@ namespace HoloRepository
             }
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            using (PopupWindow popup = new PopupWindow("Are you sure you want to cancel?", this.FindForm()))
+            {
+                if (popup.ShowDialog() == DialogResult.Yes)
+                {
+                    OnCancelConfirmed?.Invoke();
+                }
+            }
+        }
     }
 }

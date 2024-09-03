@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static HoloRepository.AddCaseControl;
+using static HoloRepository.AddOrganControl;
 
 namespace HoloRepository.AddCase
 {
@@ -92,9 +92,15 @@ namespace HoloRepository.AddCase
                     ShowFooterBtns();
                 }
             }
-            else if (userControl is AddCaseControl addCaseControl)
+            else if (userControl is AddOrganControl addCaseControl)
             {
                 // Back event trigger
+                addCaseControl.OnCancelConfirmed += () =>
+                {
+                    var caseView = new CaseView { donorId = addCaseControl.GetDonorID() }; // Pass necessary parameters
+                    LoadControl(caseView);
+                };
+
                 addCaseControl.OnSaveCompleted = donorId =>
                 {
                     var caseView = new CaseView { donorId = donorId };
@@ -147,7 +153,7 @@ namespace HoloRepository.AddCase
                     }
                 }
             }
-            else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
+            else if (addCaseContainer.Controls[0] is AddOrganControl organPage)
             {
                 // Add the logic here to determine whether the user is on the add or update organ page
                 // and add functions to upsert the organ
@@ -207,7 +213,7 @@ namespace HoloRepository.AddCase
                             mainForm.LoadControl(new ViewCasesControl());
                         }
                     }
-                    else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
+                    else if (addCaseContainer.Controls[0] is AddOrganControl organPage)
                     {
 
                     }
@@ -222,6 +228,11 @@ namespace HoloRepository.AddCase
                 control = control.Parent;
             }
             return control as MainForm;
+        }
+
+        private void AddCaseFramework_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

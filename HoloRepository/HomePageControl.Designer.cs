@@ -33,9 +33,6 @@
             viewCasesBtn = new RoundedButton();
             addCaseBtn = new RoundedButton();
             Title = new Label();
-            btnUpdateOrgan = new Button();
-            button1 = new Button();
-            button2 = new Button();
             voiceControl1 = new VoiceControl();
             SuspendLayout();
             // 
@@ -115,38 +112,6 @@
             Title.TabIndex = 77;
             Title.Text = "HoloRepository";
             // 
-            // btnUpdateOrgan
-            // 
-            btnUpdateOrgan.Anchor = AnchorStyles.None;
-            btnUpdateOrgan.Font = new Font("Poppins", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnUpdateOrgan.Location = new Point(178, 416);
-            btnUpdateOrgan.Name = "btnUpdateOrgan";
-            btnUpdateOrgan.Size = new Size(139, 64);
-            btnUpdateOrgan.TabIndex = 83;
-            btnUpdateOrgan.Text = "Update";
-            btnUpdateOrgan.UseVisualStyleBackColor = true;
-            btnUpdateOrgan.Click += btnUpdateOrgan_Click;
-            // 
-            // button1
-            // 
-            button1.Anchor = AnchorStyles.None;
-            button1.Location = new Point(178, 513);
-            button1.Name = "button1";
-            button1.Size = new Size(122, 49);
-            button1.TabIndex = 84;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(178, 613);
-            button2.Name = "button2";
-            button2.Size = new Size(122, 34);
-            button2.TabIndex = 85;
-            button2.Text = "button2";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
-            // 
             // voiceControl1
             // 
             voiceControl1.BackColor = Color.Transparent;
@@ -161,9 +126,6 @@
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
             Controls.Add(voiceControl1);
-            Controls.Add(button2);
-            Controls.Add(button1);
-            Controls.Add(btnUpdateOrgan);
             Controls.Add(userGuideBtn);
             Controls.Add(organArchiveBtn);
             Controls.Add(viewCasesBtn);
@@ -185,9 +147,6 @@
         private RoundedButton addCaseBtn;
         private Button tempBtn;
         private Label Title;
-        private Button btnUpdateOrgan;
-        private Button button1;
-        private Button button2;
         private VoiceControl voiceControl1;
     }
 }

@@ -67,21 +67,6 @@ namespace HoloRepository
             AddControl(new UserGuideHome());
         }
 
-        private void tempBtn_Click(object sender, EventArgs e)
-        {
-            LoadControl(new AddCaseFramework("home", "addCase"));
-        }
-
-        private void btnUpdateOrgan_Click(object sender, EventArgs e)
-        {
-            LoadControl(new AddCaseControl(12, 51));
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            LoadControl(new MainInterFaceControl(this, 12345, 32));
-        }
-
         private void HomePageControl_Load(object sender, EventArgs e)
         {
 

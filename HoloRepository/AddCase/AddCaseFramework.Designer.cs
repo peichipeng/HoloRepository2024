@@ -41,7 +41,7 @@
             panel1.Controls.Add(cancelBtn);
             panel1.Dock = DockStyle.Bottom;
             panel1.Location = new Point(0, 453);
-            panel1.Margin = new Padding(5, 5, 5, 5);
+            panel1.Margin = new Padding(5);
             panel1.Name = "panel1";
             panel1.Size = new Size(1257, 144);
             panel1.TabIndex = 0;
@@ -82,7 +82,7 @@
             // 
             addCaseContainer.Dock = DockStyle.Fill;
             addCaseContainer.Location = new Point(0, 0);
-            addCaseContainer.Margin = new Padding(5, 5, 5, 5);
+            addCaseContainer.Margin = new Padding(5);
             addCaseContainer.Name = "addCaseContainer";
             addCaseContainer.Size = new Size(1257, 453);
             addCaseContainer.TabIndex = 1;
@@ -93,9 +93,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(addCaseContainer);
             Controls.Add(panel1);
-            Margin = new Padding(5, 5, 5, 5);
+            Margin = new Padding(5);
             Name = "AddCaseFramework";
             Size = new Size(1257, 597);
+            Load += AddCaseFramework_Load;
             panel1.ResumeLayout(false);
             ResumeLayout(false);
         }

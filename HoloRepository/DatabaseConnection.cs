@@ -12,7 +12,7 @@ public class DatabaseConnection
 
     public DatabaseConnection()
     {
-        this.connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=HoloRepository";
+        this.connectionString = "Host=localhost;Port=5432;Username=postgres;Password=123456;Database=holorepository1";
     }
 
     public NpgsqlConnection GetConnection()

@@ -63,12 +63,18 @@ namespace HoloRepository.AddCase
                 if (organSlices.Count > 0) // need to add some text if there are no images available
                 {
                     placeholderLabel.Visible = false;
-                    // Load the image from file path
-                    Image image = Image.FromFile(organSlices[0]);
 
-                    // Assign the loaded image to PictureBox
-                    sliceImages.Image = image;
-                    imageShown = 0;
+                    // Load the image from file path
+                    using (var fileStream = new FileStream(organSlices[0], FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            fileStream.CopyTo(memoryStream);
+                            memoryStream.Seek(0, SeekOrigin.Begin);
+                            sliceImages.Image = Image.FromStream(memoryStream);
+                            imageShown = 0;
+                        }
+                    }
                 }
                 else
                 {
@@ -83,6 +89,7 @@ namespace HoloRepository.AddCase
                 // Optionally handle the exception here
             }
         }
+
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -212,7 +219,7 @@ namespace HoloRepository.AddCase
                             caseFramework.nextBtn.Text = "Update";
 
                             // Pass the donorId to the AddCaseControl if needed
-                            var addCaseControl = new AddCaseControl(donorId, organId); // Assuming AddCaseControl can accept donorId
+                            var addCaseControl = new AddOrganControl(donorId, organId); // Assuming AddCaseControl can accept donorId
                             caseFramework.LoadControl(addCaseControl);
                         }
                         else

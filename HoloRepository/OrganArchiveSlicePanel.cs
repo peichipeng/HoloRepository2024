@@ -163,7 +163,7 @@ namespace HoloRepository
 
         private void EditButton_Click(object sender, EventArgs e)
         {
-            AddCaseControl addCaseControl = new AddCaseControl(donorId, organId);
+            AddOrganControl addCaseControl = new AddOrganControl(donorId, organId);
 
             MainForm mainForm = GetMainForm(this);
 
@@ -173,6 +173,12 @@ namespace HoloRepository
 
                 addCaseControl.OnSaveCompleted = (id) =>
                 {
+                    mainForm.LoadControl(new OrganArchiveControl());
+                };
+
+                addCaseControl.OnCancelConfirmed += () =>
+                {
+                    // Load OrganArchiveControl when cancellation is confirmed
                     mainForm.LoadControl(new OrganArchiveControl());
                 };
 

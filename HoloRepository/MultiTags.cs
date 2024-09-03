@@ -169,21 +169,16 @@ namespace HoloRepository
             {
                 string inputTag = textBox.Text.Trim();
 
-                // 检查输入是否为空，或是否已经存在于选择的标签中
                 if (!string.IsNullOrEmpty(inputTag) && !data.Contains(inputTag))
                 {
-                    // 添加新标签到数据库
                     AddTagToDatabase(inputTag);
-                    // 将新标签添加到UI中
                     AddTag(inputTag);
 
-                    // 清空输入框
                     textBox.Clear();
-                    // 隐藏建议列表
+
                     listBox.Visible = false;
                 }
 
-                // 阻止回车键的默认行为
                 e.SuppressKeyPress = true;
             }
         }
