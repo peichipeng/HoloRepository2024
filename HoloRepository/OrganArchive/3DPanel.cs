@@ -1,16 +1,6 @@
-﻿using HoloRepository.AddCase;
-using HoloRepository.ContextMenu;
+﻿using HoloRepository.ContextMenu;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace HoloRepository
 {
@@ -230,7 +220,7 @@ namespace HoloRepository
 
                     try
                     {
-                        // 查询 organ_side 信息
+                        // Seek for organ_side
                         string organSideQuery = "SELECT organ_side FROM organ WHERE organ_id = @organId";
                         string organSide = string.Empty;
 

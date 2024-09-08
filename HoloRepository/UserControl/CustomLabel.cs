@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-
-namespace HoloRepository
+﻿namespace HoloRepository
 {
     public class CustomLabel : Control
     {

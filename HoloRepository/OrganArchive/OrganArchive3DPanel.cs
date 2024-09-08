@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Npgsql;
+﻿using Npgsql;
 
 namespace HoloRepository
 {
@@ -44,14 +35,6 @@ namespace HoloRepository
         private void Add3DPanel(int donorId, int organId)
         {
             _3DPanel threeDPanel = new _3DPanel(organId, donorId, new List<string>());
-            ListPanel.Controls.Add(threeDPanel);
-        }
-
-        private void Add3DP(int donorId, int organId)
-        {
-            // Add image path or any string related to the 3D panel here
-            var imagePaths = new List<string> { "C:/Users/10927/Desktop/iu.png" }; // Replace with actual image path
-            _3DPanel threeDPanel = new _3DPanel(organId, donorId, imagePaths);
             ListPanel.Controls.Add(threeDPanel);
         }
 

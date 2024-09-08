@@ -68,7 +68,7 @@ namespace HoloRepository
                         caseFramework.addCaseContainer.Controls[0] is CasePage casePage &&
                         casePage.pageName == "caseOverview")
                     {
-                        mainContainer.Controls[0].Controls.Clear();
+                        //mainContainer.Controls[0].Controls.Clear();
 
                         modeSwitch.Visible = false;
 

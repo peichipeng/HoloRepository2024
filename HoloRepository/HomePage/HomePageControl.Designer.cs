@@ -33,7 +33,6 @@
             viewCasesBtn = new RoundedButton();
             addCaseBtn = new RoundedButton();
             Title = new Label();
-            voiceControl1 = new VoiceControl();
             SuspendLayout();
             // 
             // userGuideBtn
@@ -112,20 +111,11 @@
             Title.TabIndex = 77;
             Title.Text = "HoloRepository";
             // 
-            // voiceControl1
-            // 
-            voiceControl1.BackColor = Color.Transparent;
-            voiceControl1.Location = new Point(1018, 192);
-            voiceControl1.Name = "voiceControl1";
-            voiceControl1.Size = new Size(140, 65);
-            voiceControl1.TabIndex = 86;
-            // 
             // HomePageControl
             // 
             AutoScaleDimensions = new SizeF(144F, 144F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            Controls.Add(voiceControl1);
             Controls.Add(userGuideBtn);
             Controls.Add(organArchiveBtn);
             Controls.Add(viewCasesBtn);
@@ -147,6 +137,5 @@
         private RoundedButton addCaseBtn;
         private Button tempBtn;
         private Label Title;
-        private VoiceControl voiceControl1;
     }
 }

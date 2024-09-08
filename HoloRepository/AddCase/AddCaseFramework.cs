@@ -93,8 +93,8 @@ namespace HoloRepository.AddCase
                 // Back event trigger
                 addCaseControl.OnCancelConfirmed += () =>
                 {
-                    var caseView = new CaseView { donorId = addCaseControl.GetDonorID() }; // Pass necessary parameters
-                    LoadControl(caseView);
+                    LoadControl(new CasePage("caseOverview", addCaseControl.GetDonorID()));
+                    panel1.Visible = true;
                 };
 
                 addCaseControl.OnSaveCompleted = donorId =>
@@ -110,9 +110,10 @@ namespace HoloRepository.AddCase
                     {
                         LoadControl(new CasePage("caseOverview", donorId));
                     }
+                    panel1.Visible = true;
                 };
 
-                HideFooterBtns();
+                panel1.Visible = false;
             }
             else
             {

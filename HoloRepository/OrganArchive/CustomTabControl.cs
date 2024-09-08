@@ -1,8 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace HoloRepository
+﻿namespace HoloRepository
 {
     public class CustomTabControl : UserControl
     {
@@ -19,7 +15,7 @@ namespace HoloRepository
         public CustomTabControl()
         {
             InitializeComponent();
-            // 设置默认选中项
+            // Set the default option
             Tab3DAvailable_Click(tab3DAvailable, EventArgs.Empty);
         }
 

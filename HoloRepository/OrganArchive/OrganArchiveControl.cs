@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Npgsql;
-
-namespace HoloRepository
+﻿namespace HoloRepository
 {
     public partial class OrganArchiveControl : UserControl
     {
@@ -140,33 +129,51 @@ namespace HoloRepository
         private void OrganArchiveSearchBox_TextChanged(object sender, EventArgs e)
         {
             placeholder.Visible = false;
-            string[] searchTerms = OrganArchiveSearchBox.Text.ToLower().Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            string[] orTerms = OrganArchiveSearchBox.Text.ToLower().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (Control control in OrganDisplayPanel.Controls)
             {
-                if (control is OrganArchive3DPanel organArchive3DPanel)
-                {
-                    bool matchFound = searchTerms.All(term =>
-                        organArchive3DPanel.ListPanel.Controls.OfType<_3DPanel>().Any(subControl =>
-                            subControl.GetDonorId().ToLower().Contains(term) ||
-                            organArchive3DPanel.GetOrganName().ToLower().Contains(term)));
+                bool matchFound = false;
 
-                    organArchive3DPanel.Visible = matchFound;
-                }
-                else if (control is OrganArchiveSlicePanel organArchiveSlicePanel)
+                foreach (string orTerm in orTerms)
                 {
-                    bool matchFound = searchTerms.All(term =>
-                        organArchiveSlicePanel.GetDonorID().ToLower().Contains(term) ||
-                        organArchiveSlicePanel.GetOrganName().ToLower().Contains(term) ||
-                        organArchiveSlicePanel.GetNumOrgans().ToLower().Contains(term) ||
-                        organArchiveSlicePanel.GetDateDeath().ToLower().Contains(term) ||
-                        organArchiveSlicePanel.GetAge().ToLower().Contains(term) ||
-                        organArchiveSlicePanel.GetCauseOD().ToLower().Contains(term));
+                    string[] andTerms = orTerm.Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    organArchiveSlicePanel.Visible = matchFound;
+                    if (control is OrganArchive3DPanel organArchive3DPanel)
+                    {
+                        bool currentMatch = andTerms.All(term =>
+                            organArchive3DPanel.ListPanel.Controls.OfType<_3DPanel>().Any(subControl =>
+                                subControl.GetDonorId().ToLower().Contains(term.Trim()) ||
+                                organArchive3DPanel.GetOrganName().ToLower().Contains(term.Trim())));
+
+                        if (currentMatch)
+                        {
+                            matchFound = true;
+                            break;
+                        }
+                    }
+                    else if (control is OrganArchiveSlicePanel organArchiveSlicePanel)
+                    {
+                        bool currentMatch = andTerms.All(term =>
+                            organArchiveSlicePanel.GetDonorID().ToLower().Contains(term.Trim()) ||
+                            organArchiveSlicePanel.GetOrganName().ToLower().Contains(term.Trim()) ||
+                            organArchiveSlicePanel.GetNumOrgans().ToLower().Contains(term.Trim()) ||
+                            organArchiveSlicePanel.GetDateDeath().ToLower().Contains(term.Trim()) ||
+                            organArchiveSlicePanel.GetAge().ToLower().Contains(term.Trim()) ||
+                            organArchiveSlicePanel.GetCauseOD().ToLower().Contains(term.Trim()));
+
+                        if (currentMatch)
+                        {
+                            matchFound = true;
+                            break;
+                        }
+                    }
                 }
+
+                control.Visible = matchFound;
             }
         }
+
 
         private void placeholder_Click(object sender, EventArgs e)
         {

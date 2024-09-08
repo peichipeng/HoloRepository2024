@@ -1,18 +1,8 @@
 ﻿using FellowOakDicom.Imaging;
 using FellowOakDicom;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ScrollBar;
 using SixLabors.ImageSharp;
 
 namespace HoloRepository
@@ -47,6 +37,24 @@ namespace HoloRepository
             if (organId.HasValue)
             {
                 LoadOrganData();
+            }
+            this.Load += AddOrganControl_Load;
+        }
+
+        private void AddOrganControl_Load(object sender, EventArgs e)
+        {
+            ShowAllParents(this);
+        }
+
+        private void ShowAllParents(Control control)
+        {
+            // Traverse through all parent controls
+            while (control != null)
+            {
+                // Display each parent control's type and name
+                MessageBox.Show($"Parent Control: {control.GetType().Name}, Name: {control.Name}");
+                // Move to the next parent control
+                control = control.Parent;
             }
         }
 
@@ -85,7 +93,7 @@ namespace HoloRepository
             caseNo.TextAlign = ContentAlignment.MiddleRight;
 
             // Adjust label width to ensure the right edge is fixed
-            AdjustLabelWidth(caseNo, labelText, rightAlignX: 1290); // Assume 300 is the fixed X coordinate for the right edge
+            AdjustLabelWidth(caseNo, labelText, rightAlignX: 1720);
         }
 
         private void AdjustLabelWidth(Label label, string text, int rightAlignX)
@@ -423,11 +431,11 @@ namespace HoloRepository
             }
 
             var selectedTags = multiTags1.SelectedTagIds;
-            if (selectedTags == null || selectedTags.Count == 0)
-            {
-                MessageBox.Show("No tags selected.");
-                return;
-            }
+            //if (selectedTags == null || selectedTags.Count == 0)
+            //{
+            //MessageBox.Show("No tags selected.");
+            //return;
+            //}
 
             var DICOMPath = DICOMPaths;
             if (DICOMPath == null || DICOMPath.Count == 0)
