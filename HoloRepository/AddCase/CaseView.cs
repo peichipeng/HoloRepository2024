@@ -129,5 +129,20 @@ namespace HoloRepository.AddCase
                 caseFramework.LoadControl(addCaseControl);
             }
         }
+
+        public void ProcessVoiceCommand(string transcription)
+        {
+            transcription = transcription.ToLower().Trim();
+
+            MessageBox.Show(transcription, "transcription");
+            if (transcription.Contains("update"))
+            {
+                updateBtn_Click(this, EventArgs.Empty);
+            }
+            else if (transcription.Contains("add an organ"))
+            {
+                addOrganBtn_Click(this, EventArgs.Empty);
+            }
+        }
     }
 }

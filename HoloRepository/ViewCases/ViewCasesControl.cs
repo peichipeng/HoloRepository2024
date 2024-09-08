@@ -33,6 +33,8 @@ namespace HoloRepository
         private int selectedPage = 1;
         private int pageSize = 10;
         private Color selectedPageButtonColor = SystemColors.MenuHighlight;
+        private DatabaseConnection dbConnection;
+        private MainForm mainForm;
 
         public ViewCasesControl()
         {
@@ -50,6 +52,44 @@ namespace HoloRepository
             contextMenu.Renderer = new MenuRenderer();
 
             LoadComboBox();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (this.Parent?.Parent is MainForm mainForm)
+            {
+                this.mainForm = mainForm;
+                GlobalEventManager.OnGlobalTranscriptionReceived += OnTranscriptionReceived;
+            }
+        }
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            if (mainForm != null)
+            {
+                GlobalEventManager.OnGlobalTranscriptionReceived -= OnTranscriptionReceived;
+            }
+            base.OnHandleDestroyed(e);
+        }
+
+        private void OnTranscriptionReceived(string transcription)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(ProcessVoiceCommand), transcription);
+            }
+            else
+            {
+                ProcessVoiceCommand(transcription);
+            }
+        }
+        public void ProcessVoiceCommand(string transcription)
+        {
+            if (transcription.ToLower().Contains("add a case"))
+            {
+                addCaseBtn_Click(this, EventArgs.Empty);
+            }
         }
 
         private void addCaseBtn_Click(object sender, EventArgs e)

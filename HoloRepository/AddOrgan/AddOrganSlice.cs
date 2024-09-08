@@ -24,6 +24,7 @@ namespace HoloRepository
         public event Action<Image, Image, string, int> OrganSliceUpdated;
 
         public string OrganSliceImagePath { get; private set; }
+        private bool isEntering = false;
 
 
         public AddOrganSlice(int donorId, string organName, int sliceIndex, string organSide)
@@ -40,6 +41,23 @@ namespace HoloRepository
 
             DescriptionBox.GotFocus += DescriptionBox_GotFocus;
             DescriptionBox.LostFocus += DescriptionBox_LostFocus;
+
+            GlobalStateManager.Instance.OnModeChanged += OnModeChanged;
+            voiceControl1.UpdateUI(GlobalStateManager.Instance.IsKeyboard);
+
+            GlobalEventManager.OnGlobalTranscriptionReceived += OnTranscriptionReceived;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            GlobalEventManager.OnGlobalTranscriptionReceived -= OnTranscriptionReceived;
+        }
+
+        private void OnModeChanged(bool isKeyboardMode)
+        {
+            MainForm mainForm = new MainForm();
+            mainForm.OnModeChanged(isKeyboardMode);
         }
 
         private void DescriptionBox_GotFocus(object sender, EventArgs e)
@@ -293,7 +311,7 @@ namespace HoloRepository
         private void OrganSlicePicture_Click(object sender, EventArgs e)
         {
             // Define the directory path and date format
-            string directoryPath = @"C:\Users\10927\Desktop\Pictures";
+            string directoryPath = @"C:\Users\linqing.zhao\Desktop\Pictures";
             string datePrefix = DateTime.Now.ToString("yyyy_MM_dd"); // Use current date
             string filePattern = $"{datePrefix}_*.jpg";
 
@@ -346,6 +364,45 @@ namespace HoloRepository
                 return number;
             }
             return -1; // Return -1 if parsing fails
+        }
+
+        public void ProcessVoiceCommand(string transcription)
+        {
+            transcription = transcription.ToLower();
+
+            if (transcription.Contains("add"))
+            {
+                Add_Click(this, EventArgs.Empty);
+            }
+
+            if (transcription.Contains("start entering"))
+            {
+                isEntering = true;
+                transcription = transcription.Replace("start entering", "").Trim();
+            }
+
+            if (isEntering)
+            {
+                if (transcription.Contains("stop entering"))
+                {
+                    isEntering = false;
+                    transcription = transcription.Replace("stop entering", "").Trim();
+                }
+                else
+                {
+                    SetDescription(transcription);
+                }
+            }
+        }
+
+        private void OnTranscriptionReceived(string transcription)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(OnTranscriptionReceived), transcription);
+                return;
+            }
+            ProcessVoiceCommand(transcription);
         }
     }
 

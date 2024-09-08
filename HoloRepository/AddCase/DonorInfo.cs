@@ -1,4 +1,5 @@
-﻿using HoloRepository.ViewCases;
+﻿using Newtonsoft.Json;
+using HoloRepository.ViewCases;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace HoloRepository.AddCase
 {
     public partial class DonorInfo : UserControl
     {
+        private bool isNERActive = false;
         public int originalId;
         public int donorId;
         private int age;
@@ -156,13 +158,13 @@ namespace HoloRepository.AddCase
 
             if (string.IsNullOrEmpty(inputId))
             {
-                idErrorLabel.Text = requiredFieldMsg;
+                SetLabelText(idErrorLabel, requiredFieldMsg);
                 return false;
             }
 
             if (!int.TryParse(inputId, out donorId))
             {
-                idErrorLabel.Text = "Invalid ID. Please enter a valid number.";
+                SetLabelText(idErrorLabel, "Invalid ID. Please enter a valid number.");
                 return false;
             }
 
@@ -193,13 +195,13 @@ namespace HoloRepository.AddCase
 
             if (string.IsNullOrEmpty(inputAge))
             {
-                ageErrorLabel.Text = requiredFieldMsg;
+                SetLabelText(ageErrorLabel, requiredFieldMsg);
                 return false;
             }
 
             if (!int.TryParse(inputAge, out age))
             {
-                ageErrorLabel.Text = "Invalid age. Please enter a valid number.";
+                SetLabelText(ageErrorLabel, "Invalid age. Please enter a valid number.");
                 return false;
             }
 
@@ -210,7 +212,7 @@ namespace HoloRepository.AddCase
             }
 
             // Clear the error message if the age is valid
-            ageErrorLabel.Text = "";
+            SetLabelText(ageErrorLabel, "");
             return true;
         }
 
@@ -218,12 +220,12 @@ namespace HoloRepository.AddCase
         {
             if (string.IsNullOrEmpty(causeOfDeathTxt.Text))
             {
-                causeErrorLabel.Text = requiredFieldMsg;
+                SetLabelText(causeErrorLabel, requiredFieldMsg);
                 return false;
             }
 
             causeOfDeath = causeOfDeathTxt.Text;
-            causeErrorLabel.Text = "";
+            SetLabelText(causeErrorLabel, "");
             return true;
         }
 
@@ -238,7 +240,7 @@ namespace HoloRepository.AddCase
 
             if (string.IsNullOrEmpty(dateString) || dateString == "DD/MM/YYYY")
             {
-                dodErrorLabel.Text = requiredFieldMsg;
+                SetLabelText(dodErrorLabel, requiredFieldMsg);
                 return false;
             }
 
@@ -247,13 +249,13 @@ namespace HoloRepository.AddCase
 
             if (!System.Text.RegularExpressions.Regex.IsMatch(dateString, pattern))
             {
-                dodErrorLabel.Text = formatErrorMsg;
+                SetLabelText(dodErrorLabel, formatErrorMsg);
                 return false; // Date is in incorrect format
             }
 
             if (!DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out dod))
             {
-                dodErrorLabel.Text = invalidDateMsg;
+                SetLabelText(dodErrorLabel, invalidDateMsg);
                 return false; // Date is not valid
             }
 
@@ -264,8 +266,20 @@ namespace HoloRepository.AddCase
             }
 
             // Clear error message if the date is valid
-            dodErrorLabel.Text = "";
+            SetLabelText(dodErrorLabel, "");
             return true; // Date is valid
+        }
+
+        private void SetLabelText(Label label, string text)
+        {
+            if (label.InvokeRequired)
+            {
+                label.Invoke(new Action(() => label.Text = text));
+            }
+            else
+            {
+                label.Text = text;
+            }
         }
 
         private void DOD_Enter(object sender, EventArgs e)
@@ -376,5 +390,70 @@ namespace HoloRepository.AddCase
                 return count > 0;
             }
         }
+
+        public void ProcessVoiceCommand(string transcription)
+        {
+            if (transcription.ToLower().Contains("start entering"))
+            {
+                StartNER();
+            }
+            else if (transcription.ToLower().Contains("stop entering"))
+            {
+                StopNER();
+                return;
+            }
+            if (transcription.Trim().StartsWith("NER Result:", StringComparison.OrdinalIgnoreCase))
+            {
+                var nerResultJson = transcription.Substring("NER Result:".Length).Trim();
+                var nerResult = JsonConvert.DeserializeObject<Dictionary<string, string>>(nerResultJson);
+                ProcessNERResult(nerResult);
+            }
+        }
+
+        private void StartNER()
+        {
+            MainForm mainForm = (MainForm)Application.OpenForms[0];
+            mainForm.StartNER();
+            isNERActive = true;
+        }
+
+        private void StopNER()
+        {
+            MainForm mainForm = (MainForm)Application.OpenForms[0];
+            mainForm.StopNER();
+            isNERActive = false;
+            
+        }
+
+        public void ProcessNERResult(Dictionary<string, string>? nerResult)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => ProcessNERResult(nerResult)));
+            }
+            else
+            {
+                if (nerResult.ContainsKey("id") && !string.IsNullOrEmpty(nerResult["id"]))
+                {
+                    donorIdTxt.Text = nerResult["id"];
+                }
+
+                if (nerResult.ContainsKey("dod") && !string.IsNullOrEmpty(nerResult["dod"]))
+                {
+                    dodTxt.Text = nerResult["dod"];
+                }
+
+                if (nerResult.ContainsKey("age") && !string.IsNullOrEmpty(nerResult["age"]))
+                {
+                    ageTxt.Text = nerResult["age"];
+                }
+
+                if (nerResult.ContainsKey("cause_of_death") && !string.IsNullOrEmpty(nerResult["cause_of_death"]))
+                {
+                    causeOfDeathTxt.Text = nerResult["cause_of_death"];
+                }
+            }
+        }
+
     }
 }

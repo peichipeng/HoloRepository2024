@@ -1,4 +1,5 @@
-﻿using FellowOakDicom.Imaging;
+﻿using Newtonsoft.Json;
+using FellowOakDicom.Imaging;
 using FellowOakDicom;
 using Npgsql;
 using System.Data;
@@ -910,6 +911,17 @@ namespace HoloRepository
                 {
                     OnCancelConfirmed?.Invoke();
                 }
+            }
+        }
+        public void ProcessVoiceCommand(string transcription)
+        {
+            if (transcription.ToLower().Contains("add an organ slice"))
+            {
+                AddOrganSlicesButton_Click(this, EventArgs.Empty);
+            }
+            if (transcription.ToLower().Contains("save"))
+            {
+                btnSave_Click(this, EventArgs.Empty);
             }
         }
     }

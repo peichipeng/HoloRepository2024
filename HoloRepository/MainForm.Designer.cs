@@ -30,35 +30,43 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             header = new Panel();
+            voiceControl1 = new VoiceControl();
             blackHomeBtn = new PictureBox();
             previousPageBtn = new PictureBox();
             breadcrumbPanel = new FlowLayoutPanel();
             homeBtn = new PictureBox();
             arrow = new PictureBox();
             page1 = new Button();
-            modeSwitch = new Button();
             mainContainer = new Panel();
-            voiceControl1 = new VoiceControl();
             header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)blackHomeBtn).BeginInit();
             ((System.ComponentModel.ISupportInitialize)previousPageBtn).BeginInit();
             breadcrumbPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)homeBtn).BeginInit();
             ((System.ComponentModel.ISupportInitialize)arrow).BeginInit();
-            mainContainer.SuspendLayout();
             SuspendLayout();
             // 
             // header
             // 
+            header.Controls.Add(voiceControl1);
             header.Controls.Add(blackHomeBtn);
             header.Controls.Add(previousPageBtn);
             header.Controls.Add(breadcrumbPanel);
-            header.Controls.Add(modeSwitch);
             header.Dock = DockStyle.Top;
             header.Location = new Point(0, 0);
             header.Name = "header";
-            header.Size = new Size(846, 30);
+            header.Size = new Size(846, 47);
             header.TabIndex = 0;
+            // 
+            // voiceControl1
+            // 
+            voiceControl1.Anchor = AnchorStyles.None;
+            voiceControl1.BackColor = Color.Transparent;
+            voiceControl1.Location = new Point(692, 3);
+            voiceControl1.Margin = new Padding(1);
+            voiceControl1.Name = "voiceControl1";
+            voiceControl1.Size = new Size(93, 43);
+            voiceControl1.TabIndex = 87;
             // 
             // blackHomeBtn
             // 
@@ -136,39 +144,16 @@
             page1.Text = "page1";
             page1.UseVisualStyleBackColor = false;
             // 
-            // modeSwitch
-            // 
-            modeSwitch.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            modeSwitch.Font = new Font("Century Gothic", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            modeSwitch.Location = new Point(594, 0);
-            modeSwitch.Name = "modeSwitch";
-            modeSwitch.Size = new Size(112, 27);
-            modeSwitch.TabIndex = 16;
-            modeSwitch.Text = "Microphone";
-            modeSwitch.UseVisualStyleBackColor = true;
-            modeSwitch.Click += modeSwitch_Click;
-            // 
             // mainContainer
             // 
-            mainContainer.Controls.Add(voiceControl1);
             mainContainer.Dock = DockStyle.Fill;
-            mainContainer.Location = new Point(0, 30);
+            mainContainer.Location = new Point(0, 47);
             mainContainer.Margin = new Padding(1, 8, 3, 3);
             mainContainer.Name = "mainContainer";
-            mainContainer.Size = new Size(846, 435);
+            mainContainer.Size = new Size(846, 418);
             mainContainer.TabIndex = 1;
             mainContainer.ControlAdded += mainContainer_ControlAdded;
             mainContainer.ControlRemoved += mainContainer_ControlRemoved;
-            // 
-            // voiceControl1
-            // 
-            voiceControl1.Anchor = AnchorStyles.None;
-            voiceControl1.BackColor = Color.Transparent;
-            voiceControl1.Location = new Point(381, 92);
-            voiceControl1.Margin = new Padding(1);
-            voiceControl1.Name = "voiceControl1";
-            voiceControl1.Size = new Size(93, 43);
-            voiceControl1.TabIndex = 87;
             // 
             // MainForm
             // 
@@ -189,7 +174,6 @@
             breadcrumbPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)homeBtn).EndInit();
             ((System.ComponentModel.ISupportInitialize)arrow).EndInit();
-            mainContainer.ResumeLayout(false);
             ResumeLayout(false);
         }
 

@@ -1,12 +1,7 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using static HoloRepository.AddOrganControl;
 
@@ -17,8 +12,11 @@ namespace HoloRepository.AddCase
         private DonorInfo donorInfoPage;
         private string accessedFrom; // This variable is for the cancel button
         public string destination;
+        private MainForm mainForm;
 
         private System.Windows.Forms.Timer timer;
+        private string currentTranscription;
+        private PopupWindow? _currentPopup;
 
         // This constructor is for adding a case
         public AddCaseFramework(string route, string destination)
@@ -28,7 +26,8 @@ namespace HoloRepository.AddCase
             InitializeComponent();
             donorInfoPage = new DonorInfo();
             LoadControl(donorInfoPage);
-            //InitializeTimer();
+
+            GlobalEventManager.OnGlobalTranscriptionReceived += OnTranscriptionReceived;
         }
 
         public AddCaseFramework(string route, string destination, int data)
@@ -39,30 +38,10 @@ namespace HoloRepository.AddCase
             LoadControl(new CasePage(destination, data));
         }
 
-        /*
-        private void InitializeTimer()
-        {
-            timer = new System.Windows.Forms.Timer();
-            timer.Interval = 10000; // 10 seconds in milliseconds
-            timer.Tick += new EventHandler(OnTimerTick);
-            timer.Start();
-        }
-
-        private void OnTimerTick(object sender, EventArgs e)
-        {
-            // This function will be called every 10 seconds
-            var popupWindow = Application.OpenForms.OfType<PopupWindow>().FirstOrDefault();
-            if (popupWindow != null)
-            {
-                popupWindow.HandleYesButtonClick();
-            }
-        }*/
-
         public void ShowFooterBtns()
         {
             nextBtn.Visible = true;
             cancelBtn.Visible = true;
-            //nextBtn.Text = "Save";
         }
 
         public void HideFooterBtns()
@@ -174,58 +153,225 @@ namespace HoloRepository.AddCase
 
         private void cancelBtn_Click(object sender, EventArgs e)
         {
-            MainForm mainForm = FindMainForm(this);
+            HandleCancelBtn_Click();
+        }
 
-            using (var popup = new PopupWindow("Are you sure you want to cancel?", this.ParentForm))
+        private void HandleCancelBtn_Click()
+        {
+            if (InvokeRequired)
             {
-                var result = popup.ShowDialog(this.ParentForm);
+                Invoke(new Action(HandleCancelBtn_Click));
+                return;
+            }
 
-                if (result == DialogResult.Yes)
+            MainForm mainForm = (MainForm)Application.OpenForms[0];
+            Form? parentForm = this.ParentForm;
+
+            if (parentForm != null)
+            {
+                _currentPopup = new PopupWindow("Are you sure you want to cancel?", parentForm);
+                _currentPopup.FormClosed += Popup_FormClosed;
+                GlobalEventManager.OnGlobalTranscriptionReceived += _currentPopup.OnTranscriptionReceived;
+                _currentPopup.Show(parentForm);
+            }
+        }
+
+
+        private void Popup_FormClosed(object? sender, FormClosedEventArgs e)
+        {
+            if (_currentPopup != null)
+            {
+                var result = _currentPopup.Result;
+                if (result == "Yes")
                 {
-                    // When the user is on the add/ update donor info page
-                    if (addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
+                    HandleCancelYes();
+                }
+                else if (result == "No")
+                {
+                    HandleCancelNo();
+                }
+
+                MainForm mainForm = (MainForm)Application.OpenForms[0];
+                GlobalEventManager.OnGlobalTranscriptionReceived -= _currentPopup.OnTranscriptionReceived;
+                _currentPopup = null;
+            }
+        }
+
+        public void HandleCancelYes()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(HandleCancelYes));
+                return;
+            }
+            GlobalEventManager.OnGlobalTranscriptionReceived -= OnTranscriptionReceived;
+            if (addCaseContainer.Controls[0] is DonorInfo donorInfoPage)
+            {
+                if (donorInfoPage.title.Text == "Add Donor's Basic")
+                {
+                    if (accessedFrom == "home")
                     {
-                        if (donorInfoPage.title.Text == "Add Donor's Basic")
-                        {
-                            if (accessedFrom == "home")
-                            {
-                                mainForm.LoadControl(new HomePageControl());
-                            }
-                            else if (accessedFrom == "viewCases")
-                            {
-                                mainForm.LoadControl(new ViewCasesControl());
-                            }
-                        }
-                        else
-                        {
-                            int originalId = donorInfoPage.originalId;
-                            LoadControl(new CasePage(destination, originalId));
-                        }
+                        mainForm.LoadControl(new HomePageControl());
                     }
-                    else if (addCaseContainer.Controls[0] is CasePage casePage)
+                    else if (accessedFrom == "viewCases")
                     {
-                        // Remove all the records related to the donor
-                        var dbConnection = new DatabaseConnection();
-
-                        string deleteQuery = $"DELETE FROM donor WHERE donor_id = {casePage.donorId}";
-                        dbConnection.ExecuteNonQuery(deleteQuery);
-
-                        if (accessedFrom == "home")
-                        {
-                            mainForm.LoadControl(new HomePageControl());
-                        }
-                        else if (accessedFrom == "viewCases")
-                        {
-                            mainForm.LoadControl(new ViewCasesControl());
-                        }
+                        mainForm.LoadControl(new ViewCasesControl());
                     }
-                    else if (addCaseContainer.Controls[0] is AddOrganControl organPage)
-                    {
+                }
+                else
+                {
+                    int originalId = donorInfoPage.originalId;
+                    LoadControl(new CasePage(destination, originalId));
+                }
+            }
+            else if (addCaseContainer.Controls[0] is CasePage casePage)
+            {
+                var dbConnection = new DatabaseConnection();
+                string deleteQuery = $"DELETE FROM donor WHERE donor_id = {casePage.donorId}";
+                dbConnection.ExecuteNonQuery(deleteQuery);
 
+                if (accessedFrom == "home")
+                {
+                    mainForm.LoadControl(new HomePageControl());
+                }
+                else if (accessedFrom == "viewCases")
+                {
+                    mainForm.LoadControl(new ViewCasesControl());
+                }
+            }
+            else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
+            {
+
+            }
+        }
+
+        public void HandleCancelNo()
+        {
+        
+        }
+
+        public void ProcessVoiceCommand(string transcription)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(ProcessVoiceCommand), transcription);
+                return;
+            }
+
+            if (this.IsDisposed || !this.IsHandleCreated)
+            {
+                return;
+            }
+
+            transcription = transcription.ToLower().Trim();
+
+            if (transcription.Contains("cancel"))
+            {
+                HandleCancelBtn_Click();
+                return;
+            }
+
+            foreach (Control control in addCaseContainer.Controls)
+            {
+                if (control is AddCaseControl addCaseControl)
+                {
+                    if (transcription.Contains("save"))
+                    {
+                        addCaseControl.ProcessVoiceCommand(transcription);
+                        return;
                     }
                 }
             }
+
+            if (nextBtn.Text.Equals("&Save", StringComparison.OrdinalIgnoreCase))
+            {
+                if (transcription.Contains("save"))
+                {
+                    MainForm mainForm = (MainForm)Application.OpenForms[0];
+                    mainForm.StopNER();
+                    nextBtn_Click(this, EventArgs.Empty);
+                    return;
+                }
+            }
+            else if (nextBtn.Text.Equals("&Next", StringComparison.OrdinalIgnoreCase))
+            {
+                if (transcription.Contains("next"))
+                {
+                    MainForm mainForm = (MainForm)Application.OpenForms[0];
+                    mainForm.StopNER();
+                    nextBtn_Click(this, EventArgs.Empty);
+                    return;
+                }
+            }
+
+            if (_currentPopup != null)
+            {
+                if (transcription.Contains("yes"))
+                {
+                    _currentPopup.SetResult("Yes");
+                    if (_currentPopup.InvokeRequired)
+                    {
+                        _currentPopup.Invoke(new Action(() =>
+                        {
+                            _currentPopup.Refresh();
+                            _currentPopup.Close();
+                        }));
+                    }
+                    else
+                    {
+                        _currentPopup.Refresh();
+                        _currentPopup.Close();
+                    }
+
+                }
+                else if (transcription.Contains("no"))
+                {
+                    _currentPopup.SetResult("No");
+                    if (_currentPopup.InvokeRequired)
+                    {
+                        _currentPopup.Invoke(new Action(() =>
+                        {
+                            _currentPopup.Refresh();
+                            _currentPopup.Close();
+                        }));
+                    }
+                    else
+                    {
+                        _currentPopup.Refresh();
+                        _currentPopup.Close();
+                    }
+                }
+            }
+
+            foreach (Control control in addCaseContainer.Controls)
+            {
+                if (control is DonorInfo donorInfoPage)
+                {
+                    donorInfoPage.ProcessVoiceCommand(transcription);
+                }
+                else if (control is CasePage casePage)
+                {
+                    foreach (Control casePageControl in casePage.Controls)
+                    {
+                        if (casePageControl is Panel panel)
+                        {
+                            foreach (Control panelControl in panel.Controls)
+                            {
+                                if (panelControl is CaseView caseView)
+                                {
+                                    caseView.ProcessVoiceCommand(transcription);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (control is AddCaseControl addCaseControl)
+                {
+                    addCaseControl.ProcessVoiceCommand(transcription);
+                }
+            }
         }
+
 
         private MainForm FindMainForm(Control control)
         {
@@ -234,6 +380,16 @@ namespace HoloRepository.AddCase
                 control = control.Parent;
             }
             return control as MainForm;
+        }
+
+        private void OnTranscriptionReceived(string transcription)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(OnTranscriptionReceived), transcription);
+                return;
+            }
+            ProcessVoiceCommand(transcription);
         }
 
         private void AddCaseFramework_Load(object sender, EventArgs e)
