@@ -239,7 +239,7 @@ namespace HoloRepository.AddCase
                     mainForm.LoadControl(new ViewCasesControl());
                 }
             }
-            else if (addCaseContainer.Controls[0] is AddCaseControl organPage)
+            else if (addCaseContainer.Controls[0] is AddOrganControl organPage)
             {
 
             }
@@ -273,7 +273,7 @@ namespace HoloRepository.AddCase
 
             foreach (Control control in addCaseContainer.Controls)
             {
-                if (control is AddCaseControl addCaseControl)
+                if (control is AddOrganControl addCaseControl)
                 {
                     if (transcription.Contains("save"))
                     {
@@ -365,7 +365,7 @@ namespace HoloRepository.AddCase
                         }
                     }
                 }
-                else if (control is AddCaseControl addCaseControl)
+                else if (control is AddOrganControl addCaseControl)
                 {
                     addCaseControl.ProcessVoiceCommand(transcription);
                 }

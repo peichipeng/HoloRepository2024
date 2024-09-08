@@ -36,6 +36,7 @@
             OrganSliceDescription = new CustomLabel();
             OrganSlicePicture = new PictureBox();
             DescriptionBox = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
+            voiceControl1 = new VoiceControl();
             ((System.ComponentModel.ISupportInitialize)DICOMFilePicture).BeginInit();
             OrganSlicePanel.SuspendLayout();
             roundedPanel1.SuspendLayout();
@@ -145,12 +146,21 @@
             DescriptionBox.TabIndex = 8;
             DescriptionBox.Text = "Describe additional information about the organ slice ...";
             // 
+            // voiceControl1
+            // 
+            voiceControl1.BackColor = Color.Transparent;
+            voiceControl1.Location = new Point(39, 651);
+            voiceControl1.Name = "voiceControl1";
+            voiceControl1.Size = new Size(143, 75);
+            voiceControl1.TabIndex = 9;
+            // 
             // AddOrganSlice
             // 
             AutoScaleDimensions = new SizeF(144F, 144F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
             ClientSize = new Size(1078, 738);
+            Controls.Add(voiceControl1);
             Controls.Add(DescriptionBox);
             Controls.Add(roundedPanel1);
             Controls.Add(Add);
@@ -174,5 +184,6 @@
         private PictureBox OrganSlicePicture;
         private CustomLabel OrganSliceDescription;
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox DescriptionBox;
+        private VoiceControl voiceControl1;
     }
 }

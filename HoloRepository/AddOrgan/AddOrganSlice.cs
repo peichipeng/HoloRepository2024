@@ -43,7 +43,7 @@ namespace HoloRepository
             DescriptionBox.LostFocus += DescriptionBox_LostFocus;
 
             GlobalStateManager.Instance.OnModeChanged += OnModeChanged;
-            voiceControl1.UpdateUI(GlobalStateManager.Instance.IsKeyboard);
+            //voiceControl1.UpdateUI(GlobalStateManager.Instance.IsKeyboard);
 
             GlobalEventManager.OnGlobalTranscriptionReceived += OnTranscriptionReceived;
         }
