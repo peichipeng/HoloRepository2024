@@ -432,11 +432,6 @@ namespace HoloRepository
             }
 
             var selectedTags = multiTags1.SelectedTagIds;
-            //if (selectedTags == null || selectedTags.Count == 0)
-            //{
-            //MessageBox.Show("No tags selected.");
-            //return;
-            //}
 
             var DICOMPath = DICOMPaths;
             if (DICOMPath == null || DICOMPath.Count == 0)
@@ -913,6 +908,7 @@ namespace HoloRepository
                 }
             }
         }
+
         public void ProcessVoiceCommand(string transcription)
         {
             if (transcription.ToLower().Contains("add an organ slice"))

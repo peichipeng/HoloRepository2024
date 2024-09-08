@@ -12,7 +12,6 @@ namespace HoloRepository.AddCase
         private DonorInfo donorInfoPage;
         private string accessedFrom; // This variable is for the cancel button
         public string destination;
-        private MainForm mainForm;
 
         private System.Windows.Forms.Timer timer;
         private string currentTranscription;
@@ -199,6 +198,7 @@ namespace HoloRepository.AddCase
 
         public void HandleCancelYes()
         {
+            MainForm mainForm = FindMainForm(this);
             if (InvokeRequired)
             {
                 Invoke(new Action(HandleCancelYes));
@@ -375,12 +375,17 @@ namespace HoloRepository.AddCase
 
         private MainForm FindMainForm(Control control)
         {
-            while (control != null && !(control is MainForm))
+            while (control != null)
             {
+                if (control is MainForm)
+                {
+                    return control as MainForm;
+                }
                 control = control.Parent;
             }
-            return control as MainForm;
+            return null;
         }
+
 
         private void OnTranscriptionReceived(string transcription)
         {

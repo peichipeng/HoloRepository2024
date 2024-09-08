@@ -140,12 +140,14 @@ public class PopupWindow : Form
     private void PopupYesButton_Click(object? sender, EventArgs e)
     {
         Result = "Yes";
+        DialogResult = DialogResult.Yes;
         this.Close();
     }
 
     private void PopupNoButton_Click(object? sender, EventArgs e)
     {
         Result = "No";
+        DialogResult = DialogResult.No;
         this.Close();
     }
 

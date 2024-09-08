@@ -17,8 +17,6 @@ namespace HoloRepository
         private StreamReader? _pythonOutput;
         private Thread? _outputThread;
 
-        private VoiceControl voiceControl;
-
         public MainForm()
         {
             InitializeComponent(); 
@@ -149,7 +147,7 @@ namespace HoloRepository
 
             if (mainContainer.Controls.OfType<UserGuideHome>().Any())
             {
-                modeSwitch.Visible = false;
+                voiceControl1.Visible = false;
                 breadcrumbPanel.Visible = false;
 
                 previousPageBtn.Location = new Point(breadcrumbPanel.Location.X, blackHomeBtn.Location.Y);
@@ -178,7 +176,8 @@ namespace HoloRepository
                         caseFramework.addCaseContainer.Controls[0] is CasePage casePage &&
                         casePage.pageName == "caseOverview")
                     {
-                        //mainContainer.Controls[0].Controls.Clear();
+                        if (mainContainer.Controls[0] is not AddCaseFramework)
+                            mainContainer.Controls[0].Controls.Clear();
 
                         voiceControl1.Visible = false;
 

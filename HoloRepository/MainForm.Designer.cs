@@ -181,7 +181,6 @@
 
         private Panel header;
         private Panel mainContainer;
-        public Button modeSwitch;
         private FlowLayoutPanel breadcrumbPanel;
         private PictureBox homeBtn;
         private PictureBox arrow;

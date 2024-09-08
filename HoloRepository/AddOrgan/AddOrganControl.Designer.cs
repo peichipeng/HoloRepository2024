@@ -71,7 +71,7 @@
             AddOrganTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             AddOrganTitle.AutoSize = true;
             AddOrganTitle.Font = new Font("Microsoft YaHei UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
-            AddOrganTitle.Location = new Point(481, 54);
+            AddOrganTitle.Location = new Point(62, 54);
             AddOrganTitle.Margin = new Padding(5, 0, 5, 0);
             AddOrganTitle.Name = "AddOrganTitle";
             AddOrganTitle.Size = new Size(312, 54);
@@ -83,7 +83,7 @@
             DICOMTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             DICOMTitle.AutoSize = true;
             DICOMTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            DICOMTitle.Location = new Point(481, 294);
+            DICOMTitle.Location = new Point(62, 294);
             DICOMTitle.Margin = new Padding(5, 0, 5, 0);
             DICOMTitle.Name = "DICOMTitle";
             DICOMTitle.Size = new Size(216, 42);
@@ -99,7 +99,7 @@
             ImportDICOMButton.FlatStyle = FlatStyle.Flat;
             ImportDICOMButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ImportDICOMButton.ForeColor = Color.White;
-            ImportDICOMButton.Location = new Point(1350, 290);
+            ImportDICOMButton.Location = new Point(931, 290);
             ImportDICOMButton.Margin = new Padding(5, 3, 5, 3);
             ImportDICOMButton.Name = "ImportDICOMButton";
             ImportDICOMButton.Size = new Size(152, 46);
@@ -117,7 +117,7 @@
             RemoveAllButton.FlatStyle = FlatStyle.Flat;
             RemoveAllButton.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point);
             RemoveAllButton.ForeColor = Color.White;
-            RemoveAllButton.Location = new Point(1551, 290);
+            RemoveAllButton.Location = new Point(1132, 290);
             RemoveAllButton.Margin = new Padding(5, 3, 5, 3);
             RemoveAllButton.Name = "RemoveAllButton";
             RemoveAllButton.Size = new Size(170, 46);
@@ -150,7 +150,7 @@
             panel1.Margin = new Padding(5, 3, 5, 3);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(5, 6, 5, 6);
-            panel1.Size = new Size(2239, 1531);
+            panel1.Size = new Size(1400, 1200);
             panel1.TabIndex = 7;
             // 
             // sideListBox
@@ -158,7 +158,7 @@
             sideListBox.Anchor = AnchorStyles.Top;
             sideListBox.FormattingEnabled = true;
             sideListBox.ItemHeight = 24;
-            sideListBox.Location = new Point(781, 261);
+            sideListBox.Location = new Point(362, 261);
             sideListBox.Name = "sideListBox";
             sideListBox.Size = new Size(103, 124);
             sideListBox.TabIndex = 61;
@@ -169,7 +169,7 @@
             // SideBox
             // 
             SideBox.Anchor = AnchorStyles.Top;
-            SideBox.Location = new Point(781, 222);
+            SideBox.Location = new Point(362, 222);
             SideBox.Multiline = true;
             SideBox.Name = "SideBox";
             SideBox.Size = new Size(104, 40);
@@ -190,7 +190,7 @@
             caseNo.AutoSize = true;
             caseNo.Font = new Font("Segoe UI", 12F, FontStyle.Italic, GraphicsUnit.Point);
             caseNo.ForeColor = Color.Black;
-            caseNo.Location = new Point(1529, 70);
+            caseNo.Location = new Point(1110, 70);
             caseNo.Name = "caseNo";
             caseNo.Size = new Size(187, 32);
             caseNo.TabIndex = 59;
@@ -202,7 +202,7 @@
             organListBox.Anchor = AnchorStyles.Top;
             organListBox.FormattingEnabled = true;
             organListBox.ItemHeight = 24;
-            organListBox.Location = new Point(481, 261);
+            organListBox.Location = new Point(62, 261);
             organListBox.Name = "organListBox";
             organListBox.Size = new Size(266, 124);
             organListBox.TabIndex = 24;
@@ -212,7 +212,7 @@
             // organNameTextBox
             // 
             organNameTextBox.Anchor = AnchorStyles.Top;
-            organNameTextBox.Location = new Point(481, 222);
+            organNameTextBox.Location = new Point(62, 222);
             organNameTextBox.Multiline = true;
             organNameTextBox.Name = "organNameTextBox";
             organNameTextBox.Size = new Size(267, 40);
@@ -233,7 +233,7 @@
             OrganNameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             OrganNameLabel.AutoSize = true;
             OrganNameLabel.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganNameLabel.Location = new Point(481, 157);
+            OrganNameLabel.Location = new Point(62, 157);
             OrganNameLabel.Margin = new Padding(5, 0, 5, 0);
             OrganNameLabel.Name = "OrganNameLabel";
             OrganNameLabel.Size = new Size(223, 42);
@@ -249,7 +249,7 @@
             organSlicesPanel.Controls.Add(multiTags1);
             organSlicesPanel.Controls.Add(tableLayoutPanel1);
             organSlicesPanel.FlowDirection = FlowDirection.TopDown;
-            organSlicesPanel.Location = new Point(481, 682);
+            organSlicesPanel.Location = new Point(62, 682);
             organSlicesPanel.Name = "organSlicesPanel";
             organSlicesPanel.Size = new Size(1243, 464);
             organSlicesPanel.TabIndex = 21;
@@ -308,7 +308,7 @@
             updateBtn.BackColor = Color.Transparent;
             updateBtn.Image = (Image)resources.GetObject("updateBtn.Image");
             updateBtn.Location = new Point(371, 5);
-            updateBtn.Margin = new Padding(5, 5, 5, 5);
+            updateBtn.Margin = new Padding(5);
             updateBtn.Name = "updateBtn";
             updateBtn.Size = new Size(38, 46);
             updateBtn.SizeMode = PictureBoxSizeMode.Zoom;
@@ -435,7 +435,7 @@
             fileListBox.DrawMode = DrawMode.OwnerDrawVariable;
             fileListBox.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point);
             fileListBox.FormattingEnabled = true;
-            fileListBox.Location = new Point(481, 360);
+            fileListBox.Location = new Point(62, 360);
             fileListBox.Name = "fileListBox";
             fileListBox.Size = new Size(1241, 238);
             fileListBox.TabIndex = 20;
@@ -445,7 +445,7 @@
             lineControl1.Anchor = AnchorStyles.Top;
             lineControl1.LineColor = Color.Gray;
             lineControl1.LineWidth = 1;
-            lineControl1.Location = new Point(481, 122);
+            lineControl1.Location = new Point(62, 122);
             lineControl1.Margin = new Padding(5, 3, 5, 3);
             lineControl1.Name = "lineControl1";
             lineControl1.Size = new Size(1234, 14);
@@ -457,7 +457,7 @@
             OrganSlicesTitle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             OrganSlicesTitle.AutoSize = true;
             OrganSlicesTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
-            OrganSlicesTitle.Location = new Point(481, 637);
+            OrganSlicesTitle.Location = new Point(62, 637);
             OrganSlicesTitle.Margin = new Padding(5, 0, 5, 0);
             OrganSlicesTitle.Name = "OrganSlicesTitle";
             OrganSlicesTitle.Size = new Size(392, 42);
@@ -471,7 +471,7 @@
             Controls.Add(panel1);
             Margin = new Padding(8, 6, 8, 6);
             Name = "AddOrganControl";
-            Size = new Size(2239, 1531);
+            Size = new Size(1400, 1200);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             organSlicesPanel.ResumeLayout(false);
