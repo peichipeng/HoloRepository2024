@@ -5,6 +5,7 @@ using Npgsql;
 using System.Data;
 using System.Diagnostics;
 using SixLabors.ImageSharp;
+using HoloRepository.AddCase;
 
 namespace HoloRepository
 {
@@ -14,6 +15,7 @@ namespace HoloRepository
         private List<string> DICOMPaths = new List<string>();
         public List<OrganSlicePanel> organSlicePanels = new List<OrganSlicePanel>();
         private int selectedIndex;
+        private PopupWindow? _currentPopup;
 
         private List<string> organData = new List<string>();
         private Dictionary<string, int> organNameDictionary = new Dictionary<string, int>();
@@ -40,6 +42,7 @@ namespace HoloRepository
                 LoadOrganData();
             }
             this.Load += AddOrganControl_Load;
+            GlobalEventManager.OnGlobalTranscriptionReceived += OnTranscriptionReceived;
         }
 
         private void AddOrganControl_Load(object sender, EventArgs e)
@@ -931,17 +934,127 @@ namespace HoloRepository
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            using (PopupWindow popup = new PopupWindow("Are you sure you want to cancel?", this.FindForm()))
+            HandleCancelBtn_Click();
+        }
+
+        private void HandleCancelBtn_Click()
+        {
+            if (InvokeRequired)
             {
-                if (popup.ShowDialog() == DialogResult.Yes)
-                {
-                    OnCancelConfirmed?.Invoke();
-                }
+                Invoke(new Action(HandleCancelBtn_Click));
+                return;
             }
+
+            MainForm mainForm = (MainForm)Application.OpenForms[0];
+            Form? parentForm = this.ParentForm;
+
+            if (parentForm != null)
+            {
+                _currentPopup = new PopupWindow("Are you sure you want to cancel?", parentForm);
+                _currentPopup.FormClosed += Popup_FormClosed;
+                GlobalEventManager.OnGlobalTranscriptionReceived += _currentPopup.OnTranscriptionReceived;
+                _currentPopup.Show(parentForm);
+            }
+        }
+
+        private void Popup_FormClosed(object? sender, FormClosedEventArgs e)
+        {
+            if (_currentPopup != null)
+            {
+                var result = _currentPopup.Result;
+                if (result == "Yes")
+                {
+                    HandleCancelYes();
+                }
+                else if (result == "No")
+                {
+                    HandleCancelNo();
+                }
+
+                MainForm mainForm = (MainForm)Application.OpenForms[0];
+                GlobalEventManager.OnGlobalTranscriptionReceived -= _currentPopup.OnTranscriptionReceived;
+                _currentPopup = null;
+            }
+        }
+
+        public void HandleCancelYes()
+        {
+            OnCancelConfirmed?.Invoke();
+        }
+
+        public void HandleCancelNo()
+        {
+
+        }
+
+        private void OnTranscriptionReceived(string transcription)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(OnTranscriptionReceived), transcription);
+                return;
+            }
+            ProcessVoiceCommand(transcription);
         }
 
         public void ProcessVoiceCommand(string transcription)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(ProcessVoiceCommand), transcription);
+                return;
+            }
+
+            if (this.IsDisposed || !this.IsHandleCreated)
+            {
+                return;
+            }
+
+            transcription = transcription.ToLower().Trim();
+
+            if (transcription.Contains("cancel"))
+            {
+                HandleCancelBtn_Click();
+                return;
+            }
+            if (_currentPopup != null)
+            {
+                if (transcription.Contains("yes"))
+                {
+                    _currentPopup.SetResult("Yes");
+                    if (_currentPopup.InvokeRequired)
+                    {
+                        _currentPopup.Invoke(new Action(() =>
+                        {
+                            _currentPopup.Refresh();
+                            _currentPopup.Close();
+                        }));
+                    }
+                    else
+                    {
+                        _currentPopup.Refresh();
+                        _currentPopup.Close();
+                    }
+
+                }
+                else if (transcription.Contains("no"))
+                {
+                    _currentPopup.SetResult("No");
+                    if (_currentPopup.InvokeRequired)
+                    {
+                        _currentPopup.Invoke(new Action(() =>
+                        {
+                            _currentPopup.Refresh();
+                            _currentPopup.Close();
+                        }));
+                    }
+                    else
+                    {
+                        _currentPopup.Refresh();
+                        _currentPopup.Close();
+                    }
+                }
+            }
             if (transcription.ToLower().Contains("add an organ slice"))
             {
                 AddOrganSlicesButton_Click(this, EventArgs.Empty);
