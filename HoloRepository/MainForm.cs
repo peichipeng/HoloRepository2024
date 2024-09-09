@@ -101,7 +101,6 @@ namespace HoloRepository
             if (_pythonInput != null)
             {
                 _pythonInput.WriteLine("start_ner");
-                MessageBox.Show("successfully in Mainform StartNER() function.");
             }
             else
             {

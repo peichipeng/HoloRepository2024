@@ -133,8 +133,6 @@ namespace HoloRepository.AddCase
         public void ProcessVoiceCommand(string transcription)
         {
             transcription = transcription.ToLower().Trim();
-
-            MessageBox.Show(transcription, "transcription");
             if (transcription.Contains("update"))
             {
                 updateBtn_Click(this, EventArgs.Empty);
