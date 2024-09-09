@@ -674,21 +674,53 @@ namespace HoloRepository
 
         private void InsertDICOMFiles(NpgsqlConnection connection, int organId, List<string> DICOMPath, out Dictionary<string, int> dicomIdMap)
         {
-            // Insert DICOM files
+            // Initialize the dictionary to map original paths to their corresponding dicom IDs
             dicomIdMap = new Dictionary<string, int>();
+
+            // Get the base directory of the application
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+            // Define the target directory for DICOM files
+            string dicomFileDirectory = Path.Combine(baseDirectory, "data", "DICOMFile");
+            Directory.CreateDirectory(dicomFileDirectory); // Create the directory if it doesn't exist
+
+            // SQL query to insert the DICOM file paths into the database
             string insertDICOMQuery = "INSERT INTO dicomfile (organ_id, dicom_path) VALUES (@organId, @dicomPath) RETURNING dicom_id";
+
+            // Iterate through each DICOM path in the list
             foreach (var dicomPath in DICOMPath)
             {
-                int dicomId;
-                using (var command = new NpgsqlCommand(insertDICOMQuery, connection))
+                try
                 {
-                    command.Parameters.AddWithValue("@organId", organId);
-                    command.Parameters.AddWithValue("@dicomPath", dicomPath);
-                    dicomId = (int)command.ExecuteScalar();
+                    // Define the destination file path (same name as the original file)
+                    string destinationFilePath = Path.Combine(dicomFileDirectory, Path.GetFileName(dicomPath));
+
+                    // Copy the DICOM file to the target directory
+                    File.Copy(dicomPath, destinationFilePath, overwrite: true);
+
+                    // Get the relative path to the base directory for storage in the database
+                    string relativeDICOMPath = Path.GetRelativePath(baseDirectory, destinationFilePath);
+
+                    int dicomId;
+                    // Insert the new DICOM path into the database
+                    using (var command = new NpgsqlCommand(insertDICOMQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@organId", organId);
+                        command.Parameters.AddWithValue("@dicomPath", relativeDICOMPath);
+                        dicomId = (int)command.ExecuteScalar();
+                    }
+
+                    // Map the original path to the returned DICOM ID
+                    dicomIdMap[dicomPath] = dicomId;
                 }
-                dicomIdMap[dicomPath] = dicomId;
+                catch (Exception ex)
+                {
+                    // Log or handle exceptions as needed
+                    MessageBox.Show($"Error processing DICOM file {dicomPath}: {ex.Message}");
+                }
             }
         }
+
 
         private void InsertSliceImages(NpgsqlConnection connection, int organId, Dictionary<string, int> dicomIdMap)
         {
