@@ -94,7 +94,7 @@ namespace HoloRepository
             caseNo.TextAlign = ContentAlignment.MiddleRight;
 
             // Adjust label width to ensure the right edge is fixed
-            AdjustLabelWidth(caseNo, labelText, rightAlignX: 1720);
+            AdjustLabelWidth(caseNo, labelText, rightAlignX: 1300);
         }
 
         private void AdjustLabelWidth(Label label, string text, int rightAlignX)
