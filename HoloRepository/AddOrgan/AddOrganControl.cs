@@ -721,7 +721,6 @@ namespace HoloRepository
             }
         }
 
-
         private void InsertSliceImages(NpgsqlConnection connection, int organId, Dictionary<string, int> dicomIdMap)
         {
             // Insert slice images
