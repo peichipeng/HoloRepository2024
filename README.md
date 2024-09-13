@@ -1,4 +1,4 @@
-# Speech Inference Environment Setup
+# 1. Speech Inference Environment Setup
 
 Here provides a setup for speech inference using a predefined Conda environment. Follow the steps below to set up and activate the environment.
 
@@ -59,6 +59,45 @@ If you need to remove the environment for any reason, use the following command:
 ```bash
 conda env remove --prefix ./speech_recognition_env
 ```
+
+# 2. Speech Inference Models
+Since this application works offline, you need to manually download the models. The required models are:
+- **Distil-Whisper Model**: For speech-to-text inference. Reference: [Distil-Whisper](https://huggingface.co/distil-whisper/distil-medium.en)
+- **Fine-tuned BERT-NER Model**: For named entity recognition (NER). It was trained from [BERT-base-NER](https://huggingface.co/dslim/bert-base-NER).
+
+## Download the models
+- Distil-Whisper model can be downloaded from [OneDrive-distil-whisper](https://liveuclac-my.sharepoint.com/:f:/g/personal/zczqlz8_ucl_ac_uk/EjaXEImTHjdBpFdY7Pc6KVsBbV2Bk5ZMKE9BD-zfS2f9EA?e=CHlIPW).
+- NER model can be downloaded from [OneDrive-NER](https://liveuclac-my.sharepoint.com/:f:/g/personal/zczqlz8_ucl_ac_uk/ElPXHll5vghCt0XxEkY4fwIB0dMTP1ouwQKB04nr_bMXsw?e=uWA2VF).
+
+## Setup Instructions
+Once you have downloaded the model files from OneDrive:
+1. **Extract the downloaded folder** to your local machine.
+2. **Place the models in the application’s directory**:
+    - Move the model's folder to the **same path** as the application's executable file for the application to detect the models automatically.
+    
+    Example structure:
+    ```
+    ./HoloRepository.exe
+    ./distil_whisper_model/ (place the distil-whisper model files here)
+    ./NER_model/ (place the fine-tuned BERT-NER model files here)
+    ```
+3. **Running the Application**:
+   Simply double-click the executable file `HoloRepository.exe` to launch the application. It will automatically load the downloaded models and perform speech-to-text inference followed by NER extraction. No internet connection is required once the models are in place.
+
+
+# 3. Change the Database Setting
+
+Create a new database, restore the database using the file provided and change the parameters of connection string in DatabaseConnection.cs to your own.
+
+The code to restore the file into your database is:
+
+```bash
+pg_restore --host=localhost --port=5432 --username=postgres --dbname=yourDBname --verbose "the\path\to\the\file "
+```
+
+# 4. Change the directory path to the Organ Slices
+
+Change the directoryPath in the AddOrganSlice.cs to the path accessing the pictures stored in your computer.
 
 
 
