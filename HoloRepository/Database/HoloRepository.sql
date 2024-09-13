@@ -461,54 +461,36 @@ ALTER TABLE ONLY public.texturemap ALTER COLUMN texture_id SET DEFAULT nextval('
 --
 
 COPY public.dicomfile (dicom_id, organ_id, dicom_path) FROM stdin;
-214	9	data\\DICOMFile\\image-000001.dcm
-215	9	data\\DICOMFile\\image-000002.dcm
-216	9	data\\DICOMFile\\image-000003.dcm
-217	9	data\\DICOMFile\\image-000004.dcm
-218	9	data\\DICOMFile\\image-000005.dcm
-219	9	data\\DICOMFile\\image-000006.dcm
-220	9	data\\DICOMFile\\image-000007.dcm
-221	9	data\\DICOMFile\\image-000008.dcm
-222	9	data\\DICOMFile\\image-000009.dcm
-223	9	data\\DICOMFile\\image-000010.dcm
-224	9	data\\DICOMFile\\image-000011.dcm
-225	9	data\\DICOMFile\\image-000012.dcm
-226	9	data\\DICOMFile\\image-000013.dcm
-227	9	data\\DICOMFile\\image-000014.dcm
-228	9	data\\DICOMFile\\image-000015.dcm
-229	9	data\\DICOMFile\\image-000016.dcm
-230	9	data\\DICOMFile\\image-000017.dcm
-231	9	data\\DICOMFile\\image-000018.dcm
-232	9	data\\DICOMFile\\image-000019.dcm
-233	9	data\\DICOMFile\\image-000020.dcm
-234	9	data\\DICOMFile\\image-000021.dcm
-235	9	data\\DICOMFile\\image-000022.dcm
-236	9	data\\DICOMFile\\image-000023.dcm
-237	9	data\\DICOMFile\\image-000024.dcm
-238	10	data\\DICOMFile\\image-000001.dcm
-239	10	data\\DICOMFile\\image-000002.dcm
-240	10	data\\DICOMFile\\image-000003.dcm
-241	10	data\\DICOMFile\\image-000004.dcm
-242	10	data\\DICOMFile\\image-000005.dcm
-243	10	data\\DICOMFile\\image-000006.dcm
-244	10	data\\DICOMFile\\image-000007.dcm
-245	10	data\\DICOMFile\\image-000008.dcm
-246	10	data\\DICOMFile\\image-000009.dcm
-247	10	data\\DICOMFile\\image-000010.dcm
-248	10	data\\DICOMFile\\image-000011.dcm
-249	10	data\\DICOMFile\\image-000012.dcm
-250	10	data\\DICOMFile\\image-000013.dcm
-251	10	data\\DICOMFile\\image-000014.dcm
-252	10	data\\DICOMFile\\image-000015.dcm
-253	10	data\\DICOMFile\\image-000016.dcm
-254	10	data\\DICOMFile\\image-000017.dcm
-255	10	data\\DICOMFile\\image-000018.dcm
-256	10	data\\DICOMFile\\image-000019.dcm
-257	10	data\\DICOMFile\\image-000020.dcm
-258	10	data\\DICOMFile\\image-000021.dcm
-259	10	data\\DICOMFile\\image-000022.dcm
-260	10	data\\DICOMFile\\image-000023.dcm
-261	10	data\\DICOMFile\\image-000024.dcm
+262	11	data\\DICOMFile\\image-000001.dcm
+263	11	data\\DICOMFile\\image-000002.dcm
+264	11	data\\DICOMFile\\image-000003.dcm
+265	11	data\\DICOMFile\\image-000004.dcm
+266	11	data\\DICOMFile\\image-000005.dcm
+267	11	data\\DICOMFile\\image-000006.dcm
+268	11	data\\DICOMFile\\image-000007.dcm
+269	11	data\\DICOMFile\\image-000008.dcm
+270	11	data\\DICOMFile\\image-000009.dcm
+271	11	data\\DICOMFile\\image-000010.dcm
+272	12	data\\DICOMFile\\image-000001.dcm
+273	12	data\\DICOMFile\\image-000002.dcm
+274	12	data\\DICOMFile\\image-000003.dcm
+275	12	data\\DICOMFile\\image-000004.dcm
+276	12	data\\DICOMFile\\image-000005.dcm
+277	12	data\\DICOMFile\\image-000006.dcm
+278	12	data\\DICOMFile\\image-000007.dcm
+279	12	data\\DICOMFile\\image-000008.dcm
+280	12	data\\DICOMFile\\image-000009.dcm
+281	12	data\\DICOMFile\\image-000010.dcm
+292	13	data\\DICOMFile\\image-000001.dcm
+293	13	data\\DICOMFile\\image-000002.dcm
+294	13	data\\DICOMFile\\image-000003.dcm
+295	13	data\\DICOMFile\\image-000004.dcm
+296	13	data\\DICOMFile\\image-000005.dcm
+297	13	data\\DICOMFile\\image-000006.dcm
+298	13	data\\DICOMFile\\image-000007.dcm
+299	13	data\\DICOMFile\\image-000008.dcm
+300	13	data\\DICOMFile\\image-000009.dcm
+301	13	data\\DICOMFile\\image-000010.dcm
 \.
 
 
@@ -525,8 +507,9 @@ COPY public.dicomsegmentation (dicom_segmentation_id, dicom_id, segmentation_pat
 --
 
 COPY public.donor (donor_id, age, date_of_death, cause_of_death, "timestamp") FROM stdin;
-2	26	2024-07-08	respiratory tract infection	2024-09-09 17:43:58.414691+01
-1	44	2023-09-13	cancer	2024-09-09 17:47:26.473768+01
+2	68	2023-09-15	cancer	2024-09-12 09:17:19.43752+01
+1	78	2022-09-13	natural death	2024-09-12 09:18:15.193584+01
+3	67	2024-05-08	traffic accident	2024-09-12 09:23:17.887987+01
 \.
 
 
@@ -535,7 +518,8 @@ COPY public.donor (donor_id, age, date_of_death, cause_of_death, "timestamp") FR
 --
 
 COPY public.model3d (model_id, organ_id, model_path) FROM stdin;
-6	10	data\\Model3D\\kidney_test_0000.glb
+7	12	\N
+9	13	data\\Model3D\\kidney_test_0000.glb
 \.
 
 
@@ -544,8 +528,9 @@ COPY public.model3d (model_id, organ_id, model_path) FROM stdin;
 --
 
 COPY public.organ (organ_id, donor_id, organ_name_id, organ_side) FROM stdin;
-9	1	1	\N
-10	2	3	Right
+11	1	1	\N
+12	2	5	\N
+13	3	3	Left
 \.
 
 
@@ -568,8 +553,9 @@ COPY public.organname (organ_name_id, organ_name, has_side) FROM stdin;
 --
 
 COPY public.organtag (organ_id, tag_id) FROM stdin;
-9	1
-10	2
+11	5
+12	7
+13	8
 \.
 
 
@@ -586,8 +572,9 @@ COPY public.segmentation (segmentation_id, slice_id, segmentation_path) FROM std
 --
 
 COPY public.sliceimage (slice_id, organ_id, dicom_id, additional_info, image_path) FROM stdin;
-12	9	214	123	data\\SliceImage\\1-Heart-0001-20240909.jpg
-13	10	248	demo	data\\SliceImage\\2-Kidney(Right)-0001-20240909.jpg
+14	11	262	demo	data\\SliceImage\\1-Heart-0001-20240912.jpg
+15	12	278	demonstration	data\\SliceImage\\2-Brain-0001-20240912.jpg
+17	13	299	demo	data\\SliceImage\\3-Kidney(Left)-0001-20240912.jpg
 \.
 
 
@@ -602,6 +589,8 @@ COPY public.tag (tag_id, tag_name) FROM stdin;
 4	Malnutrition
 5	Healthy
 6	Alcoholism
+7	Cancer
+8	Traffic Accident
 \.
 
 
@@ -617,7 +606,7 @@ COPY public.texturemap (texture_id, segmentation_id, texture_path) FROM stdin;
 -- Name: dicomfile_dicom_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.dicomfile_dicom_id_seq', 261, true);
+SELECT pg_catalog.setval('public.dicomfile_dicom_id_seq', 301, true);
 
 
 --
@@ -638,14 +627,14 @@ SELECT pg_catalog.setval('public.donor_donor_id_seq', 1, true);
 -- Name: model3d_model_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.model3d_model_id_seq', 6, true);
+SELECT pg_catalog.setval('public.model3d_model_id_seq', 9, true);
 
 
 --
 -- Name: organ_organ_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.organ_organ_id_seq', 10, true);
+SELECT pg_catalog.setval('public.organ_organ_id_seq', 13, true);
 
 
 --
@@ -666,14 +655,14 @@ SELECT pg_catalog.setval('public.segmentation_segmentation_id_seq', 1, false);
 -- Name: sliceimage_slice_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sliceimage_slice_id_seq', 13, true);
+SELECT pg_catalog.setval('public.sliceimage_slice_id_seq', 17, true);
 
 
 --
 -- Name: tag_tag_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tag_tag_id_seq', 6, true);
+SELECT pg_catalog.setval('public.tag_tag_id_seq', 8, true);
 
 
 --
