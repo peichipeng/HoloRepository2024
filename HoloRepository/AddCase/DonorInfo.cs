@@ -62,7 +62,7 @@ namespace HoloRepository.AddCase
                         new() { Value = age },
                         new() { Value = dod },
                         new() { Value = causeOfDeath },
-                        new() { Value = DateTime.Now }
+                        new() { Value = DateTimeOffset.Now.UtcDateTime }
                     }
                 };
                 await cmd.ExecuteNonQueryAsync();
@@ -109,7 +109,7 @@ namespace HoloRepository.AddCase
                 cmd.Parameters.AddWithValue("@age", age);
                 cmd.Parameters.AddWithValue("@dod", dod);
                 cmd.Parameters.AddWithValue("@causeOfDeath", causeOfDeath);
-                cmd.Parameters.AddWithValue("@time", DateTime.Now);
+                cmd.Parameters.AddWithValue("@time", DateTimeOffset.Now.UtcDateTime);
 
                 if (originalId != donorId)
                 {

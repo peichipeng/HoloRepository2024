@@ -52,7 +52,7 @@ namespace HoloRepository.AddCase
             string updateQuery = $"UPDATE donor SET timestamp = @time WHERE donor_id = {donorId}";
 
             await using var cmd = new NpgsqlCommand(updateQuery, conn);
-            cmd.Parameters.AddWithValue("@time", DateTime.Now);
+            cmd.Parameters.AddWithValue("@time", DateTimeOffset.Now.UtcDateTime);
 
             await cmd.ExecuteNonQueryAsync();
         }
