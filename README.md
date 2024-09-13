@@ -89,6 +89,12 @@ Once you have downloaded the model files from OneDrive:
 
 Create a new database, restore the database using the file provided and change the parameters of connection string in DatabaseConnection.cs to your own.
 
+The code to restore the file into your database is:
+
+```bash
+pg_restore --host=localhost --port=5432 --username=postgres --dbname=yourDBname --verbose "the\path\to\the\file "
+```
+
 # 4. Change the directory path to the Organ Slices
 
 Change the directoryPath in the AddOrganSlice.cs to the path accessing the pictures stored in your computer.
