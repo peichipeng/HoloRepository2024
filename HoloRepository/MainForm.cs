@@ -17,6 +17,8 @@ namespace HoloRepository
         private StreamReader? _pythonOutput;
         private Thread? _outputThread;
 
+        private bool helpPageRemoved;
+
         public MainForm()
         {
             InitializeComponent(); 
@@ -207,9 +209,10 @@ namespace HoloRepository
                 else if (control is MainInterFaceControl)
                 {
                     voiceControl1.Visible = false;
-
                     breadcrumbPanel.Visible = true;
-                    LoadBreadcrumb();
+
+                    if (!helpPageRemoved)
+                        LoadBreadcrumb();
                 }
                 else if (control is HomePageControl)
                 {
@@ -222,6 +225,7 @@ namespace HoloRepository
                     breadcrumbPanel.Visible = false;
                 }
             }
+            helpPageRemoved = false;
         }
 
         public void StartTranscription()
@@ -386,11 +390,9 @@ namespace HoloRepository
         private void previousPageBtn_Click(object sender, EventArgs e)
         {
             mainContainer.Controls.RemoveAt(0);
-        }
 
-        private void mainContainer_ControlRemoved(object sender, ControlEventArgs e)
-        {
-            OnContentChanged("main");
+            helpPageRemoved = true;
+            OnContentChanged("help");
         }
 
         private void blackHomeBtn_Click(object sender, EventArgs e)

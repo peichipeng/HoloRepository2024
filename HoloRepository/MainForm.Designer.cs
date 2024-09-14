@@ -153,7 +153,6 @@
             mainContainer.Size = new Size(846, 418);
             mainContainer.TabIndex = 1;
             mainContainer.ControlAdded += mainContainer_ControlAdded;
-            mainContainer.ControlRemoved += mainContainer_ControlRemoved;
             // 
             // MainForm
             // 
