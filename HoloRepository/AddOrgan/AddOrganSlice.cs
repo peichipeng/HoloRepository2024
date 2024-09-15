@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Drawing.Drawing2D;
+using System.Text.RegularExpressions;
 
 namespace HoloRepository
 {
@@ -311,7 +312,7 @@ namespace HoloRepository
         private void OrganSlicePicture_Click(object sender, EventArgs e)
         {
             // Define the directory path and date format
-            string directoryPath = @"C:\Users\10927\Desktop\Pictures";
+            string directoryPath = @"C:\Users\linqing.zhao\Desktop\Pictures";
             string datePrefix = DateTime.Now.ToString("yyyy_MM_dd"); // Use current date
             string filePattern = $"{datePrefix}_*.jpg";
 
@@ -369,24 +370,23 @@ namespace HoloRepository
         public void ProcessVoiceCommand(string transcription)
         {
             transcription = transcription.ToLower();
-
-            if (transcription.Contains("add"))
+            if (Regex.IsMatch(transcription, @"\badd\b", RegexOptions.IgnoreCase))
             {
                 Add_Click(this, EventArgs.Empty);
             }
 
-            if (transcription.Contains("start entering"))
+            if (transcription.Contains("start describing"))
             {
                 isEntering = true;
-                transcription = transcription.Replace("start entering", "").Trim();
+                transcription = transcription.Replace("start describing", "").Trim();
             }
 
             if (isEntering)
             {
-                if (transcription.Contains("stop entering"))
+                if (transcription.Contains("stop describing"))
                 {
                     isEntering = false;
-                    transcription = transcription.Replace("stop entering", "").Trim();
+                    transcription = transcription.Replace("stop describing", "").Trim();
                 }
                 else
                 {
