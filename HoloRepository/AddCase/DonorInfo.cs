@@ -16,7 +16,7 @@ namespace HoloRepository.AddCase
 {
     public partial class DonorInfo : UserControl
     {
-        private bool isNERActive = false;
+        public bool isNERActive = false;
         public int originalId;
         public int donorId;
         private int age;

@@ -252,7 +252,7 @@ namespace HoloRepository
             }
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        public void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (isSpeechMode)
             {

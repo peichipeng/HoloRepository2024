@@ -30,7 +30,7 @@ namespace HoloRepository.AddCase
             LoadData();
         }
 
-        private async void LoadData()
+        public async void LoadData()
         {
             var dbConnection = new DatabaseConnection();
 

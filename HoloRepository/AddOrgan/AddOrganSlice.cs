@@ -25,7 +25,7 @@ namespace HoloRepository
         public event Action<Image, Image, string, int> OrganSliceUpdated;
 
         public string OrganSliceImagePath { get; private set; }
-        private bool isEntering = false;
+        public bool isEntering = false;
 
 
         public AddOrganSlice(int donorId, string organName, int sliceIndex, string organSide)

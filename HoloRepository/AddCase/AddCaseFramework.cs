@@ -15,7 +15,7 @@ namespace HoloRepository.AddCase
 
         private System.Windows.Forms.Timer timer;
         private string currentTranscription;
-        private PopupWindow? _currentPopup;
+        public PopupWindow? _currentPopup;
 
         // This constructor is for adding a case
         public AddCaseFramework(string route, string destination)
@@ -155,7 +155,7 @@ namespace HoloRepository.AddCase
             HandleCancelBtn_Click();
         }
 
-        private void HandleCancelBtn_Click()
+        public void HandleCancelBtn_Click()
         {
             if (InvokeRequired)
             {

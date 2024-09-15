@@ -14,12 +14,12 @@ namespace HoloRepository
             UpdateUI(GlobalStateManager.Instance.IsKeyboard);
         }
 
-        private void keyboardPicture_Click(object sender, EventArgs e)
+        public void keyboardPicture_Click(object sender, EventArgs e)
         {
             ToggleMode();
         }
 
-        private void voicePicture_Click(object sender, EventArgs e)
+        public void voicePicture_Click(object sender, EventArgs e)
         {
             ToggleMode();
         }
