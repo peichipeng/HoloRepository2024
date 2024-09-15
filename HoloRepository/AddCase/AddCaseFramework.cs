@@ -283,7 +283,7 @@ namespace HoloRepository.AddCase
                 }
             }
 
-            if (nextBtn.Text.Equals("&Save", StringComparison.OrdinalIgnoreCase))
+            if (nextBtn.Text.Equals("&Save", StringComparison.OrdinalIgnoreCase) ^ nextBtn.Text.Equals("Save", StringComparison.OrdinalIgnoreCase))
             {
                 if (transcription.Contains("save"))
                 {
